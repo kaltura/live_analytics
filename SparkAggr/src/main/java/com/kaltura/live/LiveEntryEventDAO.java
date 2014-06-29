@@ -21,14 +21,14 @@ public class LiveEntryEventDAO extends LiveEventDAO {
 	{
 		super.init(event);
 		if (statement == null) {
-			statement = session.getSession().prepare("INSERT INTO " + tableName + " (entry_id, event_time, plays, alive, bitrate, buffer_time) " +
-					"VALUES (?, ?, ?, ?, ?, ?)");
+			statement = session.getSession().prepare("INSERT INTO " + tableName + " (entry_id, event_time, plays, alive, bitrate, bitrate_count, buffer_time) " +
+					"VALUES (?, ?, ?, ?, ?, ?, ?)");
 		}
 		
 	}
 
 	public void saveOrUpdate() {
 		BoundStatement boundStatement = new BoundStatement(statement);
-		session.getSession().execute(boundStatement.bind(aggrRes.getEntryId(), aggrRes.getEventTime(), aggrRes.getPlays(), aggrRes.getAlive(), aggrRes.getBitrate(), aggrRes.getBufferTime()));
+		session.getSession().execute(boundStatement.bind(aggrRes.getEntryId(), aggrRes.getEventTime(), aggrRes.getPlays(), aggrRes.getAlive(), aggrRes.getBitrate(), aggrRes.getBitrateCount(), aggrRes.getBufferTime()));
 	}
 }

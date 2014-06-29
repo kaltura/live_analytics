@@ -19,7 +19,7 @@ public class LiveEntryHourlyAggrSaveFunction extends LiveAggrSaveFunction {
 			Tuple2<EventKey, StatsEvent> row = it.next(); 
 			EntryKey key = (EntryKey)row._1;
 			StatsEvent stats = row._2;
-			event.init(new StatsEvent(key.getEventTime(), 1, key.getEntryId(), null, null, stats.getPlays(), stats.getAlive(), stats.getBitrate(), stats.getBufferTime()));
+			event.init(new StatsEvent(key.getEventTime(), 1, key.getEntryId(), null, null, null, stats.getPlays(), stats.getAlive(), stats.getBitrate(), stats.getBitrateCount(),stats.getBufferTime()));
 		    event.saveOrUpdate();
 		 }
 		 return new ArrayList<Boolean>();

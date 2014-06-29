@@ -3,6 +3,8 @@ package com.kaltura.live;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import javax.xml.transform.stax.StAXSource;
+
 import scala.Tuple2;
 
 public class LiveEntryLocationAggrSaveFunction extends LiveAggrSaveFunction {
@@ -20,7 +22,7 @@ public class LiveEntryLocationAggrSaveFunction extends LiveAggrSaveFunction {
 			Tuple2<EventKey, StatsEvent> row = it.next(); 
 			EntryLocationKey key = (EntryLocationKey)row._1;
 			StatsEvent stats = row._2;
-			event.init(new StatsEvent(key.getEventTime(), 1, key.getEntryId(), key.getCountry(), key.getCity(), stats.getPlays(), stats.getAlive(), stats.getBitrate(), stats.getBufferTime()));
+			event.init(new StatsEvent(key.getEventTime(), 1, key.getEntryId(), key.getCountry(), key.getCity(), null, stats.getPlays(), stats.getAlive(), stats.getBitrate(), stats.getBitrateCount(), stats.getBufferTime()));
 		    event.saveOrUpdate();
 		 }
 		 return new ArrayList<Boolean>();
