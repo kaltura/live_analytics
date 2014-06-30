@@ -2,20 +2,16 @@ package com.kaltura.live.model.aggregation.keys;
 
 import java.util.Date;
 
-public class EntryLocationKey extends EventKey {
+public class EntryLocationKey extends EntryKey {
 	
 	private static final long serialVersionUID = 7416244826202491902L;
 	
-	protected String entryId;
-	protected Date eventTime;
-	protected int partnerId;
+	
 	protected String country;
 	protected String city;
 	
 	public EntryLocationKey(String entryId, Date eventTime, int partnerId, String country, String city) {
-		this.entryId = entryId;
-		this.eventTime = eventTime;
-		this.partnerId = partnerId;
+		super(entryId, eventTime, partnerId);
 		this.country= country;
 		this.city = city;
 	}

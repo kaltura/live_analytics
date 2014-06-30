@@ -2,19 +2,14 @@ package com.kaltura.live.model.aggregation.keys;
 
 import java.util.Date;
 
-public class EntryReferrerKey extends EventKey {
+public class EntryReferrerKey extends EntryHourlyKey {
 	
 	private static final long serialVersionUID = 4248850425801294881L;
 	
-	protected String entryId;
-	protected Date eventTime;
-	protected int partnerId;
 	protected String referrer;
 	
 	public EntryReferrerKey(String entryId, Date eventTime, int partnerId, String referrer) {
-		this.entryId = entryId;
-		this.eventTime = eventTime;
-		this.partnerId = partnerId;
+		super(entryId, eventTime, partnerId);
 		this.referrer = referrer;
 	}
 
@@ -67,5 +62,6 @@ public class EntryReferrerKey extends EventKey {
 				+ eventTime + ", partnerId=" + partnerId + ", referrer="
 				+ referrer + "]";
 	}
+	
 	
 }

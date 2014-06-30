@@ -118,7 +118,7 @@ public class InsertFile {
 			while (startTime <= 1387125000) {
 				
 				//String fileName = formatDate.format(c.getTime());
-				String fileName = Integer.toString(startTime) + "live_stats";
+				String fileName = Integer.toString(startTime) + "_live_stats";
 				insertFile.insertIntoTable(fileName, readFile("/home/dev/orly/" + fileName + ".gz"));
 				startTime = startTime + 30;
 				Thread.sleep(30*1000);
