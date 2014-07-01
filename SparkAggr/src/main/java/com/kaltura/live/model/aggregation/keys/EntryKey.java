@@ -56,4 +56,5 @@ public class EntryKey extends EventKey {
 		return "EntryKey [entryId=" + entryId + ", eventTime=" + eventTime
 				+ ", partnerId=" + partnerId + "]";
 	}
+
 }

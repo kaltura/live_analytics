@@ -46,7 +46,9 @@ public abstract class LiveEventSave extends FlatMapFunction<Iterator<Tuple2<Even
 	public Iterable<Boolean> call(Iterator<Tuple2<EventKey, StatsEvent>> it) throws Exception {
 		 while (it.hasNext()) {
 			Tuple2<EventKey, StatsEvent> row = it.next(); 
+			EventKey key = row._1;
 			StatsEvent stats = row._2;
+			key.manipulateStatsEventByKey(stats);
 		    event.saveOrUpdate(this.session, stats);
 		 }
 		 

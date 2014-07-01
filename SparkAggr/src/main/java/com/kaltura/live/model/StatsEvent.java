@@ -20,6 +20,7 @@ import com.kaltura.live.ip2location.SerializableIP2LocationReader;
  */
 public class StatsEvent implements Serializable {
 	
+	
 	private static final long serialVersionUID = 2087162345237773624L;
 	
 	private static Logger LOG = LoggerFactory.getLogger(StatsEvent.class);
@@ -119,6 +120,7 @@ public class StatsEvent implements Serializable {
         
 	}
 	
+	
 	/**
 	 * Merges two stats events into a single one
 	 * @param other The other stats events we'd like to merge with
@@ -184,6 +186,47 @@ public class StatsEvent implements Serializable {
 	public String getIpAddress() {
 		return this.ipAddress;
 	}
+	
+	public void setEventTime(Date eventTime) {
+		this.eventTime = eventTime;
+	}
+
+	public void setPartnerId(int partnerId) {
+		this.partnerId = partnerId;
+	}
+
+	public void setEntryId(String entryId) {
+		this.entryId = entryId;
+	}
+
+	public void setReferrer(String referrer) {
+		this.referrer = referrer;
+	}
+
+	public void setPlays(long plays) {
+		this.plays = plays;
+	}
+
+	public void setAlive(long alive) {
+		this.alive = alive;
+	}
+
+	public void setBitrate(long bitrate) {
+		this.bitrate = bitrate;
+	}
+
+	public void setBitrateCount(long bitrateCount) {
+		this.bitrateCount = bitrateCount;
+	}
+
+	public void setBufferTime(long bufferTime) {
+		this.bufferTime = bufferTime;
+	}
+
+	public void setIpAddress(String ipAddress) {
+		this.ipAddress = ipAddress;
+	}
+
 
 	@Override
 	public String toString() {

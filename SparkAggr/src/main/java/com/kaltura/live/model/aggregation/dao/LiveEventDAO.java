@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import net.spy.memcached.util.StringUtils;
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.datastax.driver.core.PreparedStatement;
 import com.kaltura.live.infra.cache.SerializableSession;
@@ -18,6 +20,8 @@ public abstract class LiveEventDAO implements Serializable {
 
 	/** Auto generated serial UID */
 	private static final long serialVersionUID = 3957419748277847064L;
+	
+	private static Logger LOG = LoggerFactory.getLogger(LiveEventDAO.class);
 	
 	/** Prepared statement for cassandra update */
 	protected PreparedStatement statement;
@@ -52,7 +56,7 @@ public abstract class LiveEventDAO implements Serializable {
 	protected List<String> getTableFields() {
 		List<String> fields = new ArrayList<String>();
 		fields.addAll(getKeyFields());
-		fields.addAll(getTableFields());
+		fields.addAll(getTableSpecificFields());
 		fields.addAll(getCommonFields());
 		return fields;
 	}
@@ -67,7 +71,6 @@ public abstract class LiveEventDAO implements Serializable {
 			String[] values = new String[fields.size()];
 			Arrays.fill(values, "?");
 			String valuesStr = StringUtils.join(Arrays.asList(values), ",");
-			
 			statement = session.getSession().prepare("INSERT INTO " + getTableName() + " (" + fieldsStr + ") " +
 					"VALUES (" + valuesStr + ")");
 		}
