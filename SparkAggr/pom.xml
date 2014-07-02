@@ -38,7 +38,13 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
         <groupId>spy</groupId>
         <artifactId>spymemcached</artifactId>
         <version>2.8.1</version>
-    </dependency>
+ </dependency>
+ <dependency>
+        <groupId>kaltura</groupId>
+        <artifactId>ip-2-location</artifactId>
+        <version>1.0</version>
+ </dependency>
+   
 
 </dependencies>
 <build>
