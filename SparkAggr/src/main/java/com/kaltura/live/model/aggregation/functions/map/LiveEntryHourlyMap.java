@@ -3,7 +3,6 @@ package com.kaltura.live.model.aggregation.functions.map;
 import com.kaltura.live.infra.utils.DateUtils;
 import com.kaltura.live.model.StatsEvent;
 import com.kaltura.live.model.aggregation.keys.EntryHourlyKey;
-import com.kaltura.live.model.aggregation.keys.EntryKey;
 import com.kaltura.live.model.aggregation.keys.EventKey;
 
 import scala.Tuple2;
