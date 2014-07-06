@@ -1,7 +1,8 @@
-package com.kaltura.live.ip2location;
+package com.kaltura.ip2location;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.net.UnknownHostException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

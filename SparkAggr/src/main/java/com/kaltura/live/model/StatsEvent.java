@@ -12,8 +12,8 @@ import org.slf4j.LoggerFactory;
 import com.kaltura.live.infra.cache.SerializableMemcache;
 import com.kaltura.live.infra.utils.DateUtils;
 import com.kaltura.live.infra.utils.RequestUtils;
-import com.kaltura.live.ip2location.Ip2LocationRecord;
-import com.kaltura.live.ip2location.SerializableIP2LocationReader;
+import com.kaltura.ip2location.Ip2LocationRecord;
+import com.kaltura.ip2location.SerializableIP2LocationReader;
 
 /**
  *	Represents a single stats event 

@@ -81,5 +81,5 @@ public abstract class LiveEventDAO implements Serializable {
 	 * @param session The session connecting to the cassandra
 	 * @param event The event we'd like to save
 	 */
-	abstract public void saveOrUpdate(SerializableSession session, StatsEvent event);
+	abstract public void saveOrUpdate(SerializableSession session, StatsEvent aggregatedResult);
 }
