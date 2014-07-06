@@ -22,13 +22,17 @@ public class TestClient{
         LiveAnalytics hello = service.getPort(LiveAnalytics.class);
         
 
-        LiveReportType reportType = LiveReportType.ENTRY_SYNDICATION_TOTAL;
-		LiveReportInputFilter filter = new LiveReportInputFilter(3, false, "1_eer", 0, 5, "+zim");
+        LiveReportType reportType = LiveReportType.ENTRY_TOTAL;
+		LiveReportInputFilter filter = new LiveReportInputFilter();
+		filter.setHoursBefore(1);
+		filter.setEntryIds("1_lcn2avg8");
+		filter.setLive(false);
+		
 		LiveStatsListResponse z = hello.getReport(reportType, filter);
         System.out.println(z.getTotalCount());
         
         for (LiveStats liveStats : z.getEvents()) {
-			System.out.println(liveStats.getPlays());
+			System.out.println(liveStats.getBufferTime());
 		}
        
     }

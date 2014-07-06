@@ -14,8 +14,8 @@ final public class StatisticsManagersFactory {
 	 */
 	public static final StatisticsManagerIfc getStatisticsManager(LiveReportType type) {
 		switch (type) {
-		case ENTRY_GEO_TIME_LINE:
-			return new StatisticsDummyImplementation();
+		case ENTRY_TOTAL:
+			return new LiveReportStatsManager();
 
 		default:
 			return new StatisticsDummyImplementation();

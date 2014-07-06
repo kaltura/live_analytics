@@ -10,13 +10,14 @@ import com.kaltura.live.webservice.model.LiveStatsListResponse;
 
 @WebService(endpointInterface="com.kaltura.live.webservice.LiveAnalytics")
 public class LiveAnalyticsImpl implements LiveAnalytics{
-
+	
 	@Override
 	public LiveStatsListResponse getReport(
 			LiveReportType reportType,
 			LiveReportInputFilter filter) {
 		
 		StatisticsManagerIfc manager = StatisticsManagersFactory.getStatisticsManager(reportType);
+		System.out.println("@_!! My lovely manager for report type " + reportType + " is : " + manager.getClass());
 		return manager.query(filter);
 	}
 }
