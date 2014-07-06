@@ -8,7 +8,7 @@ import org.apache.spark.api.java.function.FlatMapFunction;
 import scala.Tuple2;
 
 import com.kaltura.live.infra.cache.SerializableSession;
-import com.kaltura.live.model.StatsEvent;
+import com.kaltura.live.model.aggregation.StatsEvent;
 import com.kaltura.live.model.aggregation.dao.LiveEventDAO;
 import com.kaltura.live.model.aggregation.keys.EventKey;
 

@@ -1,4 +1,4 @@
-package com.kaltura.live.model;
+package com.kaltura.live.model.aggregation;
 
 import java.io.Serializable;
 import java.util.Date;

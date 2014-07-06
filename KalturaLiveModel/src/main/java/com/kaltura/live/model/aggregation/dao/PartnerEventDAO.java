@@ -6,7 +6,7 @@ import java.util.List;
 
 import com.datastax.driver.core.BoundStatement;
 import com.kaltura.live.infra.cache.SerializableSession;
-import com.kaltura.live.model.StatsEvent;
+import com.kaltura.live.model.aggregation.StatsEvent;
 
 public class PartnerEventDAO extends LiveEventDAO {
 	

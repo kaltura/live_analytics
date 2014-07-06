@@ -2,7 +2,7 @@ package com.kaltura.live.model.aggregation.functions.map;
 
 import org.apache.spark.api.java.function.PairFunction;
 
-import com.kaltura.live.model.StatsEvent;
+import com.kaltura.live.model.aggregation.StatsEvent;
 import com.kaltura.live.model.aggregation.keys.EventKey;
 
 /**

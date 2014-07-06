@@ -2,11 +2,9 @@ package com.kaltura.live.model.aggregation.dao;
 
 import java.util.List;
 
-import scala.actors.threadpool.Arrays;
-
 import com.datastax.driver.core.BoundStatement;
 import com.kaltura.live.infra.cache.SerializableSession;
-import com.kaltura.live.model.StatsEvent;
+import com.kaltura.live.model.aggregation.StatsEvent;
 
 public class LiveEntryLocationEventDAO extends LiveEventDAO {
 	
@@ -17,10 +15,9 @@ public class LiveEntryLocationEventDAO extends LiveEventDAO {
 		return "kaltura_live.live_events_location";
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	protected List<String> getTableSpecificFields() {
-		return Arrays.asList(new String[]{"country", "city"});
+		return java.util.Arrays.asList(new String[]{"country", "city"});
 	}
 	
 	public void saveOrUpdate(SerializableSession session, StatsEvent aggregatedResult) {

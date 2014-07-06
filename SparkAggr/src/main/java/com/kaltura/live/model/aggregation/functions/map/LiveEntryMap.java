@@ -1,7 +1,7 @@
 package com.kaltura.live.model.aggregation.functions.map;
 
 
-import com.kaltura.live.model.StatsEvent;
+import com.kaltura.live.model.aggregation.StatsEvent;
 import com.kaltura.live.model.aggregation.keys.EntryKey;
 import com.kaltura.live.model.aggregation.keys.EventKey;
 

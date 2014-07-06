@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import com.datastax.driver.core.PreparedStatement;
 import com.kaltura.live.infra.cache.SerializableSession;
-import com.kaltura.live.model.StatsEvent;
+import com.kaltura.live.model.aggregation.StatsEvent;
 
 /**
  *	This class is a base class representing the cassandra access object for live aggregation objects 

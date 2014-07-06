@@ -2,7 +2,7 @@ package com.kaltura.live.model.aggregation.keys;
 
 import java.io.Serializable;
 
-import com.kaltura.live.model.StatsEvent;
+import com.kaltura.live.model.aggregation.StatsEvent;
 
 /**
  * This class is a base class for all event keys

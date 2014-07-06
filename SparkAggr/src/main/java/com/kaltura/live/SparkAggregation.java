@@ -23,7 +23,7 @@ import com.datastax.driver.core.Row;
 import com.kaltura.live.infra.cache.SerializableMemcache;
 import com.kaltura.live.infra.cache.SerializableSession;
 import com.kaltura.ip2location.SerializableIP2LocationReader;
-import com.kaltura.live.model.StatsEvent;
+import com.kaltura.live.model.aggregation.StatsEvent;
 import com.kaltura.live.model.aggregation.functions.map.LiveEntryHourlyMap;
 import com.kaltura.live.model.aggregation.functions.map.LiveEntryLocationMap;
 import com.kaltura.live.model.aggregation.functions.map.LiveEntryMap;

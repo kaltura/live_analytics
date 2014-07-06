@@ -2,7 +2,7 @@ package com.kaltura.live.model.aggregation.functions.reduce;
 
 import org.apache.spark.api.java.function.Function2;
 
-import com.kaltura.live.model.StatsEvent;
+import com.kaltura.live.model.aggregation.StatsEvent;
 
 public class LiveEventReduce extends Function2<StatsEvent, StatsEvent, StatsEvent> {
 	
