@@ -1,6 +1,7 @@
 package com.kaltura.live.model.aggregation;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -28,7 +29,7 @@ public class StatsEvent implements Serializable {
 			"^([\\d.]+) (\\S+) (\\S+) \\[([\\w\\d:/]+\\s[+\\-]\\d{5})\\] \"(.+?)\" (\\d{3}) ([\\d\\-]+) (\\d+\\/\\d+) \"([^\"]+)\" \"([^\"]+)\".*");
 	
 	/** Stats events fields */
-	private long eventTime;
+	private Date eventTime;
 	private int partnerId = 0;
 	private String entryId;
 	private String country;
@@ -45,7 +46,7 @@ public class StatsEvent implements Serializable {
 	/**
 	 * Constructor by fields 
 	 */
-	public StatsEvent(long eventTime, int partnerId, String entryId, String country, String city,  String referrer, long plays, long alive, long bitrate, long bitrateCount, long bufferTime) {
+	public StatsEvent(Date eventTime, int partnerId, String entryId, String country, String city,  String referrer, long plays, long alive, long bitrate, long bitrateCount, long bufferTime) {
 		this.eventTime = eventTime;
 		this.partnerId = partnerId;
 		this.entryId = entryId;
@@ -92,7 +93,7 @@ public class StatsEvent implements Serializable {
             String date = m.group(4);
             String query = m.group(5);
             
-            eventTime = DateUtils.roundDate(date).getTime();
+            eventTime = DateUtils.roundDate(date);
             
             Map<String, String> paramsMap = RequestUtils.splitQuery(query);
             entryId = paramsMap.containsKey("event:entryId") ? paramsMap.get("event:entryId") : null;
@@ -123,7 +124,7 @@ public class StatsEvent implements Serializable {
 		return new StatsEvent(eventTime, partnerId, entryId, country, city, referrer, plays + other.plays, alive + other.alive, bitrate + other.bitrate, bitrateCount + other.bitrateCount, bufferTime + other.bufferTime);
 	}
 
-	public long getEventTime() {
+	public Date getEventTime() {
 		return this.eventTime;
 	}
 	
@@ -180,7 +181,7 @@ public class StatsEvent implements Serializable {
 		return this.ipAddress;
 	}
 	
-	public void setEventTime(long eventTime) {
+	public void setEventTime(Date eventTime) {
 		this.eventTime = eventTime;
 	}
 

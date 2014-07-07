@@ -9,7 +9,7 @@ public class EntryHourlyKey extends EntryKey {
 	
 	private static final long serialVersionUID = 2876814542975152288L;
 
-	public EntryHourlyKey(String entryId, long eventTime, int partnerId) {
+	public EntryHourlyKey(String entryId, Date eventTime, int partnerId) {
 		super(entryId, eventTime, partnerId);
 	}
 	

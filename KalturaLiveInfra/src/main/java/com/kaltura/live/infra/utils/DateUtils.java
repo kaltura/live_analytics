@@ -42,12 +42,12 @@ public class DateUtils {
 		return c.getTime();
 	}
 	
-	public static long roundHourDate(long eventDate) {
+	public static Date roundHourDate(Date eventDate) {
 		Calendar c = new GregorianCalendar();
-		c.setTimeInMillis(eventDate);
+		c.setTime(eventDate);
 		c.set(Calendar.SECOND, 0);
 		c.set(Calendar.MINUTE, 0);
-		return c.getTimeInMillis();
+		return c.getTime();
 	}
 	
 	public static Calendar getCurrentTime() {

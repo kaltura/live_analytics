@@ -4,10 +4,11 @@ import java.io.FileInputStream;
 import java.nio.ByteBuffer;
 
 
+import java.util.Date;
+
 import org.apache.commons.io.IOUtils;
 
 import com.datastax.driver.core.BoundStatement;
-
 import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
@@ -32,7 +33,7 @@ public class InsertFile {
     	long hourKey = getTimeStamp(key);
     	PreparedStatement statement = cassandraSession.getSession().prepare("INSERT INTO kaltura_live.log_files (hour_id,file_id) VALUES (?, ?)");
         BoundStatement boundStatement = new BoundStatement(statement);
-        cassandraSession.getSession().execute(boundStatement.bind(hourKey,key));
+        cassandraSession.getSession().execute(boundStatement.bind(new Date(hourKey),key));
         statement = cassandraSession.getSession().prepare("INSERT INTO kaltura_live.log_data (id,data) VALUES (?, ?)");
         boundStatement = new BoundStatement(statement);
         cassandraSession.getSession().execute(boundStatement.bind(key,ByteBuffer.wrap(data)));
@@ -87,6 +88,8 @@ public class InsertFile {
 			insertFile.disconnect();
     	}
 		*/
+		
+		// TODO - remove hack and get file name as argument
 		try {
 			
 			int startTime = 1387121430;

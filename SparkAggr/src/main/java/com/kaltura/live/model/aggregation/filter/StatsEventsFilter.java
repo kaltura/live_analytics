@@ -1,5 +1,6 @@
 package com.kaltura.live.model.aggregation.filter;
 
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.spark.api.java.function.Function;
@@ -20,7 +21,7 @@ public class StatsEventsFilter extends Function<Tuple2<EventKey, StatsEvent>, Bo
 	public Boolean call(Tuple2<EventKey, StatsEvent> event) throws Exception {
 		EventKey eventKey = event._1;
 		
-		if (eventKey.getEventTime() == DateUtils.getCurrentHourInMillis() - TimeUnit.HOURS.toMillis(SparkConfiguration.HOURS_TO_SAVE)) {
+		if (eventKey.getEventTime().equals(new Date(DateUtils.getCurrentHourInMillis() - TimeUnit.HOURS.toMillis(SparkConfiguration.HOURS_TO_SAVE)))) {
 			return false;
 		}
 		
