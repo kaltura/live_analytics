@@ -10,6 +10,12 @@ import com.kaltura.live.model.aggregation.StatsEvent;
 public abstract class EventKey implements Serializable {
 	
 	private static final long serialVersionUID = 5507488723242411488L;
+	
+	protected long eventTime;
+	
+	public EventKey(long eventTime) {
+		this.eventTime = eventTime;
+	}
 
 	/**
 	 * This function is marked as abstract to enforce the implementors to implement it.
@@ -28,5 +34,11 @@ public abstract class EventKey implements Serializable {
     public void manipulateStatsEventByKey(StatsEvent statsEvent) {
     	return;
     }
+
+	public long getEventTime() {
+		return eventTime;
+	}
+    
+   
         	
 }

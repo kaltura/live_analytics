@@ -1,7 +1,5 @@
 package com.kaltura.live.model.aggregation.keys;
 
-import java.util.Date;
-
 public class EntryLocationKey extends EntryKey {
 	
 	private static final long serialVersionUID = 7416244826202491902L;
@@ -10,7 +8,7 @@ public class EntryLocationKey extends EntryKey {
 	protected String country;
 	protected String city;
 	
-	public EntryLocationKey(String entryId, Date eventTime, int partnerId, String country, String city) {
+	public EntryLocationKey(String entryId, long eventTime, int partnerId, String country, String city) {
 		super(entryId, eventTime, partnerId);
 		this.country= country;
 		this.city = city;
@@ -23,8 +21,7 @@ public class EntryLocationKey extends EntryKey {
 		result = prime * result + ((city == null) ? 0 : city.hashCode());
 		result = prime * result + ((country == null) ? 0 : country.hashCode());
 		result = prime * result + ((entryId == null) ? 0 : entryId.hashCode());
-		result = prime * result
-				+ ((eventTime == null) ? 0 : eventTime.hashCode());
+		result = prime * result + Long.valueOf(eventTime).hashCode();
 		result = prime * result + partnerId;
 		return result;
 	}
@@ -53,10 +50,7 @@ public class EntryLocationKey extends EntryKey {
 				return false;
 		} else if (!entryId.equals(other.entryId))
 			return false;
-		if (eventTime == null) {
-			if (other.eventTime != null)
-				return false;
-		} else if (!eventTime.equals(other.eventTime))
+		if (eventTime != other.eventTime)
 			return false;
 		if (partnerId != other.partnerId)
 			return false;

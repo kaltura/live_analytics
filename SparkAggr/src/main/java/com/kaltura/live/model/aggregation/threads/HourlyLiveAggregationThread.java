@@ -2,10 +2,14 @@ package com.kaltura.live.model.aggregation.threads;
 
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
+import org.apache.spark.api.java.function.Function;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import scala.Tuple2;
+
 import com.kaltura.live.model.aggregation.StatsEvent;
+import com.kaltura.live.model.aggregation.filter.StatsEventsFilter;
 import com.kaltura.live.model.aggregation.functions.map.LiveEventMap;
 import com.kaltura.live.model.aggregation.functions.reduce.LiveEventReduce;
 import com.kaltura.live.model.aggregation.functions.save.LiveEventSave;
@@ -29,12 +33,14 @@ public class HourlyLiveAggregationThread extends LiveAggregationThread {
 	
 	@Override
 	public void run() {
-		LOG.info("Start Thread");
 		
 		JavaPairRDD<EventKey, StatsEvent> eventByKeyMap = events.map(mapFunction);
 
-		if (aggregatedEvents != null) 
+		if (aggregatedEvents != null) {
+			// filter old hours aggregated results
+			aggregatedEvents = aggregatedEvents.filter(new StatsEventsFilter());
 			eventByKeyMap = eventByKeyMap.union(aggregatedEvents);
+		}
 		
 		JavaPairRDD<EventKey, StatsEvent> mergedEventsByKey = eventByKeyMap.reduceByKey(reduceFunction);
 		JavaRDD<Boolean> result = mergedEventsByKey.mapPartitions(saveFunction);
@@ -46,8 +52,6 @@ public class HourlyLiveAggregationThread extends LiveAggregationThread {
 		aggregatedEvents = mergedEventsByKey;
 		aggregatedEvents.cache();
 		aggregatedEvents.count();
-		
-		LOG.info("Done Thread");
 	}		 
 	
 }

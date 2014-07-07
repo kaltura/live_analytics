@@ -1,24 +1,20 @@
 package com.kaltura.live.model.aggregation.keys;
 
-import java.util.Date;
-
 public class PartnerKey extends EventKey {
 	
 	private static final long serialVersionUID = 5360798353836806812L;
-	
-	protected Date eventTime;
+
 	protected int partnerId;
 	
-	public PartnerKey(int partnerId, Date eventTime) {
-		this.eventTime = eventTime;
+	public PartnerKey(int partnerId, long eventTime) {
+		super(eventTime);
 		this.partnerId = partnerId;
 	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result
-				+ ((eventTime == null) ? 0 : eventTime.hashCode());
+		result = prime * result + Long.valueOf(eventTime).hashCode();
 		result = prime * result + partnerId;
 		return result;
 	}
@@ -32,10 +28,7 @@ public class PartnerKey extends EventKey {
 		if (getClass() != obj.getClass())
 			return false;
 		PartnerKey other = (PartnerKey) obj;
-		if (eventTime == null) {
-			if (other.eventTime != null)
-				return false;
-		} else if (!eventTime.equals(other.eventTime))
+		if (eventTime != other.eventTime)
 			return false;
 		if (partnerId != other.partnerId)
 			return false;

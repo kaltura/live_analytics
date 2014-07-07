@@ -1,7 +1,6 @@
 package com.kaltura.live.model.aggregation;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -9,7 +8,6 @@ import java.util.regex.Pattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.kaltura.live.infra.cache.SerializableMemcache;
 import com.kaltura.live.infra.utils.DateUtils;
 import com.kaltura.live.infra.utils.RequestUtils;
 import com.kaltura.ip2location.Ip2LocationRecord;
@@ -30,7 +28,7 @@ public class StatsEvent implements Serializable {
 			"^([\\d.]+) (\\S+) (\\S+) \\[([\\w\\d:/]+\\s[+\\-]\\d{5})\\] \"(.+?)\" (\\d{3}) ([\\d\\-]+) (\\d+\\/\\d+) \"([^\"]+)\" \"([^\"]+)\".*");
 	
 	/** Stats events fields */
-	private Date eventTime;
+	private long eventTime;
 	private int partnerId = 0;
 	private String entryId;
 	private String country;
@@ -47,7 +45,7 @@ public class StatsEvent implements Serializable {
 	/**
 	 * Constructor by fields 
 	 */
-	public StatsEvent(Date eventTime, int partnerId, String entryId, String country, String city,  String referrer, long plays, long alive, long bitrate, long bitrateCount, long bufferTime) {
+	public StatsEvent(long eventTime, int partnerId, String entryId, String country, String city,  String referrer, long plays, long alive, long bitrate, long bitrateCount, long bufferTime) {
 		this.eventTime = eventTime;
 		this.partnerId = partnerId;
 		this.entryId = entryId;
@@ -67,21 +65,16 @@ public class StatsEvent implements Serializable {
 	 * @param reader
 	 * @param cache
 	 */
-	public StatsEvent(String line , SerializableIP2LocationReader reader, SerializableMemcache cache) {
+	public StatsEvent(String line , SerializableIP2LocationReader reader) {
 		Matcher m = apacheLogRegex.matcher(line);
 		
         if (m.find()) {
             ipAddress = m.group(1);
            
             try {
-            	
-            	country = (String) cache.getCache().get(ipAddress);
-            	if (country == null) 
-            	{
             		Ip2LocationRecord ipRecord =  reader.getAll(ipAddress);
             		country = ipRecord.getCountryLong();
-            		cache.getCache().set(ipAddress, 3600, country);
-            	}
+            		city = ipRecord.getCity();
             	
             } catch (Exception e) {
             	LOG.error("Failed to parse IP", e);
@@ -99,7 +92,7 @@ public class StatsEvent implements Serializable {
             String date = m.group(4);
             String query = m.group(5);
             
-            eventTime = DateUtils.roundDate(date);
+            eventTime = DateUtils.roundDate(date).getTime();
             
             Map<String, String> paramsMap = RequestUtils.splitQuery(query);
             entryId = paramsMap.containsKey("event:entryId") ? paramsMap.get("event:entryId") : null;
@@ -130,7 +123,7 @@ public class StatsEvent implements Serializable {
 		return new StatsEvent(eventTime, partnerId, entryId, country, city, referrer, plays + other.plays, alive + other.alive, bitrate + other.bitrate, bitrateCount + other.bitrateCount, bufferTime + other.bufferTime);
 	}
 
-	public Date getEventTime() {
+	public long getEventTime() {
 		return this.eventTime;
 	}
 	
@@ -187,7 +180,7 @@ public class StatsEvent implements Serializable {
 		return this.ipAddress;
 	}
 	
-	public void setEventTime(Date eventTime) {
+	public void setEventTime(long eventTime) {
 		this.eventTime = eventTime;
 	}
 
