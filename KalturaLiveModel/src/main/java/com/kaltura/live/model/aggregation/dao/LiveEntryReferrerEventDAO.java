@@ -13,7 +13,7 @@ public class LiveEntryReferrerEventDAO extends LiveEventDAO {
 
 	@Override
 	public String getTableName() {
-		return "kaltura_live.live_events_referrer";
+		return "kaltura_live.hourly_live_events_referrer";
 	}
 
 	@Override
