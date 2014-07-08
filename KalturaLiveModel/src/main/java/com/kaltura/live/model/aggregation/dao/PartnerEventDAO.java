@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.datastax.driver.core.BoundStatement;
+import com.datastax.driver.core.Row;
 import com.kaltura.live.infra.cache.SerializableSession;
 import com.kaltura.live.model.aggregation.StatsEvent;
 
@@ -13,9 +14,15 @@ public class PartnerEventDAO extends LiveEventDAO {
 	private static final long serialVersionUID = 1506062076872874654L;
 	
 	protected String tableName;
+	protected int partnerId;
 	
 	public PartnerEventDAO(String tableName) {
 		this.tableName = tableName;
+	}
+	
+	public PartnerEventDAO(Row row) {
+		super(row);
+		this.partnerId = row.getInt("partner_id");
 	}
 	
 	@Override

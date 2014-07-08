@@ -8,8 +8,8 @@ public class EntryLiveStats extends LiveStats {
 		super();
 	}
 
-	public EntryLiveStats(int plays, int audience, int secondsViewed,
-			int bufferTime, float avgBitrate, long timestamp, long startEvent,
+	public EntryLiveStats(long plays, long audience, long secondsViewed,
+			long bufferTime, float avgBitrate, long timestamp, long startEvent,
 			String entryId) {
 		super(plays, audience, secondsViewed, bufferTime, avgBitrate,
 				timestamp, startEvent);

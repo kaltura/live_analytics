@@ -2,26 +2,17 @@ package com.kaltura.live.webservice.model;
 
 public class LiveReportInputFilter {
 	
+	protected long partnerId;
 	protected int hoursBefore;
 	protected boolean isLive;
 	protected String entryIds;
+	protected long eventTime;
 	protected long fromTime;
 	protected long toTime;
 	protected String orderBy;
 	
 	public LiveReportInputFilter() {
 		super();
-	}
-	
-	public LiveReportInputFilter(int hoursBefore, boolean isLive,
-			String entryIds, long fromTime, long toTime, String orderBy) {
-		super();
-		this.hoursBefore = hoursBefore;
-		this.isLive = isLive;
-		this.entryIds = entryIds;
-		this.fromTime = fromTime;
-		this.toTime = toTime;
-		this.orderBy = orderBy;
 	}
 	
 	public int getHoursBefore() {
@@ -61,12 +52,24 @@ public class LiveReportInputFilter {
 		this.orderBy = orderBy;
 	}
 	
-	@Override
-	public String toString() {
-		return "KalturaLiveReportsInputFilter [hoursBefore=" + hoursBefore
-				+ ", isLive=" + isLive + ", entryIds=" + entryIds
-				+ ", fromTime=" + fromTime + ", toTime=" + toTime
-				+ ", orderBy=" + orderBy + "]";
+	public long getPartnerId() {
+		return partnerId;
+	}
+
+	public void setPartnerId(long partnerId) {
+		this.partnerId = partnerId;
+	}
+
+	public long getEventTime() {
+		return eventTime;
+	}
+
+	public void setEventTime(long eventTime) {
+		this.eventTime = eventTime;
+	}
+
+	public void validate() {
+		// TODO write validator
 	}
 
 	

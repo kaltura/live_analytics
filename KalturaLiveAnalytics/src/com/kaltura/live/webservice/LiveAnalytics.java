@@ -18,6 +18,7 @@ public interface LiveAnalytics{
 	@WebMethod 
 	@RequestWrapper(localName = "getReportRequest")
 	@ResponseWrapper(localName = "getReportResponse")
-	public LiveStatsListResponse getReport(LiveReportType reportType, LiveReportInputFilter filter);
+	public LiveStatsListResponse getReport(
+			LiveReportType reportType, LiveReportInputFilter filter);
 	
 }
