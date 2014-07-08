@@ -10,5 +10,9 @@ public final class SparkConfiguration {
 	
 	public static final String MAX_CORES = "24";
 	
+	public static final int HOURS_TO_SAVE = 2;
+	
+	public static final String IP2LOCATION_FILE = "/opt/kaltura/data/geoip/IP-COUNTRY-CITY-ISP.BIN";
+	
 	
 }

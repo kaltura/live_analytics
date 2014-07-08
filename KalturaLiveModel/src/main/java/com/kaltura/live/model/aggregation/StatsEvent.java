@@ -9,7 +9,6 @@ import java.util.regex.Pattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.kaltura.live.infra.cache.SerializableMemcache;
 import com.kaltura.live.infra.utils.DateUtils;
 import com.kaltura.live.infra.utils.RequestUtils;
 import com.kaltura.ip2location.Ip2LocationRecord;
@@ -67,21 +66,16 @@ public class StatsEvent implements Serializable {
 	 * @param reader
 	 * @param cache
 	 */
-	public StatsEvent(String line , SerializableIP2LocationReader reader, SerializableMemcache cache) {
+	public StatsEvent(String line , SerializableIP2LocationReader reader) {
 		Matcher m = apacheLogRegex.matcher(line);
 		
         if (m.find()) {
             ipAddress = m.group(1);
            
             try {
-            	
-            	country = (String) cache.getCache().get(ipAddress);
-            	if (country == null) 
-            	{
             		Ip2LocationRecord ipRecord =  reader.getAll(ipAddress);
             		country = ipRecord.getCountryLong();
-            		cache.getCache().set(ipAddress, 3600, country);
-            	}
+            		city = ipRecord.getCity();
             	
             } catch (Exception e) {
             	LOG.error("Failed to parse IP", e);

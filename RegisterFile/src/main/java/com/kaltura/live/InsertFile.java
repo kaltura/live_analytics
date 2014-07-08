@@ -2,72 +2,48 @@ package com.kaltura.live;
 
 import java.io.FileInputStream;
 import java.nio.ByteBuffer;
-import java.text.SimpleDateFormat;
+
+
 import java.util.Date;
-import java.util.TimeZone;
 
 import org.apache.commons.io.IOUtils;
 
 import com.datastax.driver.core.BoundStatement;
-import com.datastax.driver.core.Cluster;
-import com.datastax.driver.core.Host;
-import com.datastax.driver.core.Metadata;
 import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
-import com.datastax.driver.core.Session;
+import com.kaltura.live.infra.cache.SerializableSession;
 
 public class InsertFile {
 
-	private Cluster cluster;
-    private Session session;
+	private SerializableSession cassandraSession;
+    
 
     public InsertFile(String node) {
-        connect(node);
-    }
-
-    private void connect(String node) {
-        cluster = Cluster.builder().addContactPoint(node).build();
-        Metadata metadata = cluster.getMetadata();
-        System.out.printf("Connected to %s\n", metadata.getClusterName());
-        for (Host host: metadata.getAllHosts()) {
-              System.out.printf("Datacenter: %s; Host: %s; Rack: %s\n",
-                         host.getDatacenter(), host.getAddress(), host.getRack());
-        }
-        session = cluster.connect();
+        cassandraSession = new SerializableSession(node);
     }
     
-    private String getDateStr(String fileName) {
+    private long getTimeStamp(String fileName) {
     	String[] parts = fileName.split("_");
     	long longUnixSeconds = Long.parseLong(parts[0]);
-    	Date date = new Date(longUnixSeconds*1000L); // *1000 is to convert seconds to milliseconds
-    	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH z"); // the format of your date
-    	sdf.setTimeZone(TimeZone.getTimeZone("GMT-5"));
-    	String formattedDate = sdf.format(date);
-    	return formattedDate;
-    }
-
-    public void disconnect()
-    {
-    	session.shutdown();
-	cluster.shutdown();
+    	return longUnixSeconds * 1000L; 
     }
     
     public void insertIntoTable(String key, byte[] data) {
-    	String hourKey = getDateStr(key);
-    	PreparedStatement statement = session.prepare("INSERT INTO kaltura_live.log_files (hour_id,file_id) VALUES (?, ?)");
+    	long hourKey = getTimeStamp(key);
+    	PreparedStatement statement = cassandraSession.getSession().prepare("INSERT INTO kaltura_live.log_files (hour_id,file_id) VALUES (?, ?)");
         BoundStatement boundStatement = new BoundStatement(statement);
-        session.execute(boundStatement.bind(hourKey,key));
-        statement = session.prepare("INSERT INTO kaltura_live.log_data (id,data) VALUES (?, ?)");
+        cassandraSession.getSession().execute(boundStatement.bind(new Date(hourKey),key));
+        statement = cassandraSession.getSession().prepare("INSERT INTO kaltura_live.log_data (id,data) VALUES (?, ?)");
         boundStatement = new BoundStatement(statement);
-        session.execute(boundStatement.bind(key,ByteBuffer.wrap(data)));
-	System.out.println("After Insert");
+        cassandraSession.getSession().execute(boundStatement.bind(key,ByteBuffer.wrap(data)));
+        System.out.println("After Insert");
     }
 
     public byte[] readFromTable(String key) {
         String q1 = "SELECT * FROM kaltura_live.log_data WHERE id = '"+key+"';";
 
-        ResultSet results = session.execute(q1);
+        ResultSet results = cassandraSession.getSession().execute(q1);
         for (Row row : results) {
             ByteBuffer data = row.getBytes("data");
 	    byte[] result = new byte[data.remaining()];
@@ -85,7 +61,7 @@ public class InsertFile {
     	   
     	  fis = new FileInputStream(fileName);
     	  byte[] fileData = IOUtils.toByteArray(fis);
-	  System.out.println("read file");
+    	  System.out.println("read file");
     	  return fileData;
     	 
     	   
@@ -112,6 +88,8 @@ public class InsertFile {
 			insertFile.disconnect();
     	}
 		*/
+		
+		// TODO - remove hack and get file name as argument
 		try {
 			
 			int startTime = 1387121430;
@@ -128,8 +106,6 @@ public class InsertFile {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} finally {
-			insertFile.disconnect();
 		}
 		
 

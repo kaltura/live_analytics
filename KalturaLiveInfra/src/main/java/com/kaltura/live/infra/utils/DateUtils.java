@@ -63,4 +63,15 @@ public class DateUtils {
 		}
 		return cal;
 	}
+	
+	public static long getCurrentHourInMillis() {
+		Calendar cal = Calendar.getInstance();
+		// TODO - remove hack
+		cal.setTimeInMillis(1387101600000L);
+		
+	  	cal.set(Calendar.MINUTE, 0);
+	  	cal.set(Calendar.SECOND, 0);
+	  	
+	  	return cal.getTimeInMillis();
+	}
 }

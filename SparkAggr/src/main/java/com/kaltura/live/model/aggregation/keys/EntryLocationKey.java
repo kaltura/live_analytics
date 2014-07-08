@@ -10,30 +10,22 @@ public class EntryLocationKey extends EntryKey {
 	protected String country;
 	protected String city;
 	
-	public EntryLocationKey(String entryId, Date eventTime, int partnerId, String country, String city) {
-		super(entryId, eventTime, partnerId);
-		this.country= country;
-		this.city = city;
-	}
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
-		int result = 1;
+		int result = super.hashCode();
 		result = prime * result + ((city == null) ? 0 : city.hashCode());
 		result = prime * result + ((country == null) ? 0 : country.hashCode());
-		result = prime * result + ((entryId == null) ? 0 : entryId.hashCode());
-		result = prime * result
-				+ ((eventTime == null) ? 0 : eventTime.hashCode());
-		result = prime * result + partnerId;
 		return result;
 	}
+
+
 
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (obj == null)
+		if (!super.equals(obj))
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
@@ -48,20 +40,18 @@ public class EntryLocationKey extends EntryKey {
 				return false;
 		} else if (!country.equals(other.country))
 			return false;
-		if (entryId == null) {
-			if (other.entryId != null)
-				return false;
-		} else if (!entryId.equals(other.entryId))
-			return false;
-		if (eventTime == null) {
-			if (other.eventTime != null)
-				return false;
-		} else if (!eventTime.equals(other.eventTime))
-			return false;
-		if (partnerId != other.partnerId)
-			return false;
 		return true;
 	}
+
+
+
+	public EntryLocationKey(String entryId, Date eventTime, int partnerId, String country, String city) {
+		super(entryId, eventTime, partnerId);
+		this.country= country;
+		this.city = city;
+	}
+
+	
 
 	@Override
 	public String toString() {

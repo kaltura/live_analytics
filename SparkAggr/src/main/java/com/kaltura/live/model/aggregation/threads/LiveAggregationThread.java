@@ -48,14 +48,12 @@ public class LiveAggregationThread implements Runnable, Serializable {
 	
 	@Override
 	public void run() {
-		LOG.info("Start Thread");
 		
 		JavaPairRDD<EventKey, StatsEvent> eventByKeyMap = events.map(mapFunction);
 		JavaPairRDD<EventKey, StatsEvent> mergedEventsByKey = eventByKeyMap.reduceByKey(reduceFunction);
 		JavaRDD<Boolean> result = mergedEventsByKey.mapPartitions(saveFunction);
 		
 		result.count();
-		LOG.info("Done Thread");
 	}		 
 	
 
