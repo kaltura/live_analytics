@@ -13,6 +13,7 @@ import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.kaltura.live.infra.cache.SerializableSession;
+import com.kaltura.live.infra.utils.DateUtils;
 
 public class InsertFile {
 
@@ -26,7 +27,8 @@ public class InsertFile {
     private long getTimeStamp(String fileName) {
     	String[] parts = fileName.split("_");
     	long longUnixSeconds = Long.parseLong(parts[0]);
-    	return longUnixSeconds * 1000L; 
+    	return DateUtils.roundHourDate(new Date(longUnixSeconds * 1000L)).getTime();
+    	 
     }
     
     public void insertIntoTable(String key, byte[] data) {

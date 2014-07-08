@@ -73,4 +73,18 @@ public class DateUtils {
 	  	
 	  	return cal.getTimeInMillis();
 	}
+	
+	// TODO - remove hack
+	public static long getCurrentHourInMillis(long startTime) {
+		Calendar cal = Calendar.getInstance();
+		long now = System.currentTimeMillis();
+		if (now - startTime < 30*60*1000) {
+			cal.setTimeInMillis(1387101600000L);
+		} else {
+			cal.setTimeInMillis(1387105200000L);
+		}
+		cal.set(Calendar.MINUTE, 0);
+	  	cal.set(Calendar.SECOND, 0);
+	  	return cal.getTimeInMillis();
+	}
 }

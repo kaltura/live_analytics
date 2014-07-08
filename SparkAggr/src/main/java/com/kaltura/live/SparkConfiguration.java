@@ -2,7 +2,7 @@ package com.kaltura.live;
 
 public final class SparkConfiguration {
 	
-	public static final String REPOSITORY_HOME = "/home/dev/orly/SparkAggr/";
+	public static final String REPOSITORY_HOME = "/home/dev/orly/live_analytics/SparkAggr/";
 
 	public static final String NODE_NAME = "pa-erans";
 	

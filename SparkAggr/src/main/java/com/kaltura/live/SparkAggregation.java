@@ -64,14 +64,14 @@ public class SparkAggregation {
 		filesByHour.put(1387105200000L, "");
 		**/
 		
-		
+		long executionStartTime = System.currentTimeMillis();
 
 		JavaRDD<String> loadedDates = null;
 		Set<Long> hoursToLoad = new HashSet<Long>();
 		boolean resume = true;
 		while (resume) {
 			
-			hoursToLoad.add(DateUtils.getCurrentHourInMillis());
+			hoursToLoad.add(DateUtils.getCurrentHourInMillis(executionStartTime));
 			List<Long> hoursToLoadList = new ArrayList<Long>();
 			hoursToLoadList.addAll(hoursToLoad);
 			JavaRDD<Long> dates = jsc.parallelize(hoursToLoadList, 8);
