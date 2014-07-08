@@ -1,2 +1,9 @@
 KalturaLiveAnalytics/.settings/
 KalturaLiveAnalytics/build/
+KalturaLiveInfra/bin/
+KalturaLiveModel/bin/
+.classpath
+.project
+IP2Location/.settings/org.eclipse.wst.common.component
+IP2Location/.settings/org.eclipse.wst.common.project.facet.core.xml
+KalturaLiveAnalytics/target/

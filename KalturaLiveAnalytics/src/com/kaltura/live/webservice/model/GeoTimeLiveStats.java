@@ -9,8 +9,8 @@ public class GeoTimeLiveStats extends EntryLiveStats {
 		super();
 	}
 	
-	public GeoTimeLiveStats(int plays, int audience, int secondsViewed,
-			int bufferTime, float avgBitrate, long timestamp, long startEvent,
+	public GeoTimeLiveStats(long plays, long audience, long secondsViewed,
+			long bufferTime, float avgBitrate, long timestamp, long startEvent,
 			String entryId, Coordinates country, Coordinates city) {
 		super(plays, audience, secondsViewed, bufferTime, avgBitrate,
 				timestamp, startEvent, entryId);

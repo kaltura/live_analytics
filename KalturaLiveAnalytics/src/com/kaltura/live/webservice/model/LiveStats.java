@@ -1,11 +1,14 @@
 package com.kaltura.live.webservice.model;
 
+import javax.xml.bind.annotation.XmlSeeAlso;
+
+@XmlSeeAlso({EntryLiveStats.class, EntryReferrerLiveStats.class, GeoTimeLiveStats.class})
 public class LiveStats {
 	
-	protected int plays;
-	protected int audience;
-	protected int secondsViewed;
-	protected int bufferTime;
+	protected long plays;
+	protected long audience;
+	protected long secondsViewed;
+	protected long bufferTime;
 	protected float avgBitrate;
 	protected long timestamp;
 	protected long startEvent;
@@ -14,8 +17,8 @@ public class LiveStats {
 		super();
 	}
 	
-	public LiveStats(int plays, int audience, int secondsViewed,
-			int bufferTime, float avgBitrate, long timestamp, long startEvent) {
+	public LiveStats(long plays, long audience, long secondsViewed,
+			long bufferTime, float avgBitrate, long timestamp, long startEvent) {
 		super();
 		this.plays = plays;
 		this.audience = audience;
@@ -26,49 +29,49 @@ public class LiveStats {
 		this.startEvent = startEvent;
 	}
 
-	public int getPlays() {
+	public long getPlays() {
 		return plays;
 	}
 
 
 
-	public void setPlays(int plays) {
+	public void setPlays(long plays) {
 		this.plays = plays;
 	}
 
 
 
-	public int getAudience() {
+	public long getAudience() {
 		return audience;
 	}
 
 
 
-	public void setAudience(int audience) {
+	public void setAudience(long audience) {
 		this.audience = audience;
 	}
 
 
 
-	public int getSecondsViewed() {
+	public long getSecondsViewed() {
 		return secondsViewed;
 	}
 
 
 
-	public void setSecondsViewed(int secondsViewed) {
+	public void setSecondsViewed(long secondsViewed) {
 		this.secondsViewed = secondsViewed;
 	}
 
 
 
-	public int getBufferTime() {
+	public long getBufferTime() {
 		return bufferTime;
 	}
 
 
 
-	public void setBufferTime(int bufferTime) {
+	public void setBufferTime(long bufferTime) {
 		this.bufferTime = bufferTime;
 	}
 

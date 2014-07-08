@@ -6,7 +6,9 @@ public class Coordinates {
 	protected long latitude;
 	protected long longtitude;
 	
-	
+	public Coordinates() {
+		// Empty constructor
+	}
 	
 	public Coordinates(String name, long latitude, long longtitude) {
 		super();
