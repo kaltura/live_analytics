@@ -31,7 +31,7 @@ public class GetNewFileIds extends FlatMapFunction<Long, String> {
 		
 		String query = "SELECT file_id from kaltura_live.log_files where hour_id = "
 					+ hourTimestamp
-					+ "';";
+					+ ";";
 		ResultSet results = session.getSession().execute(query);
 			
 		for (Row row : results) {
