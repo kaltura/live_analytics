@@ -7,6 +7,7 @@ import javax.jws.soap.SOAPBinding.Style;
 import javax.xml.ws.RequestWrapper;
 import javax.xml.ws.ResponseWrapper;
 
+import com.kaltura.live.webservice.model.AnalyticsException;
 import com.kaltura.live.webservice.model.LiveReportInputFilter;
 import com.kaltura.live.webservice.model.LiveReportType;
 import com.kaltura.live.webservice.model.LiveStatsListResponse;
@@ -19,6 +20,6 @@ public interface LiveAnalytics{
 	@RequestWrapper(localName = "getReportRequest")
 	@ResponseWrapper(localName = "getReportResponse")
 	public LiveStatsListResponse getReport(
-			LiveReportType reportType, LiveReportInputFilter filter);
+			LiveReportType reportType, LiveReportInputFilter filter) throws AnalyticsException;
 	
 }

@@ -10,6 +10,7 @@ import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.kaltura.live.infra.utils.DateUtils;
 import com.kaltura.live.model.aggregation.dao.LiveEntryEventDAO;
+import com.kaltura.live.webservice.model.AnalyticsException;
 import com.kaltura.live.webservice.model.EntryLiveStats;
 import com.kaltura.live.webservice.model.LiveReportInputFilter;
 import com.kaltura.live.webservice.model.LiveStats;
@@ -17,9 +18,7 @@ import com.kaltura.live.webservice.model.LiveStatsListResponse;
 
 public class EntryTotalReporter extends BaseReporter {
 	
-	// TODO add logger usage
 	// TODO - in case we'd like to use paging, we need to use paging token_entry_id_ > 
-	// TODO - in the connect verify we connect to the key-space
 	
 	@Override
 	public LiveStatsListResponse query(LiveReportInputFilter filter) {
@@ -41,7 +40,7 @@ public class EntryTotalReporter extends BaseReporter {
 		sb.append(";");
 		
 		String query = sb.toString();
-		System.out.println("@_!! " + query);
+		logger.debug(query);
 		return query;
 	}
 	
@@ -106,7 +105,7 @@ public class EntryTotalReporter extends BaseReporter {
 		sb.append(";");
 		
 		String query = sb.toString();
-		System.out.println("@_!! " + query);
+		logger.debug(query);
 		return query;
 	}
 	
@@ -137,4 +136,21 @@ public class EntryTotalReporter extends BaseReporter {
 		
 		return new LiveStatsListResponse(result);
 	}
+	
+	@Override
+	public void validateFilter(LiveReportInputFilter filter) throws AnalyticsException {
+		
+		String validation = "";
+		if(filter.getEntryIds() == null)
+			validation = "Entry Ids can't be null. ";
+		
+		if(!filter.isLive()) {
+			if(filter.getHoursBefore() < 0)
+				validation += "Hourse before must be a positive number.";
+		}
+		
+		if(!validation.isEmpty())
+			throw new AnalyticsException("Illegal filter input: " + validation);
+	}
+	
 }

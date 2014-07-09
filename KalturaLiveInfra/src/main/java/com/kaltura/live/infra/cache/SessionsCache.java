@@ -8,6 +8,8 @@ import com.datastax.driver.core.Metadata;
 import com.datastax.driver.core.Session;
 
 public class SessionsCache {
+	
+	private static Map<String, Cluster> clusters = new HashMap<String, Cluster>();
 	private static Map<String, Session> sessions = new HashMap<String, Session>();
 	
 	public static Session getSession(String node) {
@@ -23,9 +25,20 @@ public class SessionsCache {
 	        Metadata metadata = cluster.getMetadata();
 	        System.out.printf("Connected to %s\n", metadata.getClusterName());
 	        
+	     // TODO - Discuss with Orly the possibility to connect to a given key-space cluster.connect(key-space)
+	        clusters.put(node, cluster);
 	        sessions.put(node, cluster.connect());
-	        
 	}
 	    
-	    
+	@Override
+	protected void finalize() throws Throwable {
+		super.finalize();
+		for (Cluster cluster : clusters.values()) {
+			cluster.shutdown();
+		}
+		
+		for (Session session : sessions.values()) {
+			session.shutdown();
+		}
+	}
 }

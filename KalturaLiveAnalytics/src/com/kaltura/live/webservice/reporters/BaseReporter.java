@@ -4,9 +4,13 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.kaltura.live.Configuration;
 import com.kaltura.live.infra.cache.SerializableSession;
 import com.kaltura.live.infra.utils.DateUtils;
+import com.kaltura.live.webservice.model.AnalyticsException;
 import com.kaltura.live.webservice.model.LiveReportInputFilter;
 import com.kaltura.live.webservice.model.LiveStatsListResponse;
 
@@ -14,6 +18,8 @@ import com.kaltura.live.webservice.model.LiveStatsListResponse;
  * Interface for statistics generation
  */
 public abstract class BaseReporter {
+	
+	protected static Logger logger = LoggerFactory.getLogger(BaseReporter.class);
 	
 	private static final int TIME_FRAME_INTERVAL = 30;
 	public static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
@@ -24,10 +30,11 @@ public abstract class BaseReporter {
 		session = new SerializableSession(Configuration.NODE_NAME);
 	}
 	
-	protected void validateFilterForQuery() {
-		// TODO
-		return;
-	}
+	/**
+	 * This function validates whether the filter is good enough to be used for this specific report
+	 * @throws AnalyticsException 
+	 */
+	abstract public void validateFilter(LiveReportInputFilter filter) throws AnalyticsException;
 	
 	/**
 	 * Abstract function. Each implementor is supposed to use the filter and return the matching live statistics
@@ -36,7 +43,7 @@ public abstract class BaseReporter {
 	 */
 	abstract public LiveStatsListResponse query(LiveReportInputFilter filter);
 	
-	/** --- Base reporter utils --- */
+	/** --- Base reporter utils --- */ 
 	
 	protected String addEntryIdsCondition(String entryIdsStr) {
 		String[] entryIds = entryIdsStr.split(",");
@@ -53,8 +60,6 @@ public abstract class BaseReporter {
 		sb.append(")");
 		return sb.toString();
 	}
-	
-	// TODO - naybe move this to the DAO.
 	
 	protected String addTimeRangeCondition(Date fromDate, Date toDate) {
 		SimpleDateFormat formatDate = new SimpleDateFormat(DATE_FORMAT);

@@ -8,6 +8,7 @@ import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.kaltura.live.infra.utils.DateUtils;
 import com.kaltura.live.model.aggregation.dao.LiveEntryEventDAO;
+import com.kaltura.live.webservice.model.AnalyticsException;
 import com.kaltura.live.webservice.model.EntryLiveStats;
 import com.kaltura.live.webservice.model.LiveReportInputFilter;
 import com.kaltura.live.webservice.model.LiveStats;
@@ -47,10 +48,23 @@ public class EntryTimeLineReporter extends BaseReporter {
 		sb.append(";");
 		
 		String query = sb.toString();
-		System.out.println("@_!! " + query);
+		logger.debug(query);
 		return query;
 	}
 	
+	@Override
+	public void validateFilter(LiveReportInputFilter filter) throws AnalyticsException {
+		
+		String validation = "";
+		if(filter.getEntryIds() == null)
+			validation = "Entry Ids can't be null. ";
+		if(filter.getFromTime() < 0)
+			validation += "From Time must be a positive number.";
+		if(filter.getToTime() < 0)
+			validation += "To Time must be a positive number.";
+		
+		if(!validation.isEmpty())
+			throw new AnalyticsException("Illegal filter input: " + validation);
+	}
 	
-
 }

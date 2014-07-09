@@ -9,7 +9,7 @@ import com.datastax.driver.core.Row;
 import com.kaltura.live.infra.utils.DateUtils;
 import com.kaltura.live.model.aggregation.dao.LiveEntryEventDAO;
 import com.kaltura.live.model.aggregation.dao.PartnerEventDAO;
-import com.kaltura.live.webservice.model.EntryLiveStats;
+import com.kaltura.live.webservice.model.AnalyticsException;
 import com.kaltura.live.webservice.model.LiveReportInputFilter;
 import com.kaltura.live.webservice.model.LiveStats;
 import com.kaltura.live.webservice.model.LiveStatsListResponse;
@@ -34,7 +34,7 @@ public class PartnerTotalReporter extends BaseReporter {
 		sb.append(";");
 		
 		String query = sb.toString();
-		System.out.println("@_!! " + query);
+		logger.debug(query);
 		return query;
 	}
 	
@@ -45,7 +45,6 @@ public class PartnerTotalReporter extends BaseReporter {
 		
 		Iterator<Row> itr = results.iterator();
 		
-		// TODO - ask orly if we ant to introduce a new object
 		long audience = 0;
 		long secondsViewed = 0;
 		long bufferTime = 0;
@@ -65,7 +64,7 @@ public class PartnerTotalReporter extends BaseReporter {
 		if(bitrateCount > 0)
 			avgBitrate = bitRate / bitrateCount;
 		
-		EntryLiveStats entry = new EntryLiveStats(0, audience, secondsViewed, bufferTime, avgBitrate, 0, 0, null);
+		LiveStats entry = new LiveStats(0, audience, secondsViewed, bufferTime, avgBitrate, 0, 0);
 		
 		List<LiveStats> result = new ArrayList<LiveStats>();
 		result.add(entry);
@@ -81,7 +80,7 @@ public class PartnerTotalReporter extends BaseReporter {
 		sb.append(";");
 		
 		String query = sb.toString();
-		System.out.println("@_!! " + query);
+		logger.debug(query);
 		return query;
 	}
 
@@ -97,13 +96,33 @@ public class PartnerTotalReporter extends BaseReporter {
 			float avgBitrate = 0;
 			if(dao.getBitrateCount() > 0)
 				avgBitrate = dao.getBitrate() / dao.getBitrateCount();
-			// TODO - ask orly which event type should be here
-			EntryLiveStats event = new EntryLiveStats(dao.getPlays(), dao.getAlive(), dao.getAlive()* 10, dao.getBufferTime(),
-					avgBitrate, dao.getEventTime().getTime(), (long)0, null);
+			LiveStats event = new LiveStats(dao.getPlays(), dao.getAlive(), dao.getAlive()* 10, dao.getBufferTime(),
+					avgBitrate, dao.getEventTime().getTime(), 0);
 			result.add(event);
 		}
 		
 		return new LiveStatsListResponse(result);
 	}
+	
+	@Override
+	public void validateFilter(LiveReportInputFilter filter) throws AnalyticsException {
+		
+		String validation = "";
+		
+		if(filter.isLive()) {
+			if(filter.getEntryIds() == null)
+				validation = "Entry Ids can't be null. ";
+		} else {
+			if(filter.getPartnerId() < 0)
+				validation += "Partner Id must be a positive number.";
+			
+			if(filter.getHoursBefore() < 0)
+				validation += "Hourse before must be a positive number.";
+		}
+		
+		if(!validation.isEmpty())
+			throw new AnalyticsException("Illegal filter input: " + validation);
+	}
+	
 	
 }

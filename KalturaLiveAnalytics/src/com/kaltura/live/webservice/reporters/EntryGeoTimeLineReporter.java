@@ -8,6 +8,7 @@ import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.kaltura.live.infra.utils.DateUtils;
 import com.kaltura.live.model.aggregation.dao.LiveEntryLocationEventDAO;
+import com.kaltura.live.webservice.model.AnalyticsException;
 import com.kaltura.live.webservice.model.Coordinates;
 import com.kaltura.live.webservice.model.GeoTimeLiveStats;
 import com.kaltura.live.webservice.model.LiveReportInputFilter;
@@ -51,8 +52,14 @@ public class EntryGeoTimeLineReporter extends BaseReporter {
 		sb.append(";");
 		
 		String query = sb.toString();
-		System.out.println("@_!! " + query);
+		logger.debug(query);
 		return query;
+	}
+
+	@Override
+	public void validateFilter(LiveReportInputFilter filter) throws AnalyticsException {
+		if(filter.getEntryIds() == null)
+			throw new AnalyticsException("Illegal filter input. Entry Ids can't be null.");
 	}
 	
 	

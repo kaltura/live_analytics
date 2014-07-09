@@ -9,6 +9,7 @@ import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.kaltura.live.infra.utils.DateUtils;
 import com.kaltura.live.model.aggregation.dao.LiveEntryReferrerEventDAO;
+import com.kaltura.live.webservice.model.AnalyticsException;
 import com.kaltura.live.webservice.model.EntryReferrerLiveStats;
 import com.kaltura.live.webservice.model.LiveReportInputFilter;
 import com.kaltura.live.webservice.model.LiveStats;
@@ -59,7 +60,20 @@ public class EntrySyndicationTotalReporter extends BaseReporter {
 		sb.append(";");
 		
 		String query = sb.toString();
-		System.out.println("@_!! " + query);
+		logger.debug(query);
 		return query;
+	}
+
+	@Override
+	public void validateFilter(LiveReportInputFilter filter) throws AnalyticsException {
+		
+		String validation = "";
+		if(filter.getEntryIds() == null)
+			validation = "Entry Ids can't be null. ";
+		if(filter.getHoursBefore() < 0)
+			validation += "Hours before must be a positive number.";
+		
+		if(!validation.isEmpty())
+			throw new AnalyticsException("Illegal filter input: " + validation);
 	}
 }

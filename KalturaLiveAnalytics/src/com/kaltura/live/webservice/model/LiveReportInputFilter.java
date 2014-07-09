@@ -2,14 +2,15 @@ package com.kaltura.live.webservice.model;
 
 public class LiveReportInputFilter {
 	
-	protected long partnerId;
-	protected int hoursBefore;
-	protected boolean isLive;
 	protected String entryIds;
+	protected long partnerId;
+	
+	protected boolean isLive;
+	
 	protected long eventTime;
+	protected int hoursBefore;
 	protected long fromTime;
 	protected long toTime;
-	protected String orderBy;
 	
 	public LiveReportInputFilter() {
 		super();
@@ -45,12 +46,6 @@ public class LiveReportInputFilter {
 	public void setToTime(long toTime) {
 		this.toTime = toTime;
 	}
-	public String getOrderBy() {
-		return orderBy;
-	}
-	public void setOrderBy(String orderBy) {
-		this.orderBy = orderBy;
-	}
 	
 	public long getPartnerId() {
 		return partnerId;
@@ -68,9 +63,10 @@ public class LiveReportInputFilter {
 		this.eventTime = eventTime;
 	}
 
-	public void validate() {
-		// TODO write validator
+	public void validate() throws AnalyticsException {
+		 if((entryIds != null) && (!entryIds.matches("^[\\w_, ]+"))) {
+			 throw new AnalyticsException("Entry ids contains illegal string request.");
+		 }
 	}
 
-	
 }
