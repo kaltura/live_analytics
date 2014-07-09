@@ -37,13 +37,13 @@ public class HourlyLiveAggregationThread extends LiveAggregationThread {
 		JavaPairRDD<EventKey, StatsEvent> eventByKeyMap = events.map(mapFunction);
 
 		if (aggregatedEvents != null) {
-			// filter old hours aggregated results
-			aggregatedEvents = aggregatedEvents.filter(new StatsEventsFilter());
 			eventByKeyMap = eventByKeyMap.union(aggregatedEvents);
 		}
 		
 		JavaPairRDD<EventKey, StatsEvent> mergedEventsByKey = eventByKeyMap.reduceByKey(reduceFunction);
 		JavaRDD<Boolean> result = mergedEventsByKey.mapPartitions(saveFunction);
+		// filter old hours aggregated results
+		mergedEventsByKey = mergedEventsByKey.filter(new StatsEventsFilter());
 		result.count();
 		
 		if (aggregatedEvents != null)		
