@@ -90,17 +90,24 @@ public class PartnerTotalReporter extends BaseReporter {
 		ResultSet results = session.getSession().execute(query);
 		
 		Iterator<Row> itr = results.iterator();
-		List<LiveStats> result = new ArrayList<LiveStats>();
+		
+		long plays = 0, secondsViewed = 0, bufferTime = 0, bitRate = 0, bitrateCount = 0;
 		while(itr.hasNext()) {
 			PartnerEventDAO dao = new PartnerEventDAO(itr.next());
-			float avgBitrate = 0;
-			if(dao.getBitrateCount() > 0)
-				avgBitrate = dao.getBitrate() / dao.getBitrateCount();
-			LiveStats event = new LiveStats(dao.getPlays(), dao.getAlive(), dao.getAlive()* 10, dao.getBufferTime(),
-					avgBitrate, dao.getEventTime().getTime(), 0);
-			result.add(event);
+			plays += dao.getPlays();
+			secondsViewed += dao.getAlive() * 10;
+			bufferTime += dao.getBufferTime();
+			bitRate += dao.getBitrate();
+			bitrateCount += dao.getBitrateCount();
 		}
 		
+		float avgBitrate = 0;
+		if(bitrateCount > 0)
+			avgBitrate = bitRate / bitrateCount;
+		
+		List<LiveStats> result = new ArrayList<LiveStats>();
+		LiveStats event = new LiveStats(plays, 0,secondsViewed, bufferTime, avgBitrate, 0, 0);
+		result.add(event);
 		return new LiveStatsListResponse(result);
 	}
 	
