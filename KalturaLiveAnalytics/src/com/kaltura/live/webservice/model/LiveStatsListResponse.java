@@ -20,7 +20,7 @@ public class LiveStatsListResponse {
 	
 	public LiveStatsListResponse(Collection<LiveStats> events) {
 		super();
-		this.events = events.toArray(new EntryLiveStats[events.size()]);
+		this.events = events.toArray(new LiveStats[events.size()]);
 		this.totalCount = events.size();
 	}
 	

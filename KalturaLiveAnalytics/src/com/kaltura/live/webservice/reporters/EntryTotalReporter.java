@@ -18,8 +18,6 @@ import com.kaltura.live.webservice.model.LiveStatsListResponse;
 
 public class EntryTotalReporter extends BaseReporter {
 	
-	// TODO - in case we'd like to use paging, we need to use paging token_entry_id_ > 
-	
 	@Override
 	public LiveStatsListResponse query(LiveReportInputFilter filter) {
 

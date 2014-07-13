@@ -34,11 +34,11 @@ public class SessionsCache {
 	protected void finalize() throws Throwable {
 		super.finalize();
 		for (Cluster cluster : clusters.values()) {
-			cluster.shutdown();
+			cluster.close();
 		}
 		
 		for (Session session : sessions.values()) {
-			session.shutdown();
+			session.close();
 		}
 	}
 }

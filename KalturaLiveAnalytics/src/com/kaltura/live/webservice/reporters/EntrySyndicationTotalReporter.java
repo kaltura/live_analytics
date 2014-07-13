@@ -41,7 +41,7 @@ public class EntrySyndicationTotalReporter extends BaseReporter {
 
 			@Override
 			public int compare(LiveStats o1, LiveStats o2) {
-				return (int) (o1.getPlays() - o2.getPlays());
+				return (int) (o2.getPlays() - o1.getPlays());
 			}
 		});
 		

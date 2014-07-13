@@ -9,8 +9,8 @@ import com.datastax.driver.core.Session;
 
 public class SerializableSession implements Externalizable {
 	
-	private String node;
-	private Session session;
+	protected String node;
+	protected Session session;
 	
 	public SerializableSession() {
 		node = "test";
