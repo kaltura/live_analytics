@@ -203,5 +203,5 @@ public class Ip2LocationRecord {
 	public String getUsageType() {
 		return usageType;
 	}
-    
+
 }

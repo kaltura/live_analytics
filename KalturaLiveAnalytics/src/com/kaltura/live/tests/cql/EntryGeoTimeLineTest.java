@@ -38,17 +38,18 @@ public class EntryGeoTimeLineTest extends BaseReporterTest {
     	LiveStatsListResponse results = reporter.query(createFilter());
     	
     	Assert.assertEquals(3, results.getTotalCount());
-    	Assert.assertTrue(testCountryAndCity(results, "-", "-"));
-    	Assert.assertTrue(testCountryAndCity(results, "-", "AFGHANISTAN"));
-    	Assert.assertTrue(testCountryAndCity(results, "CHARIKAR", "AFGHANISTAN"));
+    	LiveStats[] events = results.getEvents();
+    	testCountryAndCity((GeoTimeLiveStats) events[0], "-", "-");
+    	testCountryAndCity((GeoTimeLiveStats) events[1], "-", "AFGHANISTAN");
+    	
+    	GeoTimeLiveStats event2 = (GeoTimeLiveStats) events[2];
+    	testCountryAndCity(event2, "CHARIKAR", "AFGHANISTAN");
+    	Assert.assertTrue(event2.getCountry().getLatitude() > 0);
+    	Assert.assertTrue(event2.getCity().getLongitude() > 0);
     }
     
-    protected boolean testCountryAndCity(LiveStatsListResponse results, String city, String country) {
-    	for (LiveStats stat : results.getEvents()) {
-    		GeoTimeLiveStats geoStat = (GeoTimeLiveStats)stat;
-    		if(geoStat.getCity().getName().equals(city) && geoStat.getCountry().getName().equals(country))
-    			return true;
-		}
-    	return false;
+    protected void testCountryAndCity(GeoTimeLiveStats event, String city, String country) {
+    	Assert.assertEquals(city, event.getCity().getName());
+    	Assert.assertEquals(country, event.getCountry().getName());
     }
 }

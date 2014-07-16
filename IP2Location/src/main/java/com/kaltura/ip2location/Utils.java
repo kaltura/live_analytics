@@ -33,8 +33,7 @@ public class Utils {
     }
     
     public static float readFloat(RandomAccessFile f, long offset) throws IOException {
-    	f.seek(offset - 1);
-    	return f.readFloat();
+    	return Float.intBitsToFloat( (int)readUInteger(f, offset) );
     }
     
 }

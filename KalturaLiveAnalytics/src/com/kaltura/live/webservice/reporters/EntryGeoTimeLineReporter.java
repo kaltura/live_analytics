@@ -6,10 +6,10 @@ import java.util.List;
 
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
+import com.kaltura.ip2location.Coordinate;
 import com.kaltura.live.infra.utils.DateUtils;
 import com.kaltura.live.model.aggregation.dao.LiveEntryLocationEventDAO;
 import com.kaltura.live.webservice.model.AnalyticsException;
-import com.kaltura.live.webservice.model.Coordinates;
 import com.kaltura.live.webservice.model.GeoTimeLiveStats;
 import com.kaltura.live.webservice.model.LiveReportInputFilter;
 import com.kaltura.live.webservice.model.LiveStats;
@@ -26,15 +26,17 @@ public class EntryGeoTimeLineReporter extends BaseReporter {
 		
 		List<LiveStats> result = new ArrayList<LiveStats>();
 		while(itr.hasNext()) {
-			// TODO add country city to long - latitude.
 			LiveEntryLocationEventDAO dao = new LiveEntryLocationEventDAO(itr.next());
 			float avgBitrate = 0;
 			if(dao.getBitrateCount() > 0)
 				avgBitrate = dao.getBitrate() / dao.getBitrateCount();
+			
+			Coordinate city = GeographicalLocatorsCache.getCityLocator().getCityCoordinates(dao.getCountry(), dao.getCity());
+			Coordinate country = GeographicalLocatorsCache.getCountryLocator().getCountryCoordinates(dao.getCountry());
+			
 			GeoTimeLiveStats event = new GeoTimeLiveStats(dao.getPlays(), dao.getAlive(), dao.getAlive() * 10, 
 					dao.getBufferTime(), avgBitrate, (long)0, (long)0, dao.getEntryId(), 
-					new Coordinates(dao.getCountry(), 0, 0), 
-					new Coordinates(dao.getCity(), 0, 0));
+					city, country);
 			result.add(event);
 		}
 		
