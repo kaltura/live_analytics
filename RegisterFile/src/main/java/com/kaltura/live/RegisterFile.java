@@ -20,7 +20,7 @@ public class RegisterFile {
 
 	private SerializableSession cassandraSession;
 	
-	private static final long LOGS_TTL = 60 * 60 * 3; 
+	private static final int LOGS_TTL = 60 * 60 * 3; 
     
 
     public RegisterFile(String node) {
