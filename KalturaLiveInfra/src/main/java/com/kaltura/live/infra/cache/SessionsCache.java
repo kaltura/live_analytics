@@ -41,4 +41,12 @@ public class SessionsCache {
 			session.close();
 		}
 	}
+	
+	public static void disconnect(String node) {
+		if (sessions.containsKey(node)) {
+			sessions.get(node).close();
+			sessions.remove(node);
+		}
+	}
+	
 }
