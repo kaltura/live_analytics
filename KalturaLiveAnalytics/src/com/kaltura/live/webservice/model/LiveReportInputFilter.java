@@ -69,4 +69,12 @@ public class LiveReportInputFilter {
 		 }
 	}
 
+	@Override
+	public String toString() {
+		return "LiveReportInputFilter [entryIds=" + entryIds + ", partnerId="
+				+ partnerId + ", isLive=" + isLive + ", eventTime=" + eventTime
+				+ ", hoursBefore=" + hoursBefore + ", fromTime=" + fromTime
+				+ ", toTime=" + toTime + "]";
+	}
+
 }

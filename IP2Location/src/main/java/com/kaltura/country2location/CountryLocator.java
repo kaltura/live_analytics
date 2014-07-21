@@ -7,7 +7,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -65,17 +64,10 @@ public class CountryLocator {
 	}
 	
 	public Coordinate getCountryCoordinates(String country) {
-		System.out.println("country : " + country);
 		if(countryToCoord.containsKey(country)) {
 			return countryToCoord.get(country);
 		}
 		
-		System.err.println("Coundn't find");
-		
-		for (Entry<String, Coordinate> itr : countryToCoord.entrySet()) {
-			System.err.println(itr.getKey() + "\t" + itr.getValue().getName());
-			
-		}
 		return new Coordinate(country, 0, 0);
 	}
 	
