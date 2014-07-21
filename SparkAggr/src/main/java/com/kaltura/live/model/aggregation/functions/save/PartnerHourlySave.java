@@ -1,6 +1,7 @@
 package com.kaltura.live.model.aggregation.functions.save;
 
 import com.kaltura.live.infra.cache.SerializableSession;
+import com.kaltura.live.model.aggregation.dao.LiveEntryEventDAO;
 import com.kaltura.live.model.aggregation.dao.LiveEventDAO;
 import com.kaltura.live.model.aggregation.dao.PartnerEventDAO;
 
@@ -16,7 +17,7 @@ public class PartnerHourlySave extends LiveEventSave {
 
 	@Override
 	protected LiveEventDAO createLiveEventDAO() {
-		return new PartnerEventDAO(TABLE_NAME);
+		return new PartnerEventDAO(TABLE_NAME, PartnerEventDAO.HOURLY_AGGR_TTL);
 	}
 
 }

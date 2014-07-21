@@ -16,7 +16,7 @@ import com.kaltura.live.model.aggregation.keys.EventKey;
 /**
  * This thread is responsible for aggregating results over a given event list and save them
  */
-public class LiveAggregationThread implements Runnable, Serializable {
+public class LiveAggregationThread implements /*Runnable,*/ Serializable {
 
 	private static final long serialVersionUID = 1636139741423548096L;
 	
@@ -46,7 +46,7 @@ public class LiveAggregationThread implements Runnable, Serializable {
 		this.events = events; 
 	}
 	
-	@Override
+	//@Override
 	public void run() {
 		
 		JavaPairRDD<EventKey, StatsEvent> eventByKeyMap = events.map(mapFunction);

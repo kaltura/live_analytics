@@ -14,10 +14,13 @@ public class PartnerEventDAO extends LiveEventDAO {
 	private static final long serialVersionUID = 1506062076872874654L;
 	
 	protected String tableName;
+	protected int ttl;
+	
 	protected int partnerId;
 	
-	public PartnerEventDAO(String tableName) {
+	public PartnerEventDAO(String tableName, int ttl) {
 		this.tableName = tableName;
+		this.ttl = ttl;
 	}
 	
 	public PartnerEventDAO(Row row) {
@@ -46,6 +49,11 @@ public class PartnerEventDAO extends LiveEventDAO {
 		BoundStatement boundStatement = new BoundStatement(statement);
 		session.getSession().execute(boundStatement.bind(aggregatedResult.getPartnerId(), aggregatedResult.getEventTime(), aggregatedResult.getPlays(), aggregatedResult.getAlive(), aggregatedResult.getBitrate(), aggregatedResult.getBitrateCount(), aggregatedResult.getBufferTime()));
 		
+	}
+
+	@Override
+	protected int getTTL() {
+		return ttl;
 	}
 
 }

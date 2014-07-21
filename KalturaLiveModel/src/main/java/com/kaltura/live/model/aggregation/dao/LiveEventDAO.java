@@ -17,7 +17,13 @@ import com.kaltura.live.model.aggregation.StatsEvent;
  *	This class is a base class representing the cassandra access object for live aggregation objects 
  */
 public abstract class LiveEventDAO implements Serializable {
-
+	
+	
+	public static final int AGGR_TTL = 60 * 60 * 3;
+	
+	// Equivalent to no TTL
+	public static final int HOURLY_AGGR_TTL = 0;
+	
 	/** Auto generated serial UID */
 	private static final long serialVersionUID = 3957419748277847064L;
 	
@@ -99,7 +105,7 @@ public abstract class LiveEventDAO implements Serializable {
 			Arrays.fill(values, "?");
 			String valuesStr = StringUtils.join(Arrays.asList(values), ",");
 			statement = session.getSession().prepare("INSERT INTO " + getTableName() + " (" + fieldsStr + ") " +
-					"VALUES (" + valuesStr + ")");
+					"VALUES (" + valuesStr + ") USING TTL " + getTTL());
 		}
 	}
 	
@@ -109,6 +115,12 @@ public abstract class LiveEventDAO implements Serializable {
 	 * @param event The event we'd like to save
 	 */
 	abstract public void saveOrUpdate(SerializableSession session, StatsEvent aggregatedResult);
+	
+	/**
+	 * @return TTL to save row in seconds 
+	 */
+	abstract protected int getTTL();
+	
 	
 	/** -- Getters and setters */
 

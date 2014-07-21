@@ -119,7 +119,14 @@ public class SparkAggregation {
 				locationEntryAggr.init(loadedEvents);
 				referrerHourlyAggr.init(loadedEvents);
 				partnerHourlyAggr.init(loadedEvents);
-
+				
+				entryAggr.run();
+				entryHourlyAggr.run();
+				locationEntryAggr.run();
+				referrerHourlyAggr.run();
+				partnerHourlyAggr.run();
+				
+				/*
 				aggregations.add(new Thread(entryAggr));
 				aggregations.add(new Thread(entryHourlyAggr));
 				aggregations.add(new Thread(locationEntryAggr));
@@ -133,20 +140,18 @@ public class SparkAggregation {
 				for (Thread aggr : aggregations) {
 					aggr.join();
 				}
-
+				*/
+				
 				loadedEvents.unpersist();
 
 				long endTime = System.currentTimeMillis();
 				System.out.println("Iteration time (msec): "
 						+ (endTime - startTime));
 				Thread.sleep(1000 * 20);
-
-				// Thread.sleep(1000 * 120);
-				// System.exit(0);
 			}
 
 		}
-		//
+		
 		Thread.sleep(1000 * 120);
 		System.exit(0);
 

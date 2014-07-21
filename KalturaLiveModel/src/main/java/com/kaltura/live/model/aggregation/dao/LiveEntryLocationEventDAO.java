@@ -67,4 +67,9 @@ public class LiveEntryLocationEventDAO extends LiveEventDAO {
 		this.entryId = entryId;
 	}
 
+	@Override
+	protected int getTTL() {
+		return AGGR_TTL;
+	}
+
 }

@@ -16,7 +16,7 @@ public class LiveEntryHourlySave extends LiveEventSave {
 	
 	@Override
 	protected LiveEventDAO createLiveEventDAO() {
-		return new LiveEntryEventDAO(TABLE_NAME);
+		return new LiveEntryEventDAO(TABLE_NAME, LiveEntryEventDAO.HOURLY_AGGR_TTL);
 	}
 
 }

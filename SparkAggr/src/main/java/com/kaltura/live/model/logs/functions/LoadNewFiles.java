@@ -28,7 +28,7 @@ public class LoadNewFiles extends FlatMapFunction<String, String> {
 
 		byte[] fileData = null;
 		
-		String q1 = "SELECT * FROM kaltura_live.log_data WHERE id = '"
+		String q1 = "SELECT * FROM kaltura_live.log_data WHERE file_id = '"
 				+ fileId + "';";
 
 		ResultSet results = session.getSession()
