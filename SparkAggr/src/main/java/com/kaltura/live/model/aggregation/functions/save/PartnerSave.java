@@ -16,7 +16,7 @@ public class PartnerSave extends LiveEventSave {
 
 	@Override
 	protected LiveEventDAO createLiveEventDAO() {
-		return new PartnerEventDAO(TABLE_NAME);
+		return new PartnerEventDAO(TABLE_NAME, PartnerEventDAO.AGGR_TTL);
 	}
 
 }

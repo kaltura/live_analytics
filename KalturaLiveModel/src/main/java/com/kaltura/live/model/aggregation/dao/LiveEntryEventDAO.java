@@ -16,12 +16,15 @@ public class LiveEntryEventDAO extends LiveEventDAO {
 	private static final long serialVersionUID = 7816082102323233816L;
 	
 	protected String tableName;
+	
+	protected int ttl;
 
 	protected String entryId;
 	
-	public LiveEntryEventDAO(String tableName) {
+	public LiveEntryEventDAO(String tableName, int ttl) {
 		super();
 		this.tableName = tableName;
+		this.ttl = ttl;
 	}
 	
 	public LiveEntryEventDAO(Row row) {
@@ -51,5 +54,10 @@ public class LiveEntryEventDAO extends LiveEventDAO {
 
 	public void setEntryId(String entryId) {
 		this.entryId = entryId;
+	}
+
+	@Override
+	protected int getTTL() {
+		return ttl;
 	}
 }

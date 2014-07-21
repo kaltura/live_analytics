@@ -60,5 +60,10 @@ public class LiveEntryReferrerEventDAO extends LiveEventDAO {
 	public void setEntryId(String entryId) {
 		this.entryId = entryId;
 	}
+
+	@Override
+	protected int getTTL() {
+		return HOURLY_AGGR_TTL;
+	}
 	
 }

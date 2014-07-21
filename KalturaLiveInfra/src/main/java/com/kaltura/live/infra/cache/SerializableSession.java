@@ -36,5 +36,9 @@ public class SerializableSession implements Externalizable {
 		return session;
 	}
 	
+	public void disconnect() {
+		SessionsCache.disconnect(node);
+	}
+	
 
 }

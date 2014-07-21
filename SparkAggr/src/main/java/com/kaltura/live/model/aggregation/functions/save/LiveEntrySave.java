@@ -19,6 +19,6 @@ public class LiveEntrySave extends LiveEventSave {
 	
 	@Override
 	protected LiveEventDAO createLiveEventDAO() {
-		return new LiveEntryEventDAO(TABLE_NAME);
+		return new LiveEntryEventDAO(TABLE_NAME, LiveEntryEventDAO.AGGR_TTL);
 	}
 }
