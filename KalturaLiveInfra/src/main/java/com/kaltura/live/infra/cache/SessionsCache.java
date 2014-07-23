@@ -47,6 +47,11 @@ public class SessionsCache {
 			sessions.get(node).close();
 			sessions.remove(node);
 		}
+		
+		if (clusters.containsKey(node)) {
+			clusters.get(node).close();
+			clusters.remove(node);
+		}
 	}
 	
 }

@@ -2,6 +2,7 @@ package com.kaltura.live.model.logs.functions;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -9,21 +10,26 @@ import java.util.List;
 import java.util.zip.GZIPInputStream;
 
 import org.apache.spark.api.java.function.FlatMapFunction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
+import com.kaltura.live.SparkAggregation;
 import com.kaltura.live.SparkConfiguration;
 import com.kaltura.live.infra.cache.SerializableSession;
 
 public class LoadNewFiles extends FlatMapFunction<String, String> {
 
 	private static final long serialVersionUID = 1673487538347695847L;
+	
+	private static Logger LOG = LoggerFactory.getLogger(LoadNewFiles.class);
 
 	SerializableSession session = new SerializableSession(
 			SparkConfiguration.NODE_NAME);
 
 	@Override
-	public Iterable<String> call(String fileId) throws Exception {
+	public Iterable<String> call(String fileId) {
 		List<String> lines = new ArrayList<String>();
 
 		byte[] fileData = null;
@@ -42,17 +48,36 @@ public class LoadNewFiles extends FlatMapFunction<String, String> {
 
 		ByteArrayInputStream bStream = new ByteArrayInputStream(
 				fileData);
-		GZIPInputStream gzis = new GZIPInputStream(
-				bStream);
-		InputStreamReader reader = new InputStreamReader(
-				gzis);
-		BufferedReader in = new BufferedReader(reader);
-		String readed;
-		while ((readed = in.readLine()) != null) {
-			lines.add(readed);
-		}
 		
-		return lines;
+		GZIPInputStream gzis = null;
+		BufferedReader in = null;
+		try {
+			gzis = new GZIPInputStream(
+					bStream);
+			InputStreamReader reader = new InputStreamReader(
+					gzis);
+			in = new BufferedReader(reader);
+			String readed;
+			while ((readed = in.readLine()) != null) {
+				lines.add(readed);
+			}
+		} catch (IOException e) {
+			
+		} finally {
+			try {
+				if (bStream != null)
+					bStream.close();
+				if (gzis != null)
+					gzis.close();
+				if (in != null)
+					in.close();
+			}catch (IOException ex) {
+				LOG.error("Failed to close GZipInputStream" + ex.getMessage());
+            }
+		}
+			
+			return lines;
+			
 	}
 
 }

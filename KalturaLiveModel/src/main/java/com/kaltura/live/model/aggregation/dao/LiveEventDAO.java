@@ -16,8 +16,7 @@ import com.kaltura.live.model.aggregation.StatsEvent;
 /**
  *	This class is a base class representing the cassandra access object for live aggregation objects 
  */
-public abstract class LiveEventDAO implements Serializable {
-	
+public abstract class LiveEventDAO extends LiveDAO {
 	
 	public static final int AGGR_TTL = 60 * 60 * 3;
 	
@@ -27,8 +26,6 @@ public abstract class LiveEventDAO implements Serializable {
 	/** Auto generated serial UID */
 	private static final long serialVersionUID = 3957419748277847064L;
 	
-	/** Prepared statement for cassandra update */
-	protected PreparedStatement statement;
 	
 	/** --- Object fields --- */
 	
@@ -43,7 +40,7 @@ public abstract class LiveEventDAO implements Serializable {
 	 * Empty constructor
 	 */
 	public LiveEventDAO() {
-		
+		super();
 	}
 	
 	/**
@@ -51,6 +48,7 @@ public abstract class LiveEventDAO implements Serializable {
 	 * @param row
 	 */
 	public LiveEventDAO(Row row) {
+		super();
 		this.eventTime = row.getDate("event_time");
 		this.alive = row.getLong("alive");
 		this.bitrate = row.getLong("bitrate");
@@ -93,33 +91,6 @@ public abstract class LiveEventDAO implements Serializable {
 		fields.addAll(getCommonFields());
 		return fields;
 	}
-	
-	/**
-	 * @param session creates and initializes the update statement if needed.
-	 */
-	protected void createStatement(SerializableSession session) {
-		if(statement == null) {
-			List<String> fields = getTableFields();
-			String fieldsStr = StringUtils.join(fields, ",");
-			String[] values = new String[fields.size()];
-			Arrays.fill(values, "?");
-			String valuesStr = StringUtils.join(Arrays.asList(values), ",");
-			statement = session.getSession().prepare("INSERT INTO " + getTableName() + " (" + fieldsStr + ") " +
-					"VALUES (" + valuesStr + ") USING TTL " + getTTL());
-		}
-	}
-	
-	/**
-	 * Saves a single event to a given cassandra session
-	 * @param session The session connecting to the cassandra
-	 * @param event The event we'd like to save
-	 */
-	abstract public void saveOrUpdate(SerializableSession session, StatsEvent aggregatedResult);
-	
-	/**
-	 * @return TTL to save row in seconds 
-	 */
-	abstract protected int getTTL();
 	
 	
 	/** -- Getters and setters */
