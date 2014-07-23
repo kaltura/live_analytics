@@ -49,7 +49,7 @@ public class LivePartnerEntryDAO extends LiveDAO {
 
 	@Override
 	protected int getTTL() {
-		return 37;
+		return 60 * 60 * 37;
 	}
 
 	@Override
