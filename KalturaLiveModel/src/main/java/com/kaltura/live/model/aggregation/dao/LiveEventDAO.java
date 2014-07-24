@@ -1,17 +1,11 @@
 package com.kaltura.live.model.aggregation.dao;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
-
-import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.Row;
-import com.kaltura.live.infra.cache.SerializableSession;
-import com.kaltura.live.model.aggregation.StatsEvent;
 
 /**
  *	This class is a base class representing the cassandra access object for live aggregation objects 

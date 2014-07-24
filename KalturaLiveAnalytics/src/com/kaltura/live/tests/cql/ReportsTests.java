@@ -11,7 +11,8 @@ import org.junit.runners.Suite.SuiteClasses;
 	EntryTotalLiveTest.class,
 	EntryTotalPastTest.class, 
 	PartnerTotalLiveTest.class,
-	PartnerTotalPastTest.class })
+	PartnerTotalPastTest.class,
+	LiveEntriesTest.class})
 public class ReportsTests {
 
 }

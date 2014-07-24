@@ -1,9 +1,11 @@
 package com.kaltura.live.webservice.reporters;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.TreeSet;
 
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
@@ -37,17 +39,17 @@ public class EntrySyndicationTotalReporter extends BaseReporter {
 			}
 		}
 		
-		TreeSet<LiveStats> set = new TreeSet<LiveStats>(new Comparator<LiveStats>() {
-
+		List<LiveStats> stats = new ArrayList<LiveStats>(map.values());
+		Collections.sort(stats, new Comparator<LiveStats>() {
 			@Override
 			public int compare(LiveStats o1, LiveStats o2) {
 				return (int) (o2.getPlays() - o1.getPlays());
 			}
 		});
 		
-		set.addAll(map.values());
+		List<LiveStats> limitedRes = stats.subList(0, Math.min(stats.size(), filter.getResultsLimit()));
 		
-		return new LiveStatsListResponse(set);
+		return new LiveStatsListResponse(limitedRes);
 	}
 	
 	protected String generateQuery(LiveReportInputFilter filter) {
@@ -69,9 +71,11 @@ public class EntrySyndicationTotalReporter extends BaseReporter {
 		
 		String validation = "";
 		if(filter.getEntryIds() == null)
-			validation = "Entry Ids can't be null. ";
+			validation = " Entry Ids can't be null. ";
 		if(filter.getHoursBefore() < 0)
-			validation += "Hours before must be a positive number.";
+			validation += " Hours before must be a positive number.";
+		if(filter.getResultsLimit() <= 0)
+			validation += " results limit must be a positive number.";
 		
 		if(!validation.isEmpty())
 			throw new AnalyticsException("Illegal filter input: " + validation);

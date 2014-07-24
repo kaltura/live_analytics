@@ -29,6 +29,7 @@ public class EntrySyndicationTotalTest extends BaseReporterTest {
 		LiveReportInputFilter filter = new LiveReportInputFilter();
 		filter.setEntryIds("test_entry");
 		filter.setHoursBefore(1);
+		filter.setResultsLimit(2);
 		return filter;
     }
     
@@ -38,12 +39,11 @@ public class EntrySyndicationTotalTest extends BaseReporterTest {
     	EntrySyndicationTotalReporter reporter = new EntrySyndicationTotalReporterMock(cassandraCQLUnit.session);
     	LiveStatsListResponse results = reporter.query(createFilter());
     	
-    	Assert.assertEquals(3, results.getTotalCount());
+    	Assert.assertEquals(2, results.getTotalCount());
     	
     	LiveStats[] events = results.getEvents();
     	verifyReferrer(events, 0, "testC", 200);
     	verifyReferrer(events, 1, "testB", 100); 	
-    	verifyReferrer(events, 2, "testA", 6);
     }
 
 	private void verifyReferrer(LiveStats[] events, int i, String name,

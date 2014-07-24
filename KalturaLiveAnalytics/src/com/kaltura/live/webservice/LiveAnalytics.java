@@ -8,6 +8,7 @@ import javax.xml.ws.RequestWrapper;
 import javax.xml.ws.ResponseWrapper;
 
 import com.kaltura.live.webservice.model.AnalyticsException;
+import com.kaltura.live.webservice.model.LiveEntriesListResponse;
 import com.kaltura.live.webservice.model.LiveReportInputFilter;
 import com.kaltura.live.webservice.model.LiveReportType;
 import com.kaltura.live.webservice.model.LiveStatsListResponse;
@@ -21,5 +22,10 @@ public interface LiveAnalytics{
 	@ResponseWrapper(localName = "getReportResponse")
 	public LiveStatsListResponse getReport(
 			LiveReportType reportType, LiveReportInputFilter filter) throws AnalyticsException;
+	
+	@WebMethod
+	@RequestWrapper(localName = "getLiveEntriesRequest")
+	@ResponseWrapper(localName = "getLiveEntriesResponse")
+	public LiveEntriesListResponse getLiveEntries(Integer partnerId);
 	
 }

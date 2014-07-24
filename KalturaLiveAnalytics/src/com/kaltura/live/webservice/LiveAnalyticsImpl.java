@@ -6,10 +6,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.kaltura.live.webservice.model.AnalyticsException;
+import com.kaltura.live.webservice.model.LiveEntriesListResponse;
 import com.kaltura.live.webservice.model.LiveReportInputFilter;
 import com.kaltura.live.webservice.model.LiveReportType;
 import com.kaltura.live.webservice.model.LiveStatsListResponse;
 import com.kaltura.live.webservice.reporters.BaseReporter;
+import com.kaltura.live.webservice.reporters.LivePartnerEntryService;
 import com.kaltura.live.webservice.reporters.ReportersFactory;
 
 @WebService(endpointInterface="com.kaltura.live.webservice.LiveAnalytics")
@@ -35,4 +37,13 @@ public class LiveAnalyticsImpl implements LiveAnalytics{
 		return result;
 			
 	}
+
+	@Override
+	public LiveEntriesListResponse getLiveEntries(Integer partnerId) {
+		logger.debug("Live Analytics - Handling get live entries request for partner id : " + partnerId);
+		LivePartnerEntryService service = new LivePartnerEntryService();
+		return service.getLiveEntries(partnerId);
+	}
+	
+	
 }

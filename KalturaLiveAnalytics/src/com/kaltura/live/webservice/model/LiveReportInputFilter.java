@@ -12,6 +12,8 @@ public class LiveReportInputFilter {
 	protected long fromTime;
 	protected long toTime;
 	
+	protected int resultsLimit = 10;
+	
 	public LiveReportInputFilter() {
 		super();
 	}
@@ -62,13 +64,21 @@ public class LiveReportInputFilter {
 	public void setEventTime(long eventTime) {
 		this.eventTime = eventTime;
 	}
+	
+	public int getResultsLimit() {
+		return resultsLimit;
+	}
+
+	public void setResultsLimit(int resultsLimit) {
+		this.resultsLimit = resultsLimit;
+	}
 
 	public void validate() throws AnalyticsException {
-		 if((entryIds != null) && (!entryIds.matches("^[\\w_, ]+"))) {
+		 if((entryIds != null) && (!entryIds.matches("^[\\w_, ]*"))) {
 			 throw new AnalyticsException("Entry ids contains illegal string request.");
 		 }
 	}
-
+	
 	@Override
 	public String toString() {
 		return "LiveReportInputFilter [entryIds=" + entryIds + ", partnerId="
@@ -76,5 +86,6 @@ public class LiveReportInputFilter {
 				+ ", hoursBefore=" + hoursBefore + ", fromTime=" + fromTime
 				+ ", toTime=" + toTime + "]";
 	}
+
 
 }
