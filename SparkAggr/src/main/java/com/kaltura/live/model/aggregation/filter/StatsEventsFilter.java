@@ -12,16 +12,19 @@ import com.kaltura.live.model.aggregation.keys.EventKey;
 
 import scala.Tuple2;
 
-public class StatsEventsFilter extends Function<Tuple2<EventKey, StatsEvent>, Boolean> {
+public abstract class StatsEventsFilter implements Function<Tuple2<EventKey, StatsEvent>, Boolean> {
 
 
 	private static final long serialVersionUID = 1923660264190281156L;
 
+	protected abstract Date getLatestTimeToSave();
+	
 	@Override
 	public Boolean call(Tuple2<EventKey, StatsEvent> event) throws Exception {
 		EventKey eventKey = event._1;
 		
 		if (eventKey.getEventTime().equals(new Date(DateUtils.getCurrentHourInMillis() - TimeUnit.HOURS.toMillis(SparkConfiguration.HOURS_TO_SAVE)))) {
+		if (eventKey.getEventTime().before(getLatestTimeToSave()))
 			return false;
 		}
 		

@@ -12,7 +12,7 @@ public class LiveEntryHourlyMap extends LiveEventMap {
 	private static final long serialVersionUID = -4496815986481100056L;
 
 	@Override
-	public Tuple2<EventKey, StatsEvent> call(StatsEvent s) {
+	public Tuple2<EventKey, StatsEvent> call(StatsEvent s) throws Exception {
 		return new Tuple2<EventKey, StatsEvent>(new EntryHourlyKey(s.getEntryId(), DateUtils.roundHourDate(s.getEventTime()), s.getPartnerId()) , s);
 	}
 	

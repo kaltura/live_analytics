@@ -1,10 +1,8 @@
 package com.kaltura.live;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.apache.spark.api.java.JavaRDD;
@@ -27,8 +25,9 @@ import com.kaltura.live.model.aggregation.functions.save.LiveEntryLocationSave;
 import com.kaltura.live.model.aggregation.functions.save.LiveEntryReferrerSave;
 import com.kaltura.live.model.aggregation.functions.save.LiveEntrySave;
 import com.kaltura.live.model.aggregation.functions.save.PartnerHourlySave;
-import com.kaltura.live.model.aggregation.threads.HourlyLiveAggregationThread;
-import com.kaltura.live.model.aggregation.threads.LiveAggregationThread;
+import com.kaltura.live.model.aggregation.threads.HourlyLiveAggregationCycle;
+import com.kaltura.live.model.aggregation.threads.LiveAggregationCycle;
+import com.kaltura.live.model.aggregation.threads.RealTimeLiveAggregationCycle;
 import com.kaltura.live.model.logs.functions.FilterOldFileIds;
 import com.kaltura.live.model.logs.functions.GetNewFileIds;
 import com.kaltura.live.model.logs.functions.LoadNewFiles;
@@ -49,20 +48,11 @@ public class SparkAggregation {
 		SerializableSession session = new SerializableSession(SparkConfiguration.NODE_NAME);
 		
 		// Generate aggregation threads
-		LiveAggregationThread entryAggr = new LiveAggregationThread(new LiveEntryMap(), new LiveEventReduce(), new LiveEntrySave(session));
-		HourlyLiveAggregationThread entryHourlyAggr = new HourlyLiveAggregationThread(new LiveEntryHourlyMap(), new LiveEventReduce(), new LiveEntryHourlySave(session));
-		LiveAggregationThread locationEntryAggr = new LiveAggregationThread(new LiveEntryLocationMap(), new LiveEventReduce(), new LiveEntryLocationSave(session));
-		HourlyLiveAggregationThread referrerHourlyAggr = new HourlyLiveAggregationThread(new LiveEntryReferrerMap(), new LiveEventReduce(), new LiveEntryReferrerSave(session));
-		HourlyLiveAggregationThread partnerHourlyAggr = new HourlyLiveAggregationThread(new PartnerHourlyMap(), new LiveEventReduce(), new PartnerHourlySave(session));
-
-		
-		Map<Long, String> filesByHour = new HashMap<Long, String>();
-		/*
-		// 2013-12-15 10:00
-		filesByHour.put(1387101600000L, "");
-		// 2013-12-15 11:00
-		filesByHour.put(1387105200000L, "");
-		**/
+		LiveAggregationCycle entryAggr = new RealTimeLiveAggregationCycle(new LiveEntryMap(), new LiveEventReduce(), new LiveEntrySave(session));
+		HourlyLiveAggregationCycle entryHourlyAggr = new HourlyLiveAggregationCycle(new LiveEntryHourlyMap(), new LiveEventReduce(), new LiveEntryHourlySave(session));
+		LiveAggregationCycle locationEntryAggr = new RealTimeLiveAggregationCycle(new LiveEntryLocationMap(), new LiveEventReduce(), new LiveEntryLocationSave(session));
+		HourlyLiveAggregationCycle referrerHourlyAggr = new HourlyLiveAggregationCycle(new LiveEntryReferrerMap(), new LiveEventReduce(), new LiveEntryReferrerSave(session));
+		HourlyLiveAggregationCycle partnerHourlyAggr = new HourlyLiveAggregationCycle(new PartnerHourlyMap(), new LiveEventReduce(), new PartnerHourlySave(session));
 		
 		long executionStartTime = System.currentTimeMillis();
 
@@ -110,10 +100,6 @@ public class SparkAggregation {
 				loadedEvents.cache();
 				loadedEvents.count();
 
-				
-				// Run each aggregation in different thread
-				List<Thread> aggregations = new ArrayList<Thread>();
-
 				entryAggr.init(loadedEvents);
 				entryHourlyAggr.init(loadedEvents);
 				locationEntryAggr.init(loadedEvents);
@@ -125,22 +111,6 @@ public class SparkAggregation {
 				locationEntryAggr.run();
 				referrerHourlyAggr.run();
 				partnerHourlyAggr.run();
-				
-				/*
-				aggregations.add(new Thread(entryAggr));
-				aggregations.add(new Thread(entryHourlyAggr));
-				aggregations.add(new Thread(locationEntryAggr));
-				aggregations.add(new Thread(referrerHourlyAggr));
-				aggregations.add(new Thread(partnerHourlyAggr));
-
-				for (Thread aggr : aggregations) {
-					aggr.start();
-				}
-
-				for (Thread aggr : aggregations) {
-					aggr.join();
-				}
-				*/
 				
 				loadedEvents.unpersist();
 

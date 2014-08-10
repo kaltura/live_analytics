@@ -10,7 +10,7 @@ import com.kaltura.ip2location.SerializableIP2LocationReader;
 import com.kaltura.live.SparkConfiguration;
 import com.kaltura.live.model.aggregation.StatsEvent;
 
-public class StatsEventMap extends FlatMapFunction<Iterator<String>, StatsEvent>{
+public class StatsEventMap implements FlatMapFunction<Iterator<String>, StatsEvent>{
 
 	private static final long serialVersionUID = -61094768891844569L;
 

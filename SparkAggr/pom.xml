@@ -24,10 +24,10 @@
 
 	</repositories>
 	<dependencies>
-		<dependency> <!-- Spark dependency -->
+		<dependency>
 			<groupId>org.apache.spark</groupId>
-			<artifactId>spark-core_2.9.3</artifactId>
-			<version>0.8.1-incubating</version>
+			<artifactId>spark-core_2.10</artifactId>
+			<version>1.0.1</version>
 		</dependency>
 		<dependency>
 			<groupId>com.datastax.cassandra</groupId>

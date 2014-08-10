@@ -12,7 +12,7 @@ public class LiveEntryReferrerMap extends LiveEventMap{
 	private static final long serialVersionUID = 3784007470981992581L;
 
 	@Override
-	public Tuple2<EventKey, StatsEvent> call(StatsEvent s) {
+	public Tuple2<EventKey, StatsEvent> call(StatsEvent s) throws Exception {
 		return new Tuple2<EventKey, StatsEvent>(new EntryReferrerKey(s.getEntryId(), DateUtils.roundHourDate(s.getEventTime()), s.getPartnerId(), s.getReferrer()), s);
 	}
 

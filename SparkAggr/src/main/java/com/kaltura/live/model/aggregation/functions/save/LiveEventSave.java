@@ -15,7 +15,7 @@ import com.kaltura.live.model.aggregation.keys.EventKey;
 /**
  *  This is base class represent a live aggregation save functionality
  */
-public abstract class LiveEventSave extends FlatMapFunction<Iterator<Tuple2<EventKey, StatsEvent>>, Boolean> {
+public abstract class LiveEventSave implements FlatMapFunction<Iterator<Tuple2<EventKey, StatsEvent>>, Boolean> {
 
 	private static final long serialVersionUID = 2988746438063952734L;
 	

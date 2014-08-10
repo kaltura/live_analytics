@@ -19,7 +19,7 @@ import com.kaltura.live.SparkAggregation;
 import com.kaltura.live.SparkConfiguration;
 import com.kaltura.live.infra.cache.SerializableSession;
 
-public class LoadNewFiles extends FlatMapFunction<String, String> {
+public class LoadNewFiles implements FlatMapFunction<String, String> {
 
 	private static final long serialVersionUID = 1673487538347695847L;
 	

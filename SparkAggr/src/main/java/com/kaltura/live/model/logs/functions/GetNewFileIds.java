@@ -13,7 +13,7 @@ import com.kaltura.live.infra.cache.SerializableSession;
 /**
  *	New log file watcher
  */
-public class GetNewFileIds extends FlatMapFunction<Long, String> {
+public class GetNewFileIds implements FlatMapFunction<Long, String> {
 
 	private static final long serialVersionUID = 4626988950546579557L;
 	

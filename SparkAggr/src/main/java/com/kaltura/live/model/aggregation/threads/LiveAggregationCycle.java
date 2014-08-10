@@ -8,6 +8,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.kaltura.live.model.aggregation.StatsEvent;
+import com.kaltura.live.model.aggregation.filter.StatsEventHourlyFilter;
+import com.kaltura.live.model.aggregation.filter.StatsEventsFilter;
 import com.kaltura.live.model.aggregation.functions.map.LiveEventMap;
 import com.kaltura.live.model.aggregation.functions.reduce.LiveEventReduce;
 import com.kaltura.live.model.aggregation.functions.save.LiveEventSave;
@@ -16,14 +18,17 @@ import com.kaltura.live.model.aggregation.keys.EventKey;
 /**
  * This thread is responsible for aggregating results over a given event list and save them
  */
-public class LiveAggregationThread implements /*Runnable,*/ Serializable {
+public abstract class LiveAggregationCycle implements /*Runnable,*/ Serializable {
 
 	private static final long serialVersionUID = 1636139741423548096L;
 	
-	private static Logger LOG = LoggerFactory.getLogger(LiveAggregationThread.class);
+	private static Logger LOG = LoggerFactory.getLogger(LiveAggregationCycle.class);
 	
 	/** This is a list of events to aggregate */
 	protected JavaRDD<StatsEvent> events;
+	
+	/** Old events */
+	private JavaPairRDD<EventKey, StatsEvent> aggregatedEvents;
 	
 	/* -- function pointers -- */
 	
@@ -36,7 +41,7 @@ public class LiveAggregationThread implements /*Runnable,*/ Serializable {
 	/** This class implements the reduce function */
 	protected LiveEventReduce reduceFunction;
 	
-	public LiveAggregationThread(LiveEventMap aggrFunction, LiveEventReduce reduceFunction, LiveEventSave saveFunction) {
+	public LiveAggregationCycle(LiveEventMap aggrFunction, LiveEventReduce reduceFunction, LiveEventSave saveFunction) {
 		this.mapFunction = aggrFunction;
 		this.reduceFunction = reduceFunction;
 		this.saveFunction = saveFunction;
@@ -49,12 +54,29 @@ public class LiveAggregationThread implements /*Runnable,*/ Serializable {
 	//@Override
 	public void run() {
 		
-		JavaPairRDD<EventKey, StatsEvent> eventByKeyMap = events.map(mapFunction);
+		JavaPairRDD<EventKey, StatsEvent> eventByKeyMap = events.mapToPair(mapFunction);
+		
+		if (aggregatedEvents != null) {
+			eventByKeyMap = eventByKeyMap.union(aggregatedEvents);
+		}
+		
+		
 		JavaPairRDD<EventKey, StatsEvent> mergedEventsByKey = eventByKeyMap.reduceByKey(reduceFunction);
 		JavaRDD<Boolean> result = mergedEventsByKey.mapPartitions(saveFunction);
 		
+		// filter old hours aggregated results
+		mergedEventsByKey = mergedEventsByKey.filter(new StatsEventHourlyFilter());
 		result.count();
-	}		 
+				
+		if (aggregatedEvents != null)		
+			aggregatedEvents.unpersist();
+
+		aggregatedEvents = mergedEventsByKey;
+		aggregatedEvents.cache();
+		aggregatedEvents.count();
+	}
+	
+	protected abstract StatsEventsFilter getFilterFunction();
 	
 
 }
