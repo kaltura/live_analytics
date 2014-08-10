@@ -75,6 +75,15 @@ public class DateUtils {
 	  	return cal.getTimeInMillis();
 	}
 	
+	public static long getCurrentMinInMillis() {
+		Calendar cal = Calendar.getInstance();
+	
+	  	cal.set(Calendar.SECOND, 0);
+	  	cal.set(Calendar.MILLISECOND, 0);
+	  	
+	  	return cal.getTimeInMillis();
+	}
+	
 	// TODO - remove hack
 	public static long getCurrentHourInMillis(long startTime) {
 		Calendar cal = Calendar.getInstance();
