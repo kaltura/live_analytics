@@ -31,9 +31,11 @@ public class EntryTotalLiveTest extends BaseReporterTest {
     }
     
     @Test
-    public void should_have_started_and_execute_cql_script() throws Exception {
+    public void testEntryTotalLive() throws Exception {
+    	setTime();
+    	
     	EntryTotalReporter reporter = new EntryTotalReporterMock(cassandraCQLUnit.session);
-    	LiveStatsListResponse results = reporter.query(createFilter());
+    	LiveStatsListResponse results = reporter.query(createFilter(), null);
     	
     	Assert.assertEquals(1, results.getTotalCount());
     }

@@ -20,8 +20,6 @@ final public class ReportersFactory {
 			return new EntryGeoTimeLineReporter();
 		case ENTRY_SYNDICATION_TOTAL:
 			return new EntrySyndicationTotalReporter();
-		case ENTRY_TIME_LINE:
-			return new EntryTimeLineReporter();
 		case PARTNER_TOTAL:
 			return new PartnerTotalReporter();
 			

@@ -7,8 +7,8 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import com.datastax.driver.core.Session;
+import com.kaltura.live.webservice.model.LiveEventsListResponse;
 import com.kaltura.live.webservice.model.LiveReportInputFilter;
-import com.kaltura.live.webservice.model.LiveStatsListResponse;
 import com.kaltura.live.webservice.reporters.EntryTimeLineReporter;
 
 public class EntryTimeLineTest extends BaseReporterTest{
@@ -31,9 +31,9 @@ public class EntryTimeLineTest extends BaseReporterTest{
     }
     
     @Test
-    public void should_have_started_and_execute_cql_script() throws Exception {
+    public void testEntryTimeLine() throws Exception {
     	EntryTimeLineReporter reporter = new EntryTimeLineReporterMock(cassandraCQLUnit.session);
-    	LiveStatsListResponse results = reporter.query(createFilter());
+    	LiveEventsListResponse results = reporter.eventsQuery(createFilter(), null);
     	
     	Assert.assertEquals(4, results.getTotalCount());
     }

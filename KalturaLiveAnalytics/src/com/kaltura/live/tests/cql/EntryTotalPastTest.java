@@ -33,12 +33,15 @@ public class EntryTotalPastTest extends BaseReporterTest {
     }
     
     @Test
-    public void should_have_started_and_execute_cql_script() throws Exception {
+    public void testEntryTotalPast() throws Exception {
+    	
+    	setTime();
+    	
     	EntryTotalReporter reporter = new EntryTotalReporterMock(cassandraCQLUnit.session);
-    	LiveStatsListResponse results = reporter.query(createFilter());
+    	LiveStatsListResponse results = reporter.query(createFilter(), null);
     	
     	Assert.assertEquals(1, results.getTotalCount());
-    	LiveStats event = results.getEvents()[0];
+    	LiveStats event = results.getObjects()[0];
     	Assert.assertEquals(7, event.getPlays());
     }
 }

@@ -7,10 +7,13 @@ import org.slf4j.LoggerFactory;
 
 import com.kaltura.live.webservice.model.AnalyticsException;
 import com.kaltura.live.webservice.model.LiveEntriesListResponse;
+import com.kaltura.live.webservice.model.LiveEventsListResponse;
 import com.kaltura.live.webservice.model.LiveReportInputFilter;
+import com.kaltura.live.webservice.model.LiveReportPager;
 import com.kaltura.live.webservice.model.LiveReportType;
 import com.kaltura.live.webservice.model.LiveStatsListResponse;
 import com.kaltura.live.webservice.reporters.BaseReporter;
+import com.kaltura.live.webservice.reporters.EntryTimeLineReporter;
 import com.kaltura.live.webservice.reporters.LivePartnerEntryService;
 import com.kaltura.live.webservice.reporters.ReportersFactory;
 
@@ -20,7 +23,7 @@ public class LiveAnalyticsImpl implements LiveAnalytics{
 	protected static Logger logger = LoggerFactory.getLogger(LiveAnalytics.class);
 	
 	@Override
-	public LiveStatsListResponse getReport( LiveReportType reportType, LiveReportInputFilter filter) throws AnalyticsException {
+	public LiveStatsListResponse getReport( LiveReportType reportType, LiveReportInputFilter filter, LiveReportPager pager) throws AnalyticsException {
 		
 		logger.debug("Live Analytics - Handling report request ");
 		logger.debug("Report type : " + reportType);
@@ -31,11 +34,30 @@ public class LiveAnalyticsImpl implements LiveAnalytics{
 		filter.validate();
 		reporter.validateFilter(filter);
 		
-		LiveStatsListResponse result = reporter.query(filter);
+		LiveStatsListResponse result = reporter.query(filter, pager);
 		
 		logger.debug("Done.");
+		System.out.println("Done.");
 		return result;
 			
+	}
+	
+	@Override
+	public LiveEventsListResponse getEvents(LiveReportType reportType, LiveReportInputFilter filter, LiveReportPager pager)
+			throws AnalyticsException {
+		if(reportType != LiveReportType.ENTRY_TIME_LINE)
+			throw new RuntimeException(" Unsupported report type. " + reportType);
+		
+		EntryTimeLineReporter reporter = new EntryTimeLineReporter();
+		// Filter validation
+		filter.validate();
+		reporter.validateFilter(filter);
+		
+		LiveEventsListResponse result = reporter.eventsQuery(filter, pager);
+		
+		logger.debug("Done.");
+		System.out.println("Done.");
+		return result;
 	}
 
 	@Override
@@ -44,6 +66,5 @@ public class LiveAnalyticsImpl implements LiveAnalytics{
 		LivePartnerEntryService service = new LivePartnerEntryService();
 		return service.getLiveEntries(partnerId);
 	}
-	
-	
+
 }

@@ -13,13 +13,14 @@ import com.kaltura.live.model.aggregation.dao.LiveEntryEventDAO;
 import com.kaltura.live.webservice.model.AnalyticsException;
 import com.kaltura.live.webservice.model.EntryLiveStats;
 import com.kaltura.live.webservice.model.LiveReportInputFilter;
+import com.kaltura.live.webservice.model.LiveReportPager;
 import com.kaltura.live.webservice.model.LiveStats;
 import com.kaltura.live.webservice.model.LiveStatsListResponse;
 
 public class EntryTotalReporter extends BaseReporter {
 	
 	@Override
-	public LiveStatsListResponse query(LiveReportInputFilter filter) {
+	public LiveStatsListResponse query(LiveReportInputFilter filter, LiveReportPager pager) {
 
 		if(filter.isLive())
 			return generateLiveReport(filter);
@@ -39,6 +40,7 @@ public class EntryTotalReporter extends BaseReporter {
 		
 		String query = sb.toString();
 		logger.debug(query);
+		System.out.println(query);
 		return query;
 	}
 	
@@ -104,6 +106,7 @@ public class EntryTotalReporter extends BaseReporter {
 		
 		String query = sb.toString();
 		logger.debug(query);
+		System.out.println(query);
 		return query;
 	}
 	

@@ -7,16 +7,14 @@ import javax.xml.ws.Service;
 
 import com.kaltura.live.webservice.LiveAnalytics;
 import com.kaltura.live.webservice.model.AnalyticsException;
+import com.kaltura.live.webservice.model.LiveEventsListResponse;
 import com.kaltura.live.webservice.model.LiveReportInputFilter;
 import com.kaltura.live.webservice.model.LiveReportType;
-import com.kaltura.live.webservice.model.LiveStats;
-import com.kaltura.live.webservice.model.LiveStatsListResponse;
 
 public class TestClient{
 	
 	public static void main(String[] args) throws Exception {
 	   
-		
 		URL url = new URL("http://pa-erans:9090/KalturaLiveAnalytics/KalturaLiveAnalytics?wsdl");
         QName qname = new QName("http://webservice.live.kaltura.com/", "LiveAnalyticsImplService");
 
@@ -33,20 +31,8 @@ public class TestClient{
 		filter.setFromTime(1387100000);
 		filter.setToTime(1387200000);
 		
-		LiveStatsListResponse z = hello.getReport(reportType, filter);
-        printResult(reportType, z);
+		LiveEventsListResponse z = hello.getEvents(reportType, filter, null);
+		System.out.println(z.getTotalCount());
 	}
 	
-	private static void printResult(LiveReportType reportType, LiveStatsListResponse z) {
-		System.out.println("reportType: " + reportType);
-		System.out.println("Total count : " + z.getTotalCount());
-        
-        int id = 1;
-        for (LiveStats liveStats : z.getEvents()) {
-			System.out.println("\tid:[" + id++ + "]" + liveStats.getBufferTime());
-		}
-	}
-	
-	
-
 }

@@ -9,32 +9,29 @@ import com.datastax.driver.core.Row;
 import com.kaltura.live.infra.utils.DateUtils;
 import com.kaltura.live.model.aggregation.dao.LiveEntryEventDAO;
 import com.kaltura.live.webservice.model.AnalyticsException;
-import com.kaltura.live.webservice.model.EntryLiveStats;
+import com.kaltura.live.webservice.model.LiveEvent;
+import com.kaltura.live.webservice.model.LiveEventsListResponse;
 import com.kaltura.live.webservice.model.LiveReportInputFilter;
-import com.kaltura.live.webservice.model.LiveStats;
+import com.kaltura.live.webservice.model.LiveReportPager;
 import com.kaltura.live.webservice.model.LiveStatsListResponse;
 
 public class EntryTimeLineReporter extends BaseReporter {
 	
-	@Override
-	public LiveStatsListResponse query(LiveReportInputFilter filter) {
+	public LiveEventsListResponse eventsQuery(LiveReportInputFilter filter, LiveReportPager pager) {
 		String query = generateQuery(filter);
 		ResultSet results = session.getSession().execute(query);
 		
 		Iterator<Row> itr = results.iterator();
 		
-		List<LiveStats> result = new ArrayList<LiveStats>();
+		List<LiveEvent> result = new ArrayList<LiveEvent>();
 		while(itr.hasNext()) {
 			LiveEntryEventDAO dao = new LiveEntryEventDAO(itr.next());
-			float avgBitrate = 0;
-			if(dao.getBitrateCount() > 0)
-				avgBitrate = dao.getBitrate() / dao.getBitrateCount();
-			EntryLiveStats event = new EntryLiveStats(dao.getPlays(), dao.getAlive(), dao.getAlive() * 10, 
-					dao.getBufferTime(), avgBitrate, (long)0, (long)0, dao.getEntryId());
+			
+			LiveEvent event = new LiveEvent(dao.getAlive(), dao.getEventTime().getTime() / 1000);
 			result.add(event);
 		}
 		
-		return new LiveStatsListResponse(result);
+		return new LiveEventsListResponse(result);
 	}
 
 	private String generateQuery(LiveReportInputFilter filter) {
@@ -49,6 +46,7 @@ public class EntryTimeLineReporter extends BaseReporter {
 		
 		String query = sb.toString();
 		logger.debug(query);
+		System.out.println(query);
 		return query;
 	}
 	
@@ -66,5 +64,10 @@ public class EntryTimeLineReporter extends BaseReporter {
 		if(!validation.isEmpty())
 			throw new AnalyticsException("Illegal filter input: " + validation);
 	}
-	
+
+	@Override
+	public LiveStatsListResponse query(LiveReportInputFilter filter, LiveReportPager pager) {
+		return null;
+	}
+
 }

@@ -14,13 +14,14 @@ import com.kaltura.live.model.aggregation.dao.LiveEntryReferrerEventDAO;
 import com.kaltura.live.webservice.model.AnalyticsException;
 import com.kaltura.live.webservice.model.EntryReferrerLiveStats;
 import com.kaltura.live.webservice.model.LiveReportInputFilter;
+import com.kaltura.live.webservice.model.LiveReportPager;
 import com.kaltura.live.webservice.model.LiveStats;
 import com.kaltura.live.webservice.model.LiveStatsListResponse;
 
 public class EntrySyndicationTotalReporter extends BaseReporter {
 	
 	@Override
-	public LiveStatsListResponse query(LiveReportInputFilter filter) {
+	public LiveStatsListResponse query(LiveReportInputFilter filter, LiveReportPager pager) {
 		String query = generateQuery(filter);
 		ResultSet results = session.getSession().execute(query);
 		
@@ -47,8 +48,14 @@ public class EntrySyndicationTotalReporter extends BaseReporter {
 			}
 		});
 		
-		List<LiveStats> limitedRes = stats.subList(0, Math.min(stats.size(), filter.getResultsLimit()));
+		int from = (pager.getPageIndex() - 1) * pager.getPageSize();
+		int to = pager.getPageIndex() * pager.getPageSize();
 		
+		if((from < 0) || (from > stats.size()))  {
+			return new LiveStatsListResponse(new ArrayList<LiveStats>());
+		}
+		
+		List<LiveStats> limitedRes = stats.subList(from, Math.min(stats.size(), to));
 		return new LiveStatsListResponse(limitedRes);
 	}
 	
@@ -63,6 +70,7 @@ public class EntrySyndicationTotalReporter extends BaseReporter {
 		
 		String query = sb.toString();
 		logger.debug(query);
+		System.out.println(query);
 		return query;
 	}
 
@@ -74,8 +82,6 @@ public class EntrySyndicationTotalReporter extends BaseReporter {
 			validation = " Entry Ids can't be null. ";
 		if(filter.getHoursBefore() < 0)
 			validation += " Hours before must be a positive number.";
-		if(filter.getResultsLimit() <= 0)
-			validation += " results limit must be a positive number.";
 		
 		if(!validation.isEmpty())
 			throw new AnalyticsException("Illegal filter input: " + validation);

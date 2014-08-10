@@ -11,13 +11,14 @@ import com.kaltura.live.model.aggregation.dao.LiveEntryEventDAO;
 import com.kaltura.live.model.aggregation.dao.PartnerEventDAO;
 import com.kaltura.live.webservice.model.AnalyticsException;
 import com.kaltura.live.webservice.model.LiveReportInputFilter;
+import com.kaltura.live.webservice.model.LiveReportPager;
 import com.kaltura.live.webservice.model.LiveStats;
 import com.kaltura.live.webservice.model.LiveStatsListResponse;
 
 public class PartnerTotalReporter extends BaseReporter {
 	
 	@Override
-	public LiveStatsListResponse query(LiveReportInputFilter filter) {
+	public LiveStatsListResponse query(LiveReportInputFilter filter, LiveReportPager pager) {
 
 		if(filter.isLive())
 			return generateLiveReport(filter);
@@ -35,6 +36,7 @@ public class PartnerTotalReporter extends BaseReporter {
 		
 		String query = sb.toString();
 		logger.debug(query);
+		System.out.println(query);
 		return query;
 	}
 	
@@ -72,6 +74,7 @@ public class PartnerTotalReporter extends BaseReporter {
 	}
 
 	protected String generatePastPartnerQuery(LiveReportInputFilter filter) {
+		
 		StringBuffer sb = new StringBuffer();
 		sb.append("select * from kaltura_live.hourly_live_events_partner where partner_id = ");
 		sb.append(filter.getPartnerId());
@@ -81,6 +84,7 @@ public class PartnerTotalReporter extends BaseReporter {
 		
 		String query = sb.toString();
 		logger.debug(query);
+		System.out.println(query);
 		return query;
 	}
 
@@ -124,7 +128,7 @@ public class PartnerTotalReporter extends BaseReporter {
 				validation += "Partner Id must be a positive number.";
 			
 			if(filter.getHoursBefore() < 0)
-				validation += "Hourse before must be a positive number.";
+				validation += "Hours before must be a positive number.";
 		}
 		
 		if(!validation.isEmpty())
