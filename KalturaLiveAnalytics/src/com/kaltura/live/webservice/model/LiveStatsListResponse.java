@@ -4,7 +4,7 @@ import java.util.Collection;
 
 public class LiveStatsListResponse {
 	
-	protected LiveStats[] events;
+	protected LiveStats[] objects;
 	protected int totalCount;
 	
 	public LiveStatsListResponse() {
@@ -14,21 +14,21 @@ public class LiveStatsListResponse {
 	public LiveStatsListResponse(LiveStats[] events,
 			int totalCount) {
 		super();
-		this.events = events;
+		this.objects = events;
 		this.totalCount = totalCount;
 	}
 	
 	public LiveStatsListResponse(Collection<LiveStats> events) {
 		super();
-		this.events = events.toArray(new LiveStats[events.size()]);
+		this.objects = events.toArray(new LiveStats[events.size()]);
 		this.totalCount = events.size();
 	}
 	
-	public LiveStats[] getEvents() {
-		return events;
+	public LiveStats[] getObjects() {
+		return objects;
 	}
-	public void setEvents(LiveStats[] events) {
-		this.events = events;
+	public void setObjects(LiveStats[] events) {
+		this.objects = events;
 	}
 	public int getTotalCount() {
 		return totalCount;

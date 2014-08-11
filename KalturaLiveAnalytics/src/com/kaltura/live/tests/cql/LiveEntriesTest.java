@@ -23,7 +23,7 @@ public class LiveEntriesTest extends BaseReporterTest {
 	public CassandraCQLUnit cassandraCQLUnit = new CassandraCQLUnit(new ClassPathCQLDataSet(RESOURCE_DIR + "live_partner_entry.cql", "kaltura_live"));
 
 	@Test
-	public void should_have_started_and_execute_cql_script() throws Exception {
+	public void testLiveEntries() throws Exception {
 		LivePartnerEntryService sevice = new LivePartnerEntryServiceMock(cassandraCQLUnit.session);
 		LiveEntriesListResponse result = sevice.getLiveEntries(777);
 

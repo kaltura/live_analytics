@@ -12,8 +12,6 @@ public class LiveReportInputFilter {
 	protected long fromTime;
 	protected long toTime;
 	
-	protected int resultsLimit = 10;
-	
 	public LiveReportInputFilter() {
 		super();
 	}
@@ -65,14 +63,6 @@ public class LiveReportInputFilter {
 		this.eventTime = eventTime;
 	}
 	
-	public int getResultsLimit() {
-		return resultsLimit;
-	}
-
-	public void setResultsLimit(int resultsLimit) {
-		this.resultsLimit = resultsLimit;
-	}
-
 	public void validate() throws AnalyticsException {
 		 if((entryIds != null) && (!entryIds.matches("^[\\w_, ]*"))) {
 			 throw new AnalyticsException("Entry ids contains illegal string request.");

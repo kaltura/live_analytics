@@ -33,12 +33,12 @@ public class EntryGeoTimeLineTest extends BaseReporterTest {
     }
     
     @Test
-    public void should_have_started_and_execute_cql_script() throws Exception {
+    public void testEntryGeoTimeLineTest() throws Exception {
     	EntryGeoTimeLineReporter reporter = new EntryGeoTimeLineReporterMock(cassandraCQLUnit.session);
-    	LiveStatsListResponse results = reporter.query(createFilter());
+    	LiveStatsListResponse results = reporter.query(createFilter(), null);
     	
     	Assert.assertEquals(3, results.getTotalCount());
-    	LiveStats[] events = results.getEvents();
+    	LiveStats[] events = results.getObjects();
     	testCountryAndCity((GeoTimeLiveStats) events[0], "-", "-");
     	testCountryAndCity((GeoTimeLiveStats) events[1], "-", "AFGHANISTAN");
     	

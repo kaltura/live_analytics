@@ -14,6 +14,8 @@ public class DateUtils {
 	
 	private static final String DATE_FORMAT = "dd/MMM/yyyy:HH:mm:ss Z";
 	
+	private static Calendar testCalendar = null;
+	
 	// TODO discuss with orly timestamp to query issues.
 
 	public static Date roundDate(String eventDate) {
@@ -35,6 +37,8 @@ public class DateUtils {
 		int seconds = c.get(Calendar.SECOND);
 		int decSeconds = seconds / 10 * 10;
 		c.set(Calendar.SECOND, decSeconds);
+		c.set(Calendar.MILLISECOND, 0);
+		
 		return c.getTime();
 	}
 	
@@ -48,29 +52,16 @@ public class DateUtils {
 		c.setTime(eventDate);
 		c.set(Calendar.SECOND, 0);
 		c.set(Calendar.MINUTE, 0);
+		c.set(Calendar.MILLISECOND, 0);
 		return c.getTime();
 	}
 	
-	public static Calendar getCurrentTime() {
-		SimpleDateFormat formatDate = new SimpleDateFormat(DATE_FORMAT);
-		
-		Calendar cal = Calendar.getInstance();
-		// TODO - remove hack
-		try {
-			cal.setTime(formatDate.parse("15/Dec/2013:11:30:00 -0500"));
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-		return cal;
-	}
-	
 	public static long getCurrentHourInMillis() {
-		Calendar cal = Calendar.getInstance();
-		// TODO - remove hack
-		cal.setTimeInMillis(1387101600000L);
+		Calendar cal = getCurrentTime();
 		
 	  	cal.set(Calendar.MINUTE, 0);
 	  	cal.set(Calendar.SECOND, 0);
+	  	cal.set(Calendar.MILLISECOND, 0);
 	  	
 	  	return cal.getTimeInMillis();
 	}
@@ -84,17 +75,22 @@ public class DateUtils {
 	  	return cal.getTimeInMillis();
 	}
 	
-	// TODO - remove hack
 	public static long getCurrentHourInMillis(long startTime) {
-		Calendar cal = Calendar.getInstance();
-		long now = System.currentTimeMillis();
-		if (now - startTime < 30*60*1000) {
-			cal.setTimeInMillis(1387101600000L);
-		} else {
-			cal.setTimeInMillis(1387105200000L);
-		}
+		Calendar cal = getCurrentTime();
 		cal.set(Calendar.MINUTE, 0);
 	  	cal.set(Calendar.SECOND, 0);
+	  	cal.set(Calendar.MILLISECOND, 0);
 	  	return cal.getTimeInMillis();
+	}
+	
+	public static Calendar getCurrentTime() {
+		if(testCalendar != null)
+			return testCalendar;
+		return Calendar.getInstance();
+	}
+	
+	public static void setCurrentTime(Date date) {
+		testCalendar = Calendar.getInstance();
+		testCalendar.setTime(date);
 	}
 }

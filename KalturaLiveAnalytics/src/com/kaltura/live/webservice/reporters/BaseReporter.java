@@ -1,6 +1,5 @@
 package com.kaltura.live.webservice.reporters;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -12,6 +11,7 @@ import com.kaltura.live.infra.cache.SerializableSession;
 import com.kaltura.live.infra.utils.DateUtils;
 import com.kaltura.live.webservice.model.AnalyticsException;
 import com.kaltura.live.webservice.model.LiveReportInputFilter;
+import com.kaltura.live.webservice.model.LiveReportPager;
 import com.kaltura.live.webservice.model.LiveStatsListResponse;
 
 /**
@@ -22,7 +22,6 @@ public abstract class BaseReporter {
 	protected static Logger logger = LoggerFactory.getLogger(BaseReporter.class);
 	
 	private static final int TIME_FRAME_INTERVAL = 30;
-	public static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
 	
 	protected static SerializableSession session;
 	
@@ -41,7 +40,7 @@ public abstract class BaseReporter {
 	 * @param filter The filter by which the results should be queried
 	 * @return The matching live statistics
 	 */
-	abstract public LiveStatsListResponse query(LiveReportInputFilter filter);
+	abstract public LiveStatsListResponse query(LiveReportInputFilter filter, LiveReportPager pager);
 	
 	/** --- Base reporter utils --- */ 
 	
@@ -62,29 +61,27 @@ public abstract class BaseReporter {
 	}
 	
 	protected String addTimeRangeCondition(Date fromDate, Date toDate) {
-		SimpleDateFormat formatDate = new SimpleDateFormat(DATE_FORMAT);
 		StringBuffer sb = new StringBuffer();
 		sb.append("event_time >= ");
-		sb.append("'" + formatDate.format(fromDate) + "'");
+		sb.append(fromDate.getTime());
 		sb.append(" and event_time <= ");
-		sb.append("'" + formatDate.format(toDate) + "'");
+		sb.append(toDate.getTime());
 		
 		return sb.toString();
 	}
 	
 	protected String addHoursBeforeCondition(Date curTime, int hoursBefore) {
-		SimpleDateFormat formatDate = new SimpleDateFormat(DATE_FORMAT);
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(DateUtils.roundHourDate(curTime));
 		
 		StringBuffer sb = new StringBuffer();
 		sb.append("event_time IN (");
-		sb.append("'" + formatDate.format(cal.getTime()) + "'");
+		sb.append(cal.getTime().getTime());
 		
 		for(int i = 0 ; i < hoursBefore ; ++i) {
-			cal.add(Calendar.HOUR, -hoursBefore);
+			cal.add(Calendar.HOUR, -1);
 			Date startTime = DateUtils.roundHourDate(cal.getTime());
-			sb.append(",'" + formatDate.format(startTime) + "'");
+			sb.append("," + startTime.getTime());
 		}
 		sb.append(")");
 		return sb.toString();
@@ -100,7 +97,6 @@ public abstract class BaseReporter {
 	}
 	
 	protected String addExactTimeCondition(Date curTime) {
-		SimpleDateFormat formatDate = new SimpleDateFormat(DATE_FORMAT);
-		return "event_time = '" + formatDate.format(curTime) + "'"; 
+		return "event_time = " + curTime.getTime(); 
 	}
 }
