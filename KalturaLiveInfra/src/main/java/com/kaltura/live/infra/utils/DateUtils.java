@@ -14,7 +14,7 @@ public class DateUtils {
 	
 	private static final String DATE_FORMAT = "dd/MMM/yyyy:HH:mm:ss Z";
 	
-	private static final Calendar testCalendar = Calendar.getInstance();
+	private static Calendar testCalendar = null;
 	
 	// TODO discuss with orly timestamp to query issues.
 
@@ -78,5 +78,10 @@ public class DateUtils {
 		if(testCalendar != null)
 			return testCalendar;
 		return Calendar.getInstance();
+	}
+	
+	public static void setCurrentTime(Date date) {
+		testCalendar = Calendar.getInstance();
+		testCalendar.setTime(date);
 	}
 }

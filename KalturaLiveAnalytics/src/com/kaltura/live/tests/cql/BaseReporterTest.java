@@ -31,7 +31,7 @@ abstract public class BaseReporterTest {
 		try {
 			SimpleDateFormat formatDate = new SimpleDateFormat("dd/MMM/yyyy:HH:mm:ss Z");
 	    	Date time = formatDate.parse("15/Dec/2013:11:30:00 -0500");
-	    	DateUtils.getCurrentTime().setTime(time);
+	    	DateUtils.setCurrentTime(time);
 		} catch (ParseException e) {
 			throw new RuntimeException("Failed to set time");
 		}

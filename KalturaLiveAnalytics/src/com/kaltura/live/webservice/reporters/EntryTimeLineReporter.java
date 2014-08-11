@@ -1,6 +1,7 @@
 package com.kaltura.live.webservice.reporters;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -31,6 +32,7 @@ public class EntryTimeLineReporter extends BaseReporter {
 			result.add(event);
 		}
 		
+		Collections.reverse(result);
 		return new LiveEventsListResponse(result);
 	}
 
