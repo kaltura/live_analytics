@@ -3,8 +3,8 @@ package com.kaltura.live.model.aggregation.filter;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-import com.kaltura.live.SparkConfiguration;
 import com.kaltura.live.infra.utils.DateUtils;
+import com.kaltura.live.infra.utils.LiveConfiguration;
 
 public class StatsEventsRealTimeFilter extends StatsEventsFilter {
 
@@ -12,7 +12,7 @@ public class StatsEventsRealTimeFilter extends StatsEventsFilter {
 
 	@Override
 	protected Date getLatestTimeToSave() {
-		return new Date(DateUtils.getCurrentMinInMillis() - TimeUnit.MINUTES.toMillis(SparkConfiguration.MINUTES_TO_SAVE));
+		return new Date(DateUtils.getCurrentMinInMillis() - TimeUnit.MINUTES.toMillis(LiveConfiguration.instance().getMinutesToSave()));
 	}
 
 }

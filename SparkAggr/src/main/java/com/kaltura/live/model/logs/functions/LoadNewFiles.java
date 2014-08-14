@@ -15,9 +15,8 @@ import org.slf4j.LoggerFactory;
 
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
-import com.kaltura.live.SparkAggregation;
-import com.kaltura.live.SparkConfiguration;
 import com.kaltura.live.infra.cache.SerializableSession;
+import com.kaltura.live.infra.utils.LiveConfiguration;
 
 public class LoadNewFiles implements FlatMapFunction<String, String> {
 
@@ -26,7 +25,7 @@ public class LoadNewFiles implements FlatMapFunction<String, String> {
 	private static Logger LOG = LoggerFactory.getLogger(LoadNewFiles.class);
 
 	SerializableSession session = new SerializableSession(
-			SparkConfiguration.NODE_NAME);
+			LiveConfiguration.instance().getCassandraNodeName());
 
 	@Override
 	public Iterable<String> call(String fileId) {

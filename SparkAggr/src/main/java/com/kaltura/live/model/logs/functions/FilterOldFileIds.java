@@ -4,8 +4,8 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.spark.api.java.function.Function;
 
-import com.kaltura.live.SparkConfiguration;
 import com.kaltura.live.infra.utils.DateUtils;
+import com.kaltura.live.infra.utils.LiveConfiguration;
 
 public class FilterOldFileIds implements Function<String, Boolean> {
 
@@ -13,7 +13,7 @@ public class FilterOldFileIds implements Function<String, Boolean> {
 
 	@Override
 	public Boolean call(String fileId) throws Exception {
-		if (fileId.contains(String.valueOf(DateUtils.getCurrentHourInMillis() - TimeUnit.HOURS.toMillis(SparkConfiguration.HOURS_TO_SAVE)))) {
+		if (fileId.contains(String.valueOf(DateUtils.getCurrentHourInMillis() - TimeUnit.HOURS.toMillis(LiveConfiguration.instance().getHoursToSave())))) {
 			return false;
 		}
 		return true;

@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import com.kaltura.live.infra.cache.SerializableSession;
 import com.kaltura.live.infra.utils.DateUtils;
+import com.kaltura.live.infra.utils.LiveConfiguration;
 import com.kaltura.live.model.aggregation.StatsEvent;
 import com.kaltura.live.model.aggregation.functions.map.LiveEntryHourlyMap;
 import com.kaltura.live.model.aggregation.functions.map.LiveEntryLocationMap;
@@ -39,13 +40,13 @@ import com.kaltura.live.model.logs.functions.LoadNewFiles;
 public class SparkAggregation {
 
 	private static Logger LOG = LoggerFactory.getLogger(SparkAggregation.class);
-
+	private static LiveConfiguration config;
 	public static void main(String[] args) throws Exception {
-
+		config = LiveConfiguration.instance();
 		validateArguments(args);
 		final JavaSparkContext jsc = initializeEnvironment();
 
-		SerializableSession session = new SerializableSession(SparkConfiguration.NODE_NAME);
+		SerializableSession session = new SerializableSession(config.getCassandraNodeName());
 		
 		// Generate aggregation threads
 		LiveAggregationCycle entryAggr = new RealTimeLiveAggregationCycle(new LiveEntryMap(), new LiveEventReduce(), new LiveEntrySave(session));
@@ -128,12 +129,18 @@ public class SparkAggregation {
 	}
 
 	private static JavaSparkContext initializeEnvironment() {
-		System.setProperty("spark.default.parallelism", SparkConfiguration.PARALLELISM);
-		System.setProperty("spark.cores.max", SparkConfiguration.MAX_CORES);
-		String[] jars = { SparkConfiguration.REPOSITORY_HOME + "/target/spark-aggr-1.0.jar",
-				SparkConfiguration.REPOSITORY_HOME + "/lib/cassandra-driver-core-2.0.0-rc2.jar" };
-		final JavaSparkContext jsc = new JavaSparkContext("local[24]",
-				"SparkAggr", "/opt/spark/spark-0.8.1-incubating/", jars);
+		LiveConfiguration config = LiveConfiguration.instance();
+		System.setProperty("spark.default.parallelism", config.getSparkParallelism());
+		System.setProperty("spark.cores.max", config.getSparkMaxCores());
+		
+		String[] jars = { config.getRepositoryHome() + "/spark-aggr-1.0.0.jar",
+				 config.getRepositoryHome() + "/cassandra-driver-core-2.0.3.jar",
+				 config.getRepositoryHome() + "/live-model-1.0.0.jar", 
+				 config.getRepositoryHome() + "/live-infra-1.0.0.jar",
+				 config.getRepositoryHome() + "/ip-2-location-1.0.0.jar" };
+		final JavaSparkContext jsc = new JavaSparkContext("spark://il-bigdata-1.dev.kaltura.com:7077",
+                "SparkAggr", config.getSparkHome(), jars);
+
 		return jsc;
 	}
 

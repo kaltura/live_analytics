@@ -3,10 +3,10 @@ package com.kaltura.live.model.aggregation.filter;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-import com.kaltura.live.SparkConfiguration;
 import com.kaltura.live.infra.utils.DateUtils;
+import com.kaltura.live.infra.utils.LiveConfiguration;
 
-public class StatsEventHourlyFilter extends StatsEventsFilter {
+public class StatsEventsHourlyFilter extends StatsEventsFilter {
 
 	/**
 	 * 
@@ -15,7 +15,7 @@ public class StatsEventHourlyFilter extends StatsEventsFilter {
 
 	@Override
 	protected Date getLatestTimeToSave() {
-		return new Date(DateUtils.getCurrentHourInMillis() - TimeUnit.HOURS.toMillis(SparkConfiguration.HOURS_TO_SAVE));
+		return new Date(DateUtils.getCurrentHourInMillis() - TimeUnit.HOURS.toMillis(LiveConfiguration.instance().getHoursToSave()));
 	}
 
 }

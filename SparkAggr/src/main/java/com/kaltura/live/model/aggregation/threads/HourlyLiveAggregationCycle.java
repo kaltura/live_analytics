@@ -1,6 +1,6 @@
 package com.kaltura.live.model.aggregation.threads;
 
-import com.kaltura.live.model.aggregation.filter.StatsEventHourlyFilter;
+import com.kaltura.live.model.aggregation.filter.StatsEventsHourlyFilter;
 import com.kaltura.live.model.aggregation.filter.StatsEventsFilter;
 import com.kaltura.live.model.aggregation.functions.map.LiveEventMap;
 import com.kaltura.live.model.aggregation.functions.reduce.LiveEventReduce;
@@ -20,7 +20,7 @@ public class HourlyLiveAggregationCycle extends LiveAggregationCycle {
 
 	@Override
 	protected StatsEventsFilter getFilterFunction() {
-		return new StatsEventHourlyFilter();
+		return new StatsEventsHourlyFilter();
 	}
 	
 }

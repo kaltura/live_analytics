@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.kaltura.live.model.aggregation.StatsEvent;
-import com.kaltura.live.model.aggregation.filter.StatsEventHourlyFilter;
+import com.kaltura.live.model.aggregation.filter.StatsEventsHourlyFilter;
 import com.kaltura.live.model.aggregation.filter.StatsEventsFilter;
 import com.kaltura.live.model.aggregation.functions.map.LiveEventMap;
 import com.kaltura.live.model.aggregation.functions.reduce.LiveEventReduce;
@@ -65,7 +65,7 @@ public abstract class LiveAggregationCycle implements /*Runnable,*/ Serializable
 		JavaRDD<Boolean> result = mergedEventsByKey.mapPartitions(saveFunction);
 		
 		// filter old hours aggregated results
-		mergedEventsByKey = mergedEventsByKey.filter(new StatsEventHourlyFilter());
+		mergedEventsByKey = mergedEventsByKey.filter(new StatsEventsHourlyFilter());
 		result.count();
 				
 		if (aggregatedEvents != null)		

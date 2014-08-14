@@ -7,7 +7,7 @@ import java.util.List;
 import org.apache.spark.api.java.function.FlatMapFunction;
 
 import com.kaltura.ip2location.SerializableIP2LocationReader;
-import com.kaltura.live.SparkConfiguration;
+import com.kaltura.live.infra.utils.LiveConfiguration;
 import com.kaltura.live.model.aggregation.StatsEvent;
 
 public class StatsEventMap implements FlatMapFunction<Iterator<String>, StatsEvent>{
@@ -17,7 +17,7 @@ public class StatsEventMap implements FlatMapFunction<Iterator<String>, StatsEve
 	@Override
 	public Iterable<StatsEvent> call(Iterator<String> it) throws Exception {
 		SerializableIP2LocationReader reader = new SerializableIP2LocationReader(
-				SparkConfiguration.IP2LOCATION_FILE);
+				LiveConfiguration.instance().getIp2locationPath());
 		
 		List<StatsEvent> statsEvents = new ArrayList<StatsEvent>();
 		while (it.hasNext()) {
