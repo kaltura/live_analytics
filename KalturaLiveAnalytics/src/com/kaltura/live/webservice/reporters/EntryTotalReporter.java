@@ -40,7 +40,6 @@ public class EntryTotalReporter extends BaseReporter {
 		
 		String query = sb.toString();
 		logger.debug(query);
-		System.out.println(query);
 		return query;
 	}
 	
@@ -106,7 +105,6 @@ public class EntryTotalReporter extends BaseReporter {
 		
 		String query = sb.toString();
 		logger.debug(query);
-		System.out.println(query);
 		return query;
 	}
 	

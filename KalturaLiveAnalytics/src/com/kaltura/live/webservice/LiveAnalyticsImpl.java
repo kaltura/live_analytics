@@ -37,7 +37,6 @@ public class LiveAnalyticsImpl implements LiveAnalytics{
 		LiveStatsListResponse result = reporter.query(filter, pager);
 		
 		logger.debug("Done.");
-		System.out.println("Done.");
 		return result;
 			
 	}
@@ -45,6 +44,10 @@ public class LiveAnalyticsImpl implements LiveAnalytics{
 	@Override
 	public LiveEventsListResponse getEvents(LiveReportType reportType, LiveReportInputFilter filter, LiveReportPager pager)
 			throws AnalyticsException {
+		
+		logger.debug("Live Analytics - Handling event request ");
+		logger.debug("Report type : " + reportType);
+		
 		if(reportType != LiveReportType.ENTRY_TIME_LINE)
 			throw new RuntimeException(" Unsupported report type. " + reportType);
 		
@@ -56,7 +59,6 @@ public class LiveAnalyticsImpl implements LiveAnalytics{
 		LiveEventsListResponse result = reporter.eventsQuery(filter, pager);
 		
 		logger.debug("Done.");
-		System.out.println("Done.");
 		return result;
 	}
 
