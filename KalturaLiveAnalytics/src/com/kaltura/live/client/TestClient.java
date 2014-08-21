@@ -9,6 +9,7 @@ import com.kaltura.live.webservice.LiveAnalytics;
 import com.kaltura.live.webservice.model.AnalyticsException;
 import com.kaltura.live.webservice.model.LiveEventsListResponse;
 import com.kaltura.live.webservice.model.LiveReportInputFilter;
+import com.kaltura.live.webservice.model.LiveReportPager;
 import com.kaltura.live.webservice.model.LiveReportType;
 
 public class TestClient{
@@ -33,7 +34,9 @@ public class TestClient{
 		filter.setFromTime(1387100000);
 		filter.setToTime(1387200000);
 		
-		LiveEventsListResponse z = hello.getEvents(reportType, filter, null);
+		LiveReportPager pager = new LiveReportPager();
+		
+		LiveEventsListResponse z = hello.getEvents(reportType, filter, pager);
 		System.out.println(z.getTotalCount());
 	}
 	
