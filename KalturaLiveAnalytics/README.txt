@@ -22,7 +22,7 @@ Tomcat configuration:
 ----------------------
 1. Go here http://jax-ws.java.net/.
 2. Download JAX-WS RI distribution.
-3. Unzip it and copy following JAX-WS dependencies to Tomcat library folder “{$TOMCAT}/lib“.
+3. Unzip it and copy following JAX-WS dependencies to Tomcat library folder â€œ{$TOMCAT}/libâ€œ.
 	gmbal-api-only.jar
 	ha-api.jar
 	jaxb-core.jar
@@ -33,3 +33,8 @@ Tomcat configuration:
 	policy.jar
 	stax-ex.jar
 	streambuffer.jar
+	
+Logs view:
+-----------
+Or: I don't see logs, what should i do?
+Edit the log4j properties to debug, and re-deploy.
