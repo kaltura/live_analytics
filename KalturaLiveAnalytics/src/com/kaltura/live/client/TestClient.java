@@ -13,9 +13,11 @@ import com.kaltura.live.webservice.model.LiveReportType;
 
 public class TestClient{
 	
+	private static final String HOST_NAME = "@HOST_NAME@";
+	
 	public static void main(String[] args) throws Exception {
 	   
-		URL url = new URL("http://pa-erans:9090/KalturaLiveAnalytics/KalturaLiveAnalytics?wsdl");
+		URL url = new URL("http://" + HOST_NAME + "/KalturaLiveAnalytics/KalturaLiveAnalytics?wsdl");
         QName qname = new QName("http://webservice.live.kaltura.com/", "LiveAnalyticsImplService");
 
         Service service = Service.create(url, qname);
