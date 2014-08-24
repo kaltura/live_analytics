@@ -62,7 +62,7 @@ public class SparkAggregation {
 		boolean resume = true;
 		while (resume) {
 			
-			hoursToLoad.add(DateUtils.getCurrentHourInMillis(executionStartTime));
+			hoursToLoad.add(DateUtils.getCurrentHourInMillis());
 			List<Long> hoursToLoadList = new ArrayList<Long>();
 			hoursToLoadList.addAll(hoursToLoad);
 			JavaRDD<Long> dates = jsc.parallelize(hoursToLoadList, 8);
