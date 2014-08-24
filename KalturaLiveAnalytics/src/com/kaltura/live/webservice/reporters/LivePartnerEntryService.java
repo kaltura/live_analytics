@@ -9,8 +9,8 @@ import org.slf4j.LoggerFactory;
 
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
-import com.kaltura.live.Configuration;
 import com.kaltura.live.infra.cache.SerializableSession;
+import com.kaltura.live.infra.utils.LiveConfiguration;
 import com.kaltura.live.model.aggregation.dao.LivePartnerEntryDAO;
 import com.kaltura.live.webservice.model.LiveEntriesListResponse;
 
@@ -20,7 +20,7 @@ public class LivePartnerEntryService {
 	protected static SerializableSession session;
 	
 	public LivePartnerEntryService() {
-		session = new SerializableSession(Configuration.NODE_NAME);
+		session = new SerializableSession(LiveConfiguration.instance().getCassandraNodeName());
 	}
 
 	public LiveEntriesListResponse getLiveEntries(Integer partnerId) {

@@ -48,7 +48,6 @@ public class EntryTimeLineReporter extends BaseReporter {
 		
 		String query = sb.toString();
 		logger.debug(query);
-		System.out.println(query);
 		return query;
 	}
 	

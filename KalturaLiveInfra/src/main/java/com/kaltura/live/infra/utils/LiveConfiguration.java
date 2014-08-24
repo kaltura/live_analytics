@@ -28,36 +28,42 @@ public class LiveConfiguration {
 	
 	private String ip2locationPath;
 	
-	protected LiveConfiguration(){
-	    try{
-	    	String confPath = "/opt/kaltura";
-	    	if (System.getenv().containsKey("KALTURA_CONF_PATH")) {
-	    		confPath = System.getenv().get("KALTURA_CONF_PATH");
-	    	}
-	    	
-	    	InputStream file = new FileInputStream(confPath + "/config.properties") ;
-	        Properties props = new Properties();
-	        props.load(file);
-	        
-	        cassandraNodeName = props.getProperty("cassandra.node_name");
-	        sparkHome = props.getProperty("spark.home");
-	        sparkMaster = props.getProperty("spark.master");
-	        sparkParallelism = props.getProperty("spark.parallelism");
-	        sparkMaxCores = props.getProperty("spark.max_core");
-	        sparkExectorMem = props.getProperty("spark.executor_memory");
-	        hoursToSave = Integer.valueOf(props.getProperty("aggr.hours_to_save"));
-	        minutesToSave = Integer.valueOf(props.getProperty("aggr.minutes_to_save"));
-	        ip2locationPath = props.getProperty("aggr.ip2location_path");
-	        	        
-	    } 
-	    catch(Exception e){
-	        System.out.println("error" + e);
-	    }	 
+	protected LiveConfiguration(String confPath) {
+		try {
+			InputStream file = new FileInputStream(confPath);
+			Properties props = new Properties();
+			props.load(file);
+			file.close();
+
+			cassandraNodeName = props.getProperty("cassandra.node_name");
+			sparkHome = props.getProperty("spark.home");
+			sparkMaster = props.getProperty("spark.master");
+			sparkParallelism = props.getProperty("spark.parallelism");
+			sparkMaxCores = props.getProperty("spark.max_core");
+			sparkExectorMem = props.getProperty("spark.executor_memory");
+			hoursToSave = Integer.valueOf(props
+					.getProperty("aggr.hours_to_save"));
+			minutesToSave = Integer.valueOf(props
+					.getProperty("aggr.minutes_to_save"));
+			ip2locationPath = props.getProperty("aggr.ip2location_path");
+		} catch (Exception e) {
+			System.out.println("error" + e);
+		}
+	}
+	
+	static protected String getConfigurationPath() {
+		String confPath = "/opt/kaltura";
+    	if (System.getenv().containsKey("KALTURA_CONF_PATH")) {
+    		confPath = System.getenv().get("KALTURA_CONF_PATH");
+    	}
+    	return confPath + "/config.properties";
 	}
 		 
+	
     static public LiveConfiguration instance(){
         if (_instance == null) {
-            _instance = new LiveConfiguration();
+        	String filePath = getConfigurationPath();
+            _instance = new LiveConfiguration(filePath);
         }
         return _instance;
     }
@@ -102,5 +108,7 @@ public class LiveConfiguration {
 		return ip2locationPath;
 	}
 
-
+	public void setCassandraNodeName(String cassandraNodeName) {
+		this.cassandraNodeName = cassandraNodeName;
+	}
 }

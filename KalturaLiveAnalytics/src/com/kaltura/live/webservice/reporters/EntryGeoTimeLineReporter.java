@@ -56,7 +56,6 @@ public class EntryGeoTimeLineReporter extends BaseReporter {
 		
 		String query = sb.toString();
 		logger.debug(query);
-		System.out.println(query);
 		return query;
 	}
 

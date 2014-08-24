@@ -6,9 +6,9 @@ import java.util.Date;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.kaltura.live.Configuration;
 import com.kaltura.live.infra.cache.SerializableSession;
 import com.kaltura.live.infra.utils.DateUtils;
+import com.kaltura.live.infra.utils.LiveConfiguration;
 import com.kaltura.live.webservice.model.AnalyticsException;
 import com.kaltura.live.webservice.model.LiveReportInputFilter;
 import com.kaltura.live.webservice.model.LiveReportPager;
@@ -26,7 +26,7 @@ public abstract class BaseReporter {
 	protected static SerializableSession session;
 	
 	public BaseReporter() {
-		session = new SerializableSession(Configuration.NODE_NAME);
+		session = new SerializableSession(LiveConfiguration.instance().getCassandraNodeName());
 	}
 	
 	/**
