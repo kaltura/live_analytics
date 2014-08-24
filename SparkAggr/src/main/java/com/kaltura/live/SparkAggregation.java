@@ -138,7 +138,7 @@ public class SparkAggregation {
 				 config.getRepositoryHome() + "/live-model-1.0.0.jar", 
 				 config.getRepositoryHome() + "/live-infra-1.0.0.jar",
 				 config.getRepositoryHome() + "/ip-2-location-1.0.0.jar" };
-		final JavaSparkContext jsc = new JavaSparkContext("spark://il-bigdata-1.dev.kaltura.com:7077",
+		final JavaSparkContext jsc = new JavaSparkContext(config.getSparkMaster(),
                 "SparkAggr", config.getSparkHome(), jars);
 
 		return jsc;
