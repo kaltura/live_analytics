@@ -2,7 +2,7 @@ Installation guide:
 -------------------
 1. Copy the configuration file from : KalturaLiveInfra/configuration/config.properties
 	to a path of your choice, and expose it as a system variable named KALTURA_CONF_PATH
-2. Install tomcat (preferably 8)
+2. Install tomcat (preferably 7)
 3. Configure Tomcat (see section 'TomCat Configuration')
 4. Export WAR file (Soon to be a maven script)
 5. Deploy the war {$TOMCAT}/webapps
@@ -13,7 +13,7 @@ System variables:
 ----------------------
 In order to expose a system variable, create a file named - /etc/profile.d/kaltura.sh
 and add the following content:
-KALTURA_CONF_PATH=/opt/kaltura/lib/
+KALTURA_CONF_PATH=@CONFIGURATION_DIR@
 export KALTURA_CONF_PATH
 
 Restart the machine and the exposure will hold.
