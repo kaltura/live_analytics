@@ -13,7 +13,7 @@ System variables:
 ----------------------
 In order to expose a system variable, create a file named - /etc/profile.d/kaltura.sh
 and add the following content:
-KALTURA_CONF_PATH=/opt/kaltura/lib/
+KALTURA_CONF_PATH=@CONFIGURATION_DIR@
 export KALTURA_CONF_PATH
 
 Restart the machine and the exposure will hold.
