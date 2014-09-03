@@ -21,7 +21,7 @@ public abstract class BaseReporter {
 	
 	protected static Logger logger = LoggerFactory.getLogger(BaseReporter.class);
 	
-	private static final int TIME_FRAME_INTERVAL = 30;
+	private static final int TIME_FRAME_INTERVAL = 60;
 	
 	protected static SerializableSession session;
 	
