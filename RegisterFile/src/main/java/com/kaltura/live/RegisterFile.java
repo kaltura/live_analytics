@@ -28,8 +28,8 @@ public class RegisterFile {
     }
     
     private long getTimeStamp(String fileName) {
-    	String[] parts = fileName.split("_");
-    	long longUnixSeconds = Long.parseLong(parts[0]);
+    	String[] parts = fileName.split("-");
+    	long longUnixSeconds = Long.parseLong(parts[1]);
     	return DateUtils.roundHourDate(new Date(longUnixSeconds * 1000L)).getTime();
     	 
     }
@@ -84,20 +84,36 @@ public class RegisterFile {
     
     public static void main(String[] args) {
     	
-		RegisterFile insertFile = new RegisterFile("pa-erans");
+    	String node = "pa-erans";
+    	String fileName = "access_log";
+    	String logsFolder = "";
+    	
+    	if (args.length == 1)
+    	{
+    		node = args[0];
+    	}
+    	if (args.length == 3)
+    	{
+    		node = args[0];
+    		logsFolder = args[1] + "/";
+    		fileName = args[2];
+    		
+    	}
+    	
+		RegisterFile insertFile = new RegisterFile(node);
         
-		/*
+	
     	try {
-	    	String fileName = args[0];
-			insertFile.insertIntoTable(fileName, readFile("/home/dev/orly/" + fileName + ".gz"));
+    		String fileNameNoExt = fileName.substring(0, fileName.length()-3);
+			insertFile.insertIntoTable(fileNameNoExt, readFile(logsFolder + fileName));
 			insertFile.disconnect();
     	} catch (Exception ex) {
     		ex.printStackTrace();
 		} finally {
 			insertFile.disconnect();
     	}
-		*/
 		
+		/**
 		// TODO - remove hack and get file name as argument
 		try {
 			
@@ -105,7 +121,7 @@ public class RegisterFile {
 			while (startTime <= 1387125000) {
 				
 				//String fileName = formatDate.format(c.getTime());
-				String fileName = Integer.toString(startTime) + "_live_stats";
+				fileName = Integer.toString(startTime) + "_live_stats";
 				insertFile.insertIntoTable(fileName, readFile("/home/dev/orly/" + fileName + ".gz"));
 				startTime = startTime + 30;
 				Thread.sleep(30*1000);
@@ -118,7 +134,7 @@ public class RegisterFile {
 		} finally {
 			insertFile.disconnect();
 		}
-		
+		*/
 
 	}
 }

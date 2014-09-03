@@ -46,6 +46,7 @@ public class LiveConfiguration {
 			minutesToSave = Integer.valueOf(props
 					.getProperty("aggr.minutes_to_save"));
 			ip2locationPath = props.getProperty("aggr.ip2location_path");
+			repositoryHome = props.getProperty("repository_home");
 		} catch (Exception e) {
 			System.out.println("error" + e);
 		}

@@ -1,6 +1,8 @@
 package com.kaltura.live.model.aggregation;
 
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.Date;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -26,7 +28,7 @@ public class StatsEvent implements Serializable {
 	
 	/** Regular expression representing the apache log format */
 	public static Pattern apacheLogRegex = Pattern.compile(
-			"^([\\d.]+) (\\S+) (\\S+) \\[([\\w\\d:/]+\\s[+\\-]\\d{5})\\] \"(.+?)\" (\\d{3}) ([\\d\\-]+) (\\d+\\/\\d+) \"([^\"]+)\" \"([^\"]+)\".*");
+			"^([\\d.]+) \\[([\\w\\d:/]+\\s[+\\-]\\d{4})\\] \"(.+?)\" (\\d{3}) \"([^\"]+)\".*");
 	
 	/** Stats events fields */
 	private Date eventTime;
@@ -90,15 +92,22 @@ public class StatsEvent implements Serializable {
             	city = "N/A";
             }
 
-            String date = m.group(4);
-            String query = m.group(5);
+            String date = m.group(2);
+            String query = m.group(3);
+            try {
+				query = URLDecoder.decode(query, "UTF-8");
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
             
             eventTime = DateUtils.roundDate(date);
             
             Map<String, String> paramsMap = RequestUtils.splitQuery(query);
             entryId = paramsMap.containsKey("event:entryId") ? paramsMap.get("event:entryId") : null;
             partnerId = Integer.parseInt(paramsMap.containsKey("event:partnerId") ? paramsMap.get("event:partnerId") : null);
-            bufferTime = Long.parseLong(paramsMap.containsKey("event:bufferTime") ? paramsMap.get("event:bufferTime") : "0");
+            float fBufferTime = Float.parseFloat(paramsMap.containsKey("event:bufferTime") ? paramsMap.get("event:bufferTime") : "0");
+            bufferTime = (long)(fBufferTime);
             bitrate = Long.parseLong(paramsMap.containsKey("event:bitrate") ? paramsMap.get("event:bitrate") : "-1");
             referrer = paramsMap.containsKey("event:referrer") ? paramsMap.get("event:referrer") : null; 
             bitrateCount = 1;
@@ -107,7 +116,7 @@ public class StatsEvent implements Serializable {
             	bitrate = 0;
             	bitrateCount = 0;
             }
-            int eventIndex = Integer.parseInt(paramsMap.containsKey("event:index") ? paramsMap.get("event:index") : "0");
+            int eventIndex = Integer.parseInt(paramsMap.containsKey("event:eventIndex") ? paramsMap.get("event:eventIndex") : "0");
             plays = eventIndex == 1 ? 1 : 0;
             alive = eventIndex > 1 ? 1 : 0;
         }
