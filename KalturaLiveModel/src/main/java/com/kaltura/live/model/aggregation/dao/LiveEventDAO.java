@@ -12,7 +12,7 @@ import com.datastax.driver.core.Row;
  */
 public abstract class LiveEventDAO extends LiveDAO {
 	
-	public static final int AGGR_TTL = 60 * 60 * 3;
+	public static final int AGGR_TTL = 60 * 60 * 36;
 	
 	// Equivalent to no TTL
 	public static final int HOURLY_AGGR_TTL = 0;
