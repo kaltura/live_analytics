@@ -1,8 +1,10 @@
 package com.kaltura.live;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.spark.api.java.JavaRDD;
@@ -42,6 +44,7 @@ public class SparkAggregation {
 	private static Logger LOG = LoggerFactory.getLogger(SparkAggregation.class);
 	private static LiveConfiguration config;
 	public static void main(String[] args) throws Exception {
+		
 		config = LiveConfiguration.instance();
 		validateArguments(args);
 		final JavaSparkContext jsc = initializeEnvironment();
@@ -59,6 +62,7 @@ public class SparkAggregation {
 
 		JavaRDD<String> loadedDates = null;
 		Set<Long> hoursToLoad = new HashSet<Long>();
+		int iterCount = 0;
 		boolean resume = true;
 		while (resume) {
 			
@@ -90,13 +94,18 @@ public class SparkAggregation {
 				
 				loadedDates = fileIdsToLoad;
 				loadedDates.cache();
+				if (iterCount > 50) {
+					loadedDates.checkpoint();
+					iterCount = 0;
+				}
+				++iterCount;
 				loadedDates.count();
 
 				// Map each line events to statsEvent object
 				JavaRDD<StatsEvent> loadedEvents = loadedLines
 						.repartition(24)
 						.mapPartitions(
-								new StatsEventMap());
+								new StatsEventMap(config.getIp2locationPath()));
 				
 				loadedEvents.cache();
 				loadedEvents.count();
@@ -118,7 +127,7 @@ public class SparkAggregation {
 				long endTime = System.currentTimeMillis();
 				System.out.println("Iteration time (msec): "
 						+ (endTime - startTime));
-				Thread.sleep(1000 * 20);
+				
 			}
 
 		}
@@ -132,15 +141,19 @@ public class SparkAggregation {
 		LiveConfiguration config = LiveConfiguration.instance();
 		System.setProperty("spark.default.parallelism", config.getSparkParallelism());
 		System.setProperty("spark.cores.max", config.getSparkMaxCores());
+		System.setProperty("spark.executor.memory", config.getSparkExectorMem());
 		
 		String[] jars = { config.getRepositoryHome() + "/spark-aggr-1.0.0.jar",
 				 config.getRepositoryHome() + "/cassandra-driver-core-2.0.3.jar",
 				 config.getRepositoryHome() + "/live-model-1.0.0.jar", 
 				 config.getRepositoryHome() + "/live-infra-1.0.0.jar",
 				 config.getRepositoryHome() + "/ip-2-location-1.0.0.jar" };
+		Map<String, String> env = new HashMap<String, String>();
+		env.put("KALTURA_CONF_PATH", System.getenv().get("KALTURA_CONF_PATH"));
+		
 		final JavaSparkContext jsc = new JavaSparkContext(config.getSparkMaster(),
-                "SparkAggr", config.getSparkHome(), jars);
-
+                "SparkAggr", config.getSparkHome(), jars, env);
+		jsc.setCheckpointDir("/tmp/checkpoint/");
 		return jsc;
 	}
 

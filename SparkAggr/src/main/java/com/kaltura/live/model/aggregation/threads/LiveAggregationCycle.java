@@ -24,11 +24,12 @@ public abstract class LiveAggregationCycle implements /*Runnable,*/ Serializable
 	
 	private static Logger LOG = LoggerFactory.getLogger(LiveAggregationCycle.class);
 	
+	private int iterCount = 0;
 	/** This is a list of events to aggregate */
-	protected JavaRDD<StatsEvent> events;
+	protected JavaRDD<StatsEvent> events = null;
 	
 	/** Old events */
-	private JavaPairRDD<EventKey, StatsEvent> aggregatedEvents;
+	private JavaPairRDD<EventKey, StatsEvent> aggregatedEvents = null;
 	
 	/* -- function pointers -- */
 	
@@ -54,26 +55,35 @@ public abstract class LiveAggregationCycle implements /*Runnable,*/ Serializable
 	//@Override
 	public void run() {
 		
-		JavaPairRDD<EventKey, StatsEvent> eventByKeyMap = events.mapToPair(mapFunction);
-		
-		if (aggregatedEvents != null) {
-			eventByKeyMap = eventByKeyMap.union(aggregatedEvents);
-		}
-		
-		
-		JavaPairRDD<EventKey, StatsEvent> mergedEventsByKey = eventByKeyMap.reduceByKey(reduceFunction);
-		JavaRDD<Boolean> result = mergedEventsByKey.mapPartitions(saveFunction);
-		
-		// filter old hours aggregated results
-		mergedEventsByKey = mergedEventsByKey.filter(new StatsEventsHourlyFilter());
-		result.count();
-				
-		if (aggregatedEvents != null)		
-			aggregatedEvents.unpersist();
+	    JavaPairRDD<EventKey, StatsEvent> eventByKeyMap = events.mapToPair(mapFunction);
 
-		aggregatedEvents = mergedEventsByKey;
-		aggregatedEvents.cache();
-		aggregatedEvents.count();
+        if (aggregatedEvents != null) {
+                eventByKeyMap = eventByKeyMap.union(aggregatedEvents);
+        }
+
+
+        JavaPairRDD<EventKey, StatsEvent> mergedEventsByKey = eventByKeyMap.reduceByKey(reduceFunction);
+        JavaRDD<Boolean> result = mergedEventsByKey.mapPartitions(saveFunction);
+
+        // filter old hours aggregated results
+        mergedEventsByKey = mergedEventsByKey.filter(getFilterFunction());
+        if (iterCount > 50) {
+                result.checkpoint();
+        }
+        result.count();
+
+        if (aggregatedEvents != null)
+                aggregatedEvents.unpersist();
+
+        aggregatedEvents = mergedEventsByKey;
+        aggregatedEvents.cache();
+        if (iterCount > 50) {
+                aggregatedEvents.checkpoint();
+                iterCount = 0;
+        }
+        ++iterCount;
+        aggregatedEvents.count();
+
 	}
 	
 	protected abstract StatsEventsFilter getFilterFunction();
