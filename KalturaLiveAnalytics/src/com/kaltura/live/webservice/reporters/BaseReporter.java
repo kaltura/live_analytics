@@ -99,4 +99,10 @@ public abstract class BaseReporter {
 	protected String addExactTimeCondition(Date curTime) {
 		return "event_time = " + curTime.getTime(); 
 	}
+	
+	protected long calcAverageBufferTime(long bufferTime, long alive) {
+		if(alive > 0)
+			return 6 * bufferTime / alive;
+		return 0;
+	}
 }

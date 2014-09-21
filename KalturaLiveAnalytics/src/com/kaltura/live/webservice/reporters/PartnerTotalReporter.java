@@ -46,26 +46,31 @@ public class PartnerTotalReporter extends BaseReporter {
 		
 		Iterator<Row> itr = results.iterator();
 		
+		long alive = 0;
 		long audience = 0;
 		long secondsViewed = 0;
 		long bufferTime = 0;
 		long bitRate = 0;
 		long bitrateCount = 0;
+		long plays = 0;
+		
 		while(itr.hasNext()) {
 			LiveEntryEventDAO dao = new LiveEntryEventDAO(itr.next());
+			alive += dao.getAlive();
 			audience += dao.getAlive();
 			secondsViewed += dao.getAlive() * 10;
 			bufferTime += dao.getBufferTime();
 			bitRate += dao.getBitrate();
 			bitrateCount += dao.getBitrateCount();
-			
+			plays += dao.getPlays();
 		}
 		
 		float avgBitrate = 0;
 		if(bitrateCount > 0)
 			avgBitrate = bitRate / bitrateCount;
 		
-		LiveStats entry = new LiveStats(0, audience, secondsViewed, bufferTime, avgBitrate, 0, 0);
+		long avgBufferTime = calcAverageBufferTime(bufferTime, alive + plays);
+		LiveStats entry = new LiveStats(0, audience, secondsViewed, avgBufferTime , avgBitrate, 0, 0);
 		
 		List<LiveStats> result = new ArrayList<LiveStats>();
 		result.add(entry);
@@ -93,7 +98,7 @@ public class PartnerTotalReporter extends BaseReporter {
 		
 		Iterator<Row> itr = results.iterator();
 		
-		long plays = 0, secondsViewed = 0, bufferTime = 0, bitRate = 0, bitrateCount = 0;
+		long plays = 0, secondsViewed = 0, bufferTime = 0, bitRate = 0, bitrateCount = 0, alive = 0;
 		while(itr.hasNext()) {
 			PartnerEventDAO dao = new PartnerEventDAO(itr.next());
 			plays += dao.getPlays();
@@ -101,14 +106,17 @@ public class PartnerTotalReporter extends BaseReporter {
 			bufferTime += dao.getBufferTime();
 			bitRate += dao.getBitrate();
 			bitrateCount += dao.getBitrateCount();
+			alive += dao.getAlive();
 		}
 		
 		float avgBitrate = 0;
 		if(bitrateCount > 0)
 			avgBitrate = bitRate / bitrateCount;
 		
+		long avgBufferTime = calcAverageBufferTime(bufferTime, alive + plays);
+		
 		List<LiveStats> result = new ArrayList<LiveStats>();
-		LiveStats event = new LiveStats(plays, 0,secondsViewed, bufferTime, avgBitrate, 0, 0);
+		LiveStats event = new LiveStats(plays, 0,secondsViewed, avgBufferTime, avgBitrate, 0, 0);
 		result.add(event);
 		return new LiveStatsListResponse(result);
 	}

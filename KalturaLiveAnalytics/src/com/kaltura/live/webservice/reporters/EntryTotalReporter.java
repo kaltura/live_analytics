@@ -71,7 +71,7 @@ public class EntryTotalReporter extends BaseReporter {
 			entry.setEntryId(entryId);
 			entry.setPlays(plays.get(entryId).longValue());
 			entry.setSecondsViewed(alive.get(entryId).longValue() * 10);
-			entry.setBufferTime(bufferTime.get(entryId).longValue());
+			entry.setBufferTime(calcAverageBufferTime(bufferTime.get(entryId), alive.get(entryId) + plays.get(entryId)));
 			
 			int bitrateCountVal = (int)bitrateCount.get(entryId).longValue();
 			if(bitrateCountVal > 0)
@@ -122,7 +122,7 @@ public class EntryTotalReporter extends BaseReporter {
 			entry.setEntryId(dao.getEntryId());
 			entry.setAudience(dao.getAlive());
 			entry.setSecondsViewed(dao.getAlive() * 10);
-			entry.setBufferTime(dao.getBufferTime());
+			entry.setBufferTime(calcAverageBufferTime(dao.getBufferTime(), dao.getAlive() + dao.getPlays()));
 			
 			long bitrateCountVal = dao.getBitrate();
 			if(bitrateCountVal > 0)
