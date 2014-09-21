@@ -13,11 +13,17 @@ import com.kaltura.live.model.aggregation.StatsEvent;
 public class StatsEventMap implements FlatMapFunction<Iterator<String>, StatsEvent>{
 
 	private static final long serialVersionUID = -61094768891844569L;
+	private String ip2locationFileName;
 
+
+	public StatsEventMap(String ip2locationFileName) {
+		this.ip2locationFileName = ip2locationFileName;
+	}
+	
 	@Override
 	public Iterable<StatsEvent> call(Iterator<String> it) throws Exception {
 		SerializableIP2LocationReader reader = new SerializableIP2LocationReader(
-				LiveConfiguration.instance().getIp2locationPath());
+				ip2locationFileName);
 		
 		List<StatsEvent> statsEvents = new ArrayList<StatsEvent>();
 		while (it.hasNext()) {
@@ -28,5 +34,7 @@ public class StatsEventMap implements FlatMapFunction<Iterator<String>, StatsEve
 		reader.close();
 		return statsEvents;
 	}
+
+
 
 }

@@ -33,10 +33,10 @@ public class StatsEvent implements Serializable {
 	/** Stats events fields */
 	private Date eventTime;
 	private int partnerId = 0;
-	private String entryId;
-	private String country;
-	private String city;
-	private String referrer;
+	private String entryId = "N/A";
+	private String country = "N/A";
+	private String city = "N/A";
+	private String referrer = "N/A";
 	private long plays = 0;
 	private long alive = 0;
 	private long bitrate = 0;
@@ -104,21 +104,23 @@ public class StatsEvent implements Serializable {
             eventTime = DateUtils.roundDate(date);
             
             Map<String, String> paramsMap = RequestUtils.splitQuery(query);
-            entryId = paramsMap.containsKey("event:entryId") ? paramsMap.get("event:entryId") : null;
-            partnerId = Integer.parseInt(paramsMap.containsKey("event:partnerId") ? paramsMap.get("event:partnerId") : null);
-            float fBufferTime = Float.parseFloat(paramsMap.containsKey("event:bufferTime") ? paramsMap.get("event:bufferTime") : "0");
-            bufferTime = (long)(fBufferTime);
-            bitrate = Long.parseLong(paramsMap.containsKey("event:bitrate") ? paramsMap.get("event:bitrate") : "-1");
-            referrer = paramsMap.containsKey("event:referrer") ? paramsMap.get("event:referrer") : null; 
-            bitrateCount = 1;
-            if (bitrate < 0)
-            {
-            	bitrate = 0;
-            	bitrateCount = 0;
+            if (paramsMap != null && paramsMap.size() > 0) {
+	            entryId = paramsMap.containsKey("event:entryId") ? paramsMap.get("event:entryId") : null;
+	            partnerId = Integer.parseInt(paramsMap.containsKey("event:partnerId") ? paramsMap.get("event:partnerId") : null);
+	            float fBufferTime = Float.parseFloat(paramsMap.containsKey("event:bufferTime") ? paramsMap.get("event:bufferTime") : "0");
+	            bufferTime = (long)(fBufferTime);
+	            bitrate = Long.parseLong(paramsMap.containsKey("event:bitrate") ? paramsMap.get("event:bitrate") : "-1");
+	            referrer = paramsMap.containsKey("event:referrer") ? paramsMap.get("event:referrer") : null; 
+	            bitrateCount = 1;
+	            if (bitrate < 0)
+	            {
+	            	bitrate = 0;
+	            	bitrateCount = 0;
+	            }
+	            int eventIndex = Integer.parseInt(paramsMap.containsKey("event:eventIndex") ? paramsMap.get("event:eventIndex") : "0");
+	            plays = eventIndex == 1 ? 1 : 0;
+	            alive = eventIndex > 1 ? 1 : 0;
             }
-            int eventIndex = Integer.parseInt(paramsMap.containsKey("event:eventIndex") ? paramsMap.get("event:eventIndex") : "0");
-            plays = eventIndex == 1 ? 1 : 0;
-            alive = eventIndex > 1 ? 1 : 0;
         }
         
 	}

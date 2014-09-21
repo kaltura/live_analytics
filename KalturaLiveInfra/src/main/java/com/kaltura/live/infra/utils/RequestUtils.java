@@ -22,6 +22,8 @@ public class RequestUtils {
 				query_pairs.put(URLDecoder.decode(pair.substring(0, idx), "UTF-8"), URLDecoder.decode(pair.substring(idx + 1), "UTF-8"));
 			} catch (UnsupportedEncodingException e) {
 				LOG.error("Failed to parse request", e);
+			} catch (Exception ex) {
+				LOG.error("Failed to parse request: " + query, ex);
 			}
 	    }
 	    return query_pairs;

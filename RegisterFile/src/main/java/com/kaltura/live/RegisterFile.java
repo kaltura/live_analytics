@@ -36,12 +36,13 @@ public class RegisterFile {
     
     public void insertIntoTable(String key, byte[] data) {
     	long hourKey = getTimeStamp(key);
-    	PreparedStatement statement = cassandraSession.getSession().prepare("INSERT INTO kaltura_live.log_files (hour_id,file_id) VALUES (?, ?) USING TTL ?");
-        BoundStatement boundStatement = new BoundStatement(statement);
-        cassandraSession.getSession().execute(boundStatement.bind(new Date(hourKey),key, LOGS_TTL));
-        statement = cassandraSession.getSession().prepare("INSERT INTO kaltura_live.log_data (file_id,data) VALUES (?, ?) USING TTL ?");
-        boundStatement = new BoundStatement(statement);
+    	PreparedStatement statement = cassandraSession.getSession().prepare("INSERT INTO kaltura_live.log_data (file_id,data) VALUES (?, ?) USING TTL ?");
+    	BoundStatement boundStatement = new BoundStatement(statement);
         cassandraSession.getSession().execute(boundStatement.bind(key,ByteBuffer.wrap(data), LOGS_TTL));
+    	statement = cassandraSession.getSession().prepare("INSERT INTO kaltura_live.log_files (hour_id,file_id) VALUES (?, ?) USING TTL ?");
+        boundStatement = new BoundStatement(statement);
+        cassandraSession.getSession().execute(boundStatement.bind(new Date(hourKey),key, LOGS_TTL));
+        
         System.out.println("After Insert");
     }
 
