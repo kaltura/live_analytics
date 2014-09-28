@@ -124,9 +124,9 @@ public class EntryTotalReporter extends BaseReporter {
 			entry.setSecondsViewed(dao.getAlive() * 10);
 			entry.setBufferTime(calcAverageBufferTime(dao.getBufferTime(), dao.getAlive() + dao.getPlays()));
 			
-			long bitrateCountVal = dao.getBitrate();
+			long bitrateCountVal = dao.getBitrateCount();
 			if(bitrateCountVal > 0)
-				entry.setAvgBitrate(dao.getBitrateCount() / bitrateCountVal);
+				entry.setAvgBitrate(dao.getBitrate() / bitrateCountVal);
 			else 
 				entry.setAvgBitrate(0);
 			
