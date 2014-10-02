@@ -69,7 +69,7 @@ public class PartnerTotalReporter extends BaseReporter {
 		if(bitrateCount > 0)
 			avgBitrate = bitRate / bitrateCount;
 		
-		long avgBufferTime = calcAverageBufferTime(bufferTime, alive + plays);
+		float avgBufferTime = calcAverageBufferTime(bufferTime, alive + plays);
 		LiveStats entry = new LiveStats(0, audience, secondsViewed, avgBufferTime , avgBitrate, 0, 0);
 		
 		List<LiveStats> result = new ArrayList<LiveStats>();
@@ -113,7 +113,7 @@ public class PartnerTotalReporter extends BaseReporter {
 		if(bitrateCount > 0)
 			avgBitrate = bitRate / bitrateCount;
 		
-		long avgBufferTime = calcAverageBufferTime(bufferTime, alive + plays);
+		float avgBufferTime = calcAverageBufferTime(bufferTime, alive + plays);
 		
 		List<LiveStats> result = new ArrayList<LiveStats>();
 		LiveStats event = new LiveStats(plays, 0,secondsViewed, avgBufferTime, avgBitrate, 0, 0);

@@ -8,7 +8,7 @@ public class LiveStats {
 	protected long plays;
 	protected long audience;
 	protected long secondsViewed;
-	protected long bufferTime;
+	protected float bufferTime;
 	protected float avgBitrate;
 	protected long timestamp;
 	protected long startEvent;
@@ -18,7 +18,7 @@ public class LiveStats {
 	}
 	
 	public LiveStats(long plays, long audience, long secondsViewed,
-			long bufferTime, float avgBitrate, long timestamp, long startEvent) {
+			float bufferTime, float avgBitrate, long timestamp, long startEvent) {
 		super();
 		this.plays = plays;
 		this.audience = audience;
@@ -65,13 +65,13 @@ public class LiveStats {
 
 
 
-	public long getBufferTime() {
+	public float getBufferTime() {
 		return bufferTime;
 	}
 
 
 
-	public void setBufferTime(long bufferTime) {
+	public void setBufferTime(float bufferTime) {
 		this.bufferTime = bufferTime;
 	}
 
@@ -110,7 +110,6 @@ public class LiveStats {
 	public void setStartEvent(long startEvent) {
 		this.startEvent = startEvent;
 	}
-
 
 
 	@Override

@@ -100,9 +100,11 @@ public abstract class BaseReporter {
 		return "event_time = " + curTime.getTime(); 
 	}
 	
-	protected long calcAverageBufferTime(long bufferTime, long alive) {
+	protected float calcAverageBufferTime(long bufferTime, long alive) {
 		if(alive > 0)
-			return 6 * bufferTime / alive;
+			// Round to 2 decimal points
+			// And set it to be average on one minute
+			return (float) (Math.round((6 * 100.0 * bufferTime) / alive) / 100.0);
 		return 0;
 	}
 }
