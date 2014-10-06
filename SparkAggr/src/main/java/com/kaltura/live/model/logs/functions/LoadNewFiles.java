@@ -45,39 +45,39 @@ public class LoadNewFiles implements FlatMapFunction<String, String> {
 			fileData = result;
 		}
 
-		ByteArrayInputStream bStream = new ByteArrayInputStream(
-				fileData);
-		
-		GZIPInputStream gzis = null;
-		BufferedReader in = null;
-		try {
-			gzis = new GZIPInputStream(
-					bStream);
-			InputStreamReader reader = new InputStreamReader(
-					gzis);
-			in = new BufferedReader(reader);
-			String readed;
-			while ((readed = in.readLine()) != null) {
-				lines.add(readed);
-			}
-		} catch (IOException e) {
+		if (fileData != null)
+		{
+			ByteArrayInputStream bStream = new ByteArrayInputStream(
+					fileData);
 			
-		} finally {
+			GZIPInputStream gzis = null;
+			BufferedReader in = null;
 			try {
-				if (bStream != null)
-					bStream.close();
-				if (gzis != null)
-					gzis.close();
-				if (in != null)
-					in.close();
-			}catch (IOException ex) {
-				LOG.error("Failed to close GZipInputStream" + ex.getMessage());
-            }
+				gzis = new GZIPInputStream(
+						bStream);
+				InputStreamReader reader = new InputStreamReader(
+						gzis);
+				in = new BufferedReader(reader);
+				String readed;
+				while ((readed = in.readLine()) != null) {
+					lines.add(readed);
+				}
+			} catch (IOException e) {
+				
+			} finally {
+				try {
+					if (bStream != null)
+						bStream.close();
+					if (gzis != null)
+						gzis.close();
+					if (in != null)
+						in.close();
+				}catch (IOException ex) {
+					LOG.error("Failed to close GZipInputStream" + ex.getMessage());
+	            }
+			}
 		}
-			
-			return lines;
-			
+		return lines;
 	}
-
 }
 

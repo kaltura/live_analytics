@@ -16,18 +16,22 @@ import com.kaltura.live.infra.cache.SerializableSession;
 import com.kaltura.live.infra.utils.DateUtils;
 import com.kaltura.live.infra.utils.LiveConfiguration;
 import com.kaltura.live.model.aggregation.StatsEvent;
+import com.kaltura.live.model.aggregation.functions.map.LiveEntryAggrMap;
 import com.kaltura.live.model.aggregation.functions.map.LiveEntryHourlyMap;
 import com.kaltura.live.model.aggregation.functions.map.LiveEntryLocationMap;
 import com.kaltura.live.model.aggregation.functions.map.LiveEntryMap;
 import com.kaltura.live.model.aggregation.functions.map.LiveEntryReferrerMap;
 import com.kaltura.live.model.aggregation.functions.map.PartnerHourlyMap;
 import com.kaltura.live.model.aggregation.functions.map.StatsEventMap;
+import com.kaltura.live.model.aggregation.functions.reduce.LiveEventMaxAudience;
 import com.kaltura.live.model.aggregation.functions.reduce.LiveEventReduce;
+import com.kaltura.live.model.aggregation.functions.save.LiveEntryHourlyMaxAudienceSave;
 import com.kaltura.live.model.aggregation.functions.save.LiveEntryHourlySave;
 import com.kaltura.live.model.aggregation.functions.save.LiveEntryLocationSave;
 import com.kaltura.live.model.aggregation.functions.save.LiveEntryReferrerSave;
 import com.kaltura.live.model.aggregation.functions.save.LiveEntrySave;
 import com.kaltura.live.model.aggregation.functions.save.PartnerHourlySave;
+import com.kaltura.live.model.aggregation.threads.EntryRealTimeLiveAggregationCycle;
 import com.kaltura.live.model.aggregation.threads.HourlyLiveAggregationCycle;
 import com.kaltura.live.model.aggregation.threads.LiveAggregationCycle;
 import com.kaltura.live.model.aggregation.threads.RealTimeLiveAggregationCycle;
@@ -46,13 +50,15 @@ public class SparkAggregation {
 	public static void main(String[] args) throws Exception {
 		
 		config = LiveConfiguration.instance();
+		
 		validateArguments(args);
 		final JavaSparkContext jsc = initializeEnvironment();
 
 		SerializableSession session = new SerializableSession(config.getCassandraNodeName());
 		
 		// Generate aggregation threads
-		LiveAggregationCycle entryAggr = new RealTimeLiveAggregationCycle(new LiveEntryMap(), new LiveEventReduce(), new LiveEntrySave(session));
+		LiveAggregationCycle entryAggr = new EntryRealTimeLiveAggregationCycle(new LiveEntryMap(), new LiveEventReduce(), new LiveEntrySave(session),
+				new LiveEntryAggrMap(), new LiveEventMaxAudience(), new LiveEntryHourlyMaxAudienceSave(session));
 		HourlyLiveAggregationCycle entryHourlyAggr = new HourlyLiveAggregationCycle(new LiveEntryHourlyMap(), new LiveEventReduce(), new LiveEntryHourlySave(session));
 		LiveAggregationCycle locationEntryAggr = new RealTimeLiveAggregationCycle(new LiveEntryLocationMap(), new LiveEventReduce(), new LiveEntryLocationSave(session));
 		HourlyLiveAggregationCycle referrerHourlyAggr = new HourlyLiveAggregationCycle(new LiveEntryReferrerMap(), new LiveEventReduce(), new LiveEntryReferrerSave(session));

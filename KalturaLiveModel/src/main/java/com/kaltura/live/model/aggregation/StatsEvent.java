@@ -72,28 +72,10 @@ public class StatsEvent implements Serializable {
 		Matcher m = apacheLogRegex.matcher(line);
 		
         if (m.find()) {
-            ipAddress = m.group(1);
-           
-            try {
-            		Ip2LocationRecord ipRecord =  reader.getAll(ipAddress);
-            		country = ipRecord.getCountryLong();
-            		city = ipRecord.getCity();
-            	
-            } catch (Exception e) {
-            	LOG.error("Failed to parse IP", e);
-            	country = "N/A";
-            	city = "N/A";
-            }
-           
-            if (country == null) {
-            	country = "N/A";
-            }
-            if (city == null) {
-            	city = "N/A";
-            }
-
-            String date = m.group(2);
-            String query = m.group(3);
+        	String date = m.group(2);
+            eventTime = DateUtils.roundDate(date);
+            
+        	String query = m.group(3);
             try {
 				query = URLDecoder.decode(query, "UTF-8");
 			} catch (UnsupportedEncodingException e) {
@@ -101,25 +83,49 @@ public class StatsEvent implements Serializable {
 				e.printStackTrace();
 			}
             
-            eventTime = DateUtils.roundDate(date);
-            
-            Map<String, String> paramsMap = RequestUtils.splitQuery(query);
-            if (paramsMap != null && paramsMap.size() > 0) {
-	            entryId = paramsMap.containsKey("event:entryId") ? paramsMap.get("event:entryId") : null;
-	            partnerId = Integer.parseInt(paramsMap.containsKey("event:partnerId") ? paramsMap.get("event:partnerId") : null);
-	            float fBufferTime = Float.parseFloat(paramsMap.containsKey("event:bufferTime") ? paramsMap.get("event:bufferTime") : "0");
-	            bufferTime = (long)(fBufferTime);
-	            bitrate = Long.parseLong(paramsMap.containsKey("event:bitrate") ? paramsMap.get("event:bitrate") : "-1");
-	            referrer = paramsMap.containsKey("event:referrer") ? paramsMap.get("event:referrer") : null; 
-	            bitrateCount = 1;
-	            if (bitrate < 0)
-	            {
-	            	bitrate = 0;
-	            	bitrateCount = 0;
+            if (query.indexOf("service=LiveStats") > -1 && query.indexOf("action=collect") > -1) {
+	            ipAddress = m.group(1);
+	           
+	            try {
+	            		Ip2LocationRecord ipRecord =  reader.getAll(ipAddress);
+	            		country = ipRecord.getCountryLong();
+	            		city = ipRecord.getCity();
+	            	
+	            } catch (Exception e) {
+	            	LOG.error("Failed to parse IP", e);
+	            	country = "N/A";
+	            	city = "N/A";
 	            }
-	            int eventIndex = Integer.parseInt(paramsMap.containsKey("event:eventIndex") ? paramsMap.get("event:eventIndex") : "0");
-	            plays = eventIndex == 1 ? 1 : 0;
-	            alive = eventIndex > 1 ? 1 : 0;
+	           
+	            if (country == null) {
+	            	country = "N/A";
+	            }
+	            if (city == null) {
+	            	city = "N/A";
+	            }
+	            
+	            Map<String, String> paramsMap = RequestUtils.splitQuery(query);
+	            if (paramsMap != null && paramsMap.size() > 0) {
+	            	try {
+			            entryId = paramsMap.containsKey("event:entryId") ? paramsMap.get("event:entryId") : null;
+			            partnerId = Integer.parseInt(paramsMap.containsKey("event:partnerId") ? paramsMap.get("event:partnerId") : null);
+			            float fBufferTime = Float.parseFloat(paramsMap.containsKey("event:bufferTime") ? paramsMap.get("event:bufferTime") : "0");
+			            bufferTime = (long)(fBufferTime);
+			            bitrate = Long.parseLong(paramsMap.containsKey("event:bitrate") ? paramsMap.get("event:bitrate") : "-1");
+			            referrer = paramsMap.containsKey("event:referrer") ? paramsMap.get("event:referrer") : null; 
+			            bitrateCount = 1;
+			            if (bitrate < 0)
+			            {
+			            	bitrate = 0;
+			            	bitrateCount = 0;
+			            }
+			            int eventIndex = Integer.parseInt(paramsMap.containsKey("event:eventIndex") ? paramsMap.get("event:eventIndex") : "0");
+			            plays = eventIndex == 1 ? 1 : 0;
+			            alive = eventIndex > 1 ? 1 : 0;
+	            	} catch (NumberFormatException ex) {
+	            		LOG.error("Failed to parse line " + line );
+	            	}
+	            }
             }
         }
         

@@ -51,5 +51,13 @@ public class EntryKey extends EventKey {
 		return "EntryKey [entryId=" + entryId + ", eventTime=" + eventTime
 				+ ", partnerId=" + partnerId + "]";
 	}
+	
+	public String getEntryId() {
+		return entryId;
+	}
+	
+	public int getPartnerId() {
+		return partnerId;
+	}
 
 }
