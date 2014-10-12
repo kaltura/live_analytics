@@ -8,6 +8,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import com.datastax.driver.core.Session;
+import com.kaltura.live.infra.utils.DateUtils;
 import com.kaltura.live.webservice.model.LiveReportInputFilter;
 import com.kaltura.live.webservice.model.LiveStatsListResponse;
 import com.kaltura.live.webservice.reporters.EntryTotalReporter;
@@ -26,6 +27,8 @@ public class EntryTotalLiveTest extends BaseReporterTest {
     protected LiveReportInputFilter createFilter() {
 		LiveReportInputFilter filter = new LiveReportInputFilter();
 		filter.setEntryIds("test_entry");
+		filter.setFromTime(DateUtils.getCurrentTime().getTimeInMillis() / 1000);
+		filter.setToTime(DateUtils.getCurrentTime().getTimeInMillis() / 1000);
 		filter.setLive(true);
 		return filter;
     }

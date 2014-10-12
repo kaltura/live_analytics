@@ -12,10 +12,10 @@ public class GeoTimeLiveStats extends EntryLiveStats {
 	}
 	
 	public GeoTimeLiveStats(long plays, long audience, long secondsViewed,
-			long bufferTime, float avgBitrate, long timestamp, long startEvent,
+			float bufferTime, float avgBitrate, long timestamp,
 			String entryId, Coordinate city, Coordinate country) {
 		super(plays, audience, secondsViewed, bufferTime, avgBitrate,
-				timestamp, startEvent, entryId);
+				timestamp, entryId);
 		this.country = country;
 		this.city = city;
 	}

@@ -1,8 +1,11 @@
 package com.kaltura.live.webservice.reporters;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
@@ -31,7 +34,7 @@ public class PartnerTotalReporter extends BaseReporter {
 		sb.append("select * from kaltura_live.live_events where ");
 		sb.append(addEntryIdsCondition(filter.getEntryIds()));
 		sb.append(" and ");
-		sb.append(addNowCondition());
+		sb.append(addTimeRangeCondition(DateUtils.roundDate(filter.getFromTime()), DateUtils.roundDate(filter.getToTime())));
 		sb.append(";");
 		
 		String query = sb.toString();
@@ -45,32 +48,14 @@ public class PartnerTotalReporter extends BaseReporter {
 		ResultSet results = session.getSession().execute(query);
 		
 		Iterator<Row> itr = results.iterator();
-		
-		long alive = 0;
-		long audience = 0;
-		long secondsViewed = 0;
-		long bufferTime = 0;
-		long bitRate = 0;
-		long bitrateCount = 0;
-		long plays = 0;
-		
+		ReportsAggregator aggr = new ReportsAggregator();
 		while(itr.hasNext()) {
 			LiveEntryEventDAO dao = new LiveEntryEventDAO(itr.next());
-			alive += dao.getAlive();
-			audience += dao.getAlive();
-			secondsViewed += dao.getAlive() * 10;
-			bufferTime += dao.getBufferTime();
-			bitRate += dao.getBitrate();
-			bitrateCount += dao.getBitrateCount();
-			plays += dao.getPlays();
+			aggr.aggregateResult(dao.getPlays(), dao.getAlive(), dao.getBufferTime(), dao.getBitrate(), dao.getBitrateCount());
 		}
 		
-		float avgBitrate = 0;
-		if(bitrateCount > 0)
-			avgBitrate = bitRate / bitrateCount;
-		
-		float avgBufferTime = calcAverageBufferTime(bufferTime, alive + plays);
-		LiveStats entry = new LiveStats(0, audience, secondsViewed, avgBufferTime , avgBitrate, 0, 0);
+		LiveStats entry = new LiveStats();
+		aggr.fillObject(entry);
 		
 		List<LiveStats> result = new ArrayList<LiveStats>();
 		result.add(entry);
@@ -83,7 +68,7 @@ public class PartnerTotalReporter extends BaseReporter {
 		sb.append("select * from kaltura_live.hourly_live_events_partner where partner_id = ");
 		sb.append(filter.getPartnerId());
 		sb.append(" and ");
-		sb.append(addHoursBeforeCondition(DateUtils.getCurrentTime().getTime(), filter.getHoursBefore()));
+		sb.append(addTimeInHourRangeCondition(filter.getFromTime(),filter.getToTime()));
 		sb.append(";");
 		
 		String query = sb.toString();
@@ -97,27 +82,22 @@ public class PartnerTotalReporter extends BaseReporter {
 		ResultSet results = session.getSession().execute(query);
 		
 		Iterator<Row> itr = results.iterator();
-		
-		long plays = 0, secondsViewed = 0, bufferTime = 0, bitRate = 0, bitrateCount = 0, alive = 0;
+		Map<Integer, ReportsAggregator> map = new HashMap<Integer, ReportsAggregator>();
 		while(itr.hasNext()) {
 			PartnerEventDAO dao = new PartnerEventDAO(itr.next());
-			plays += dao.getPlays();
-			secondsViewed += dao.getAlive() * 10;
-			bufferTime += dao.getBufferTime();
-			bitRate += dao.getBitrate();
-			bitrateCount += dao.getBitrateCount();
-			alive += dao.getAlive();
+			int key = dao.getPartnerId();
+			if(!map.containsKey(key)) {
+				map.put(key, new ReportsAggregator());
+			}
+			map.get(key).aggregateResult(dao.getPlays(), dao.getAlive(), dao.getBufferTime(), dao.getBitrate(), dao.getBitrateCount());
 		}
 		
-		float avgBitrate = 0;
-		if(bitrateCount > 0)
-			avgBitrate = bitRate / bitrateCount;
-		
-		float avgBufferTime = calcAverageBufferTime(bufferTime, alive + plays);
-		
 		List<LiveStats> result = new ArrayList<LiveStats>();
-		LiveStats event = new LiveStats(plays, 0,secondsViewed, avgBufferTime, avgBitrate, 0, 0);
-		result.add(event);
+		for (Entry<Integer, ReportsAggregator> stat : map.entrySet()) {
+			LiveStats statObj = new LiveStats();
+			stat.getValue().fillObject(statObj);
+			result.add(statObj);
+		}
 		return new LiveStatsListResponse(result);
 	}
 	
@@ -132,9 +112,6 @@ public class PartnerTotalReporter extends BaseReporter {
 		} else {
 			if(filter.getPartnerId() < 0)
 				validation += "Partner Id must be a positive number.";
-			
-			if(filter.getHoursBefore() < 0)
-				validation += "Hours before must be a positive number.";
 		}
 		
 		if(!validation.isEmpty())

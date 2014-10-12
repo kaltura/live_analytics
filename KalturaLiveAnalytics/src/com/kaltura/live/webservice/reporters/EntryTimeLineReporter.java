@@ -42,8 +42,8 @@ public class EntryTimeLineReporter extends BaseReporter {
 		sb.append(addEntryIdsCondition(filter.getEntryIds()));
 		sb.append(" and ");
 		sb.append(addTimeRangeCondition(
-				DateUtils.roundDate(filter.getFromTime() * 1000), 
-				DateUtils.roundDate(filter.getToTime() * 1000)));
+				DateUtils.roundDate(filter.getFromTime()), 
+				DateUtils.roundDate(filter.getToTime())));
 		sb.append(";");
 		
 		String query = sb.toString();

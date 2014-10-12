@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
@@ -35,7 +36,7 @@ public class EntryTotalReporter extends BaseReporter {
 		sb.append("select * from kaltura_live.hourly_live_events where ");
 		sb.append(addEntryIdsCondition(filter.getEntryIds()));
 		sb.append(" and ");
-		sb.append(addHoursBeforeCondition(DateUtils.getCurrentTime().getTime(), filter.getHoursBefore()));
+		sb.append(addTimeRangeCondition(DateUtils.roundDate(filter.getFromTime()), DateUtils.roundDate(filter.getToTime())));
 		sb.append(";");
 		
 		String query = sb.toString();
@@ -48,36 +49,23 @@ public class EntryTotalReporter extends BaseReporter {
 		String query = generatePastEntryQuery(filter);
 		ResultSet results = session.getSession().execute(query);
 		
-		Map<String, Long> plays = new HashMap<String, Long>();
-		Map<String, Long> alive = new HashMap<String, Long>();
-		Map<String, Long> bitrate = new HashMap<String, Long>();
-		Map<String, Long> bitrateCount = new HashMap<String, Long>();
-		Map<String, Long> bufferTime = new HashMap<String, Long>();
-		
+		Map<String, ReportsAggregator> map = new HashMap<String, ReportsAggregator>();
 		Iterator<Row> itr = results.iterator();
 		while(itr.hasNext()) {
 			LiveEntryEventDAO dao = new LiveEntryEventDAO(itr.next());
 			String key = dao.getEntryId();
-			aggregateResult(plays, key, dao.getPlays());
-			aggregateResult(alive, key, dao.getAlive());
-			aggregateResult(bitrate, key, dao.getBitrate());
-			aggregateResult(bitrateCount, key, dao.getBitrateCount());
-			aggregateResult(bufferTime, key, dao.getBufferTime());
+			if(!map.containsKey(key)) {
+				map.put(key, new ReportsAggregator());
+			}
+			
+			map.get(key).aggregateResult(dao.getPlays(), dao.getAlive(), dao.getBufferTime(), dao.getBitrate(), dao.getBitrateCount());
 		}
 
 		List<LiveStats> result = new ArrayList<LiveStats>();
-		for (String entryId : plays.keySet()) {
+		for (Entry<String, ReportsAggregator> stat : map.entrySet()) {
 			EntryLiveStats entry = new EntryLiveStats();
-			entry.setEntryId(entryId);
-			entry.setPlays(plays.get(entryId).longValue());
-			entry.setSecondsViewed(alive.get(entryId).longValue() * 10);
-			entry.setBufferTime(calcAverageBufferTime(bufferTime.get(entryId), alive.get(entryId) + plays.get(entryId)));
-			
-			int bitrateCountVal = (int)bitrateCount.get(entryId).longValue();
-			if(bitrateCountVal > 0)
-				entry.setAvgBitrate(bitrate.get(entryId) / bitrateCountVal);
-			else 
-				entry.setAvgBitrate(0);
+			entry.setEntryId(stat.getKey());
+			stat.getValue().fillObject(entry);
 			result.add(entry);
 		}
 		
@@ -100,7 +88,7 @@ public class EntryTotalReporter extends BaseReporter {
 		sb.append("select * from kaltura_live.live_events where ");
 		sb.append(addEntryIdsCondition(filter.getEntryIds()));
 		sb.append(" and ");
-		sb.append(addNowCondition());
+		sb.append(addTimeRangeCondition(DateUtils.roundDate(filter.getFromTime()), DateUtils.roundDate(filter.getToTime())));
 		sb.append(";");
 		
 		String query = sb.toString();
@@ -114,25 +102,25 @@ public class EntryTotalReporter extends BaseReporter {
 		String query = generateLiveQuery(filter);
 		ResultSet results = session.getSession().execute(query);
 		
+		Map<String, ReportsAggregator> map = new HashMap<String, ReportsAggregator>();
 		Iterator<Row> itr = results.iterator();
-		List<LiveStats> result = new ArrayList<LiveStats>();
 		while(itr.hasNext()) {
 			LiveEntryEventDAO dao = new LiveEntryEventDAO(itr.next());
-			EntryLiveStats entry = new EntryLiveStats();
-			entry.setEntryId(dao.getEntryId());
-			entry.setAudience(dao.getAlive());
-			entry.setSecondsViewed(dao.getAlive() * 10);
-			entry.setBufferTime(calcAverageBufferTime(dao.getBufferTime(), dao.getAlive() + dao.getPlays()));
+			String key = dao.getEntryId();
+			if(!map.containsKey(key)) {
+				map.put(key, new ReportsAggregator());
+			}
 			
-			long bitrateCountVal = dao.getBitrateCount();
-			if(bitrateCountVal > 0)
-				entry.setAvgBitrate(dao.getBitrate() / bitrateCountVal);
-			else 
-				entry.setAvgBitrate(0);
-			
-			result.add(entry);
+			map.get(key).aggregateResult(dao.getPlays(), dao.getAlive(), dao.getBufferTime(), dao.getBitrate(), dao.getBitrateCount());
 		}
 		
+		List<LiveStats> result = new ArrayList<LiveStats>();
+		for (Entry<String, ReportsAggregator> stat : map.entrySet()) {
+			EntryLiveStats entry = new EntryLiveStats();
+			entry.setEntryId(stat.getKey());
+			stat.getValue().fillObject(entry);
+			result.add(entry);
+		}
 		return new LiveStatsListResponse(result);
 	}
 	
@@ -143,11 +131,12 @@ public class EntryTotalReporter extends BaseReporter {
 		if(filter.getEntryIds() == null)
 			validation = "Entry Ids can't be null. ";
 		
-		if(!filter.isLive()) {
-			if(filter.getHoursBefore() < 0)
-				validation += "Hourse before must be a positive number.";
-		}
+		if(filter.getFromTime() <= 0)
+			validation += "From time must be a timestamp ";
 		
+		if(filter.getToTime() <= 0)
+			validation += "To time must be a timestamp ";
+			
 		if(!validation.isEmpty())
 			throw new AnalyticsException("Illegal filter input: " + validation);
 	}

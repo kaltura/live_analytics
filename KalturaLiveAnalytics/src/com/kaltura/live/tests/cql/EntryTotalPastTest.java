@@ -1,5 +1,7 @@
 package com.kaltura.live.tests.cql;
 
+import java.util.Calendar;
+
 import junit.framework.Assert;
 
 import org.cassandraunit.CassandraCQLUnit;
@@ -8,6 +10,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import com.datastax.driver.core.Session;
+import com.kaltura.live.infra.utils.DateUtils;
 import com.kaltura.live.webservice.model.LiveReportInputFilter;
 import com.kaltura.live.webservice.model.LiveStats;
 import com.kaltura.live.webservice.model.LiveStatsListResponse;
@@ -25,9 +28,15 @@ public class EntryTotalPastTest extends BaseReporterTest {
     public CassandraCQLUnit cassandraCQLUnit = new CassandraCQLUnit(new ClassPathCQLDataSet(RESOURCE_DIR + "hourly_live_events.cql","kaltura_live"));
 
     protected LiveReportInputFilter createFilter() {
+    	Calendar now = DateUtils.getCurrentTime();
+    	Calendar hourAgo = Calendar.getInstance();
+    	hourAgo.setTime(now.getTime());
+    	hourAgo.add(Calendar.HOUR, -2);
+    	
 		LiveReportInputFilter filter = new LiveReportInputFilter();
 		filter.setEntryIds("test_entry");
-		filter.setHoursBefore(1);
+		filter.setToTime(now.getTimeInMillis() / 1000);
+		filter.setFromTime(hourAgo.getTimeInMillis() / 1000);
 		filter.setLive(false);
 		return filter;
     }

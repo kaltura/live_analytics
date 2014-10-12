@@ -28,7 +28,8 @@ public class EntryGeoTimeLineTest extends BaseReporterTest {
     protected LiveReportInputFilter createFilter() {
 		LiveReportInputFilter filter = new LiveReportInputFilter();
 		filter.setEntryIds("test_entry");
-		filter.setEventTime(1387121900);
+		filter.setFromTime(1387121900);
+		filter.setToTime(1387121900);
 		return filter;
     }
     
@@ -39,13 +40,29 @@ public class EntryGeoTimeLineTest extends BaseReporterTest {
     	
     	Assert.assertEquals(3, results.getTotalCount());
     	LiveStats[] events = results.getObjects();
-    	testCountryAndCity((GeoTimeLiveStats) events[0], "-", "-");
-    	testCountryAndCity((GeoTimeLiveStats) events[1], "-", "AFGHANISTAN");
     	
-    	GeoTimeLiveStats event2 = (GeoTimeLiveStats) events[2];
-    	testCountryAndCity(event2, "CHARIKAR", "AFGHANISTAN");
-    	Assert.assertTrue(event2.getCountry().getLatitude() > 0);
-    	Assert.assertTrue(event2.getCity().getLongitude() > 0);
+    	boolean foundBoth = false, foundCountry = false, foundNone = false;
+    	for (LiveStats event : events) {
+    		GeoTimeLiveStats geoEvent = (GeoTimeLiveStats)event;
+    		String country = geoEvent.getCountry().getName();
+    		String city = geoEvent.getCity().getName();
+    		
+			if(country.equals("AFGHANISTAN")) {
+				if(city.equals("CHARIKAR")) {
+					Assert.assertTrue(geoEvent.getCountry().getLatitude() > 0);
+			    	Assert.assertTrue(geoEvent.getCity().getLongitude() > 0);
+			    	foundBoth = true;
+				} else if (city.equals("-")) {
+					foundCountry = true;
+				}
+			} else if(country.equals("-") && city.equals("-")) {
+				foundNone = true;
+			}
+		}
+    	
+    	Assert.assertTrue(foundBoth);
+    	Assert.assertTrue(foundCountry);
+    	Assert.assertTrue(foundNone);
     }
     
     protected void testCountryAndCity(GeoTimeLiveStats event, String city, String country) {

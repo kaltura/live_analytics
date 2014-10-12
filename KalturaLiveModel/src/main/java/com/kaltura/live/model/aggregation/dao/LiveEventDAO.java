@@ -120,11 +120,11 @@ public abstract class LiveEventDAO extends LiveDAO {
 	public void setBitrateCount(long bitrateCount) {
 		this.bitrateCount = bitrateCount;
 	}
-
+	
 	public long getBufferTime() {
 		return bufferTime;
 	}
-
+	
 	public void setBufferTime(long bufferTime) {
 		this.bufferTime = bufferTime;
 	}
