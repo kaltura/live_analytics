@@ -29,7 +29,7 @@ public abstract class LiveAggregationCycle implements /*Runnable,*/ Serializable
 	protected JavaRDD<StatsEvent> events = null;
 	
 	/** Old events */
-	private JavaPairRDD<EventKey, StatsEvent> aggregatedEvents = null;
+	protected JavaPairRDD<EventKey, StatsEvent> aggregatedEvents = null;
 	
 	/* -- function pointers -- */
 	
@@ -42,8 +42,8 @@ public abstract class LiveAggregationCycle implements /*Runnable,*/ Serializable
 	/** This class implements the reduce function */
 	protected LiveEventReduce reduceFunction;
 	
-	public LiveAggregationCycle(LiveEventMap aggrFunction, LiveEventReduce reduceFunction, LiveEventSave saveFunction) {
-		this.mapFunction = aggrFunction;
+	public LiveAggregationCycle(LiveEventMap mapFunction, LiveEventReduce reduceFunction, LiveEventSave saveFunction) {
+		this.mapFunction = mapFunction;
 		this.reduceFunction = reduceFunction;
 		this.saveFunction = saveFunction;
 	}
@@ -71,6 +71,8 @@ public abstract class LiveAggregationCycle implements /*Runnable,*/ Serializable
                 result.checkpoint();
         }
         result.count();
+        
+        
 
         if (aggregatedEvents != null)
                 aggregatedEvents.unpersist();
@@ -83,7 +85,7 @@ public abstract class LiveAggregationCycle implements /*Runnable,*/ Serializable
         }
         ++iterCount;
         aggregatedEvents.count();
-
+       
 	}
 	
 	protected abstract StatsEventsFilter getFilterFunction();
