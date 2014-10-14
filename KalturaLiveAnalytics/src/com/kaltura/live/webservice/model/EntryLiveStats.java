@@ -24,5 +24,12 @@ public class EntryLiveStats extends LiveStats {
 	public void setEntryId(String entryId) {
 		this.entryId = entryId;
 	}
+
+	public void setPeakAudience(long peakAudience) {
+		this.peakAudience = peakAudience;
+	}
 	
+	public long getPeakAudience() {
+		return peakAudience;
+	}
 }

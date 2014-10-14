@@ -11,8 +11,8 @@ import org.junit.Test;
 
 import com.datastax.driver.core.Session;
 import com.kaltura.live.infra.utils.DateUtils;
+import com.kaltura.live.webservice.model.EntryLiveStats;
 import com.kaltura.live.webservice.model.LiveReportInputFilter;
-import com.kaltura.live.webservice.model.LiveStats;
 import com.kaltura.live.webservice.model.LiveStatsListResponse;
 import com.kaltura.live.webservice.reporters.EntryTotalReporter;
 
@@ -50,7 +50,8 @@ public class EntryTotalPastTest extends BaseReporterTest {
     	LiveStatsListResponse results = reporter.query(createFilter(), null);
     	
     	Assert.assertEquals(1, results.getTotalCount());
-    	LiveStats event = results.getObjects()[0];
+    	EntryLiveStats event = (EntryLiveStats)results.getObjects()[0];
     	Assert.assertEquals(7, event.getPlays());
+    	Assert.assertEquals(700, event.getPeakAudience());
     }
 }

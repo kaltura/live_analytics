@@ -4,9 +4,6 @@ import com.kaltura.live.webservice.model.LiveStats;
 
 public class ReportsAggregator {
 	
-	// Constants
-	protected long timestamp;
-
 	// Sum based
 	protected long plays = 0;
 	protected long audience = 0;
@@ -14,9 +11,8 @@ public class ReportsAggregator {
 	
 	// Average per minute
 	protected long bufferTime = 0;
-	protected long bufferTimeCnt = 0;
 	protected long bitRate = 0;
-	protected long BitrateCnt = 0;
+	protected long bitrateCnt = 0;
 	
 	public void aggregateResult(long plays, long audience, long bufferTime, long bitRate, long bitrateCount) {
 		this.plays += plays;
@@ -24,9 +20,8 @@ public class ReportsAggregator {
 		this.secondsViewed += audience * 10;
 		
 		this.bufferTime += bufferTime;
-		this.bufferTimeCnt++;
 		this.bitRate += bitRate;
-		this.BitrateCnt++;
+		this.bitrateCnt += bitrateCount;
 	}
 	
 	public void fillObject(LiveStats stats) {
@@ -34,15 +29,16 @@ public class ReportsAggregator {
 		stats.setAudience(audience);
 		stats.setSecondsViewed(secondsViewed);
 		
-		stats.setBufferTime(calcAveragePerMinute(bufferTime, bufferTimeCnt));
-		stats.setBufferTime(calcAveragePerMinute(bitRate, BitrateCnt));
+		stats.setBufferTime(calcAveragePerMinute(bufferTime, plays + audience, 6));
+		stats.setAvgBitrate(calcAveragePerMinute(bitRate, bitrateCnt, 1));
 	}
 	
-	protected static float calcAveragePerMinute(long parts, long denominator) {
+	
+	protected static float calcAveragePerMinute(long parts, long denominator, int normFactor) {
 		if(denominator > 0)
 			// Round to 2 decimal points
 			// And set it to be average on one minute
-			return (float) (Math.round((6 * 100.0 * parts) / denominator) / 100.0);
+			return (float) (Math.round((normFactor * 100.0 * parts) / denominator) / 100.0);
 		return 0;
 	}
 	

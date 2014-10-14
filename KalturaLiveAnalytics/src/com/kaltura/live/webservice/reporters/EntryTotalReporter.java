@@ -11,6 +11,7 @@ import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.kaltura.live.infra.utils.DateUtils;
 import com.kaltura.live.model.aggregation.dao.LiveEntryEventDAO;
+import com.kaltura.live.model.aggregation.dao.LiveEntryPeakDAO;
 import com.kaltura.live.webservice.model.AnalyticsException;
 import com.kaltura.live.webservice.model.EntryLiveStats;
 import com.kaltura.live.webservice.model.LiveReportInputFilter;
@@ -69,6 +70,7 @@ public class EntryTotalReporter extends BaseReporter {
 			result.add(entry);
 		}
 		
+		calculatePeakAudience(filter, result);
 		return new LiveStatsListResponse(result);
 	}
 	
@@ -121,7 +123,49 @@ public class EntryTotalReporter extends BaseReporter {
 			stat.getValue().fillObject(entry);
 			result.add(entry);
 		}
+		
+		calculatePeakAudience(filter, result);
 		return new LiveStatsListResponse(result);
+	}
+	
+	protected String generatePeakAudienceQuery(LiveReportInputFilter filter) {
+		StringBuffer sb = new StringBuffer();
+		sb.append("select * from kaltura_live.live_entry_hourly_peak where ");
+		sb.append(addEntryIdsCondition(filter.getEntryIds()));
+		sb.append(" and ");
+		sb.append(addTimeRangeCondition(DateUtils.roundDate(filter.getFromTime()), DateUtils.roundDate(filter.getToTime())));
+		sb.append(";");
+		
+		String query = sb.toString();
+		logger.debug(query);
+		return query;
+	}
+	
+	protected void calculatePeakAudience(LiveReportInputFilter filter, List<LiveStats> liveStats) {
+		String query = generatePeakAudienceQuery(filter);
+		ResultSet results = session.getSession().execute(query);
+		
+		// Retrieve entryId-peakAudience
+		Map<String, Long> peakAudience = new HashMap<String, Long>();
+		Iterator<Row> itr = results.iterator();
+		while(itr.hasNext()) {
+			LiveEntryPeakDAO dao = new LiveEntryPeakDAO(itr.next());
+			String key = dao.getEntryId();
+			Long value = dao.getAudience();
+			
+			Long curVal = peakAudience.get(key);
+			if((curVal == null) || (curVal < value))
+				peakAudience.put(key, value);
+		}
+		
+		// Fill peak audience
+		for (LiveStats liveStat : liveStats) {
+			EntryLiveStats stat = (EntryLiveStats)liveStat;
+			String entryId = stat.getEntryId();
+			Long peakAudienceVal = peakAudience.get(entryId);
+			if(peakAudienceVal != null)
+				stat.setPeakAudience(peakAudienceVal);
+		}
 	}
 	
 	@Override
