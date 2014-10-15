@@ -4,6 +4,7 @@ import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
 
 import com.kaltura.live.model.aggregation.StatsEvent;
+import com.kaltura.live.model.aggregation.filter.StatsEventsHourlyFilter;
 import com.kaltura.live.model.aggregation.functions.map.LiveEntryAggrMap;
 import com.kaltura.live.model.aggregation.functions.map.LiveEventMap;
 import com.kaltura.live.model.aggregation.functions.reduce.LiveEventMaxAudience;
@@ -21,6 +22,8 @@ public class EntryRealTimeLiveAggregationCycle extends RealTimeLiveAggregationCy
 	private LiveEntryAggrMap aggrMapFunction;
 	private LiveEventMaxAudience aggrReduceFunction; 
 	private LiveEntryHourlyMaxAudienceSave aggrSaveFunction;
+	
+	private int iterCounter = 0;
 	
 	public EntryRealTimeLiveAggregationCycle(LiveEventMap mapFunction,
 			LiveEventReduce reduceFunction, LiveEventSave saveFunction, 
@@ -44,9 +47,14 @@ public class EntryRealTimeLiveAggregationCycle extends RealTimeLiveAggregationCy
 		}
 		
 		JavaPairRDD<EventKey, StatsEvent> topAudience = audience.reduceByKey(aggrReduceFunction);
-		//topAudience.filter(new StatsEventsHourlyFilter());
+		topAudience.filter(new StatsEventsHourlyFilter());
 		JavaRDD<Boolean> result = topAudience.mapPartitions(aggrSaveFunction);
 		peakAudienceEvent = topAudience;
+		if (iterCounter > 50) {
+			peakAudienceEvent.checkpoint();
+            iterCounter = 0;
+		}
+		++iterCounter;
 		result.count();
 		
 			 

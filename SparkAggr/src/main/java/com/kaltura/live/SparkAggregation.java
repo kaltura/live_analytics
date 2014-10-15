@@ -159,7 +159,7 @@ public class SparkAggregation {
 		
 		final JavaSparkContext jsc = new JavaSparkContext(config.getSparkMaster(),
                 "SparkAggr", config.getSparkHome(), jars, env);
-		jsc.setCheckpointDir("/tmp/checkpoint/");
+		jsc.setCheckpointDir(config.getCheckpointDir());
 		return jsc;
 	}
 

@@ -31,7 +31,7 @@ public class StatsEvent implements Serializable {
 			"^([\\d.]+) \\[([\\w\\d:/]+\\s[+\\-]\\d{4})\\] \"(.+?)\" (\\d{3}) \"([^\"]+)\".*");
 	
 	/** Stats events fields */
-	private Date eventTime;
+	private Date eventTime = new Date(0);
 	private int partnerId = 0;
 	private String entryId = "N/A";
 	private String country = "N/A";
@@ -107,8 +107,8 @@ public class StatsEvent implements Serializable {
 	            Map<String, String> paramsMap = RequestUtils.splitQuery(query);
 	            if (paramsMap != null && paramsMap.size() > 0) {
 	            	try {
-			            entryId = paramsMap.containsKey("event:entryId") ? paramsMap.get("event:entryId") : null;
-			            partnerId = Integer.parseInt(paramsMap.containsKey("event:partnerId") ? paramsMap.get("event:partnerId") : null);
+			            entryId = paramsMap.containsKey("event:entryId") ? paramsMap.get("event:entryId") : "N/A";
+			            partnerId = Integer.parseInt(paramsMap.containsKey("event:partnerId") ? paramsMap.get("event:partnerId") : "0");
 			            float fBufferTime = Float.parseFloat(paramsMap.containsKey("event:bufferTime") ? paramsMap.get("event:bufferTime") : "0");
 			            bufferTime = (long)(fBufferTime);
 			            bitrate = Long.parseLong(paramsMap.containsKey("event:bitrate") ? paramsMap.get("event:bitrate") : "-1");
