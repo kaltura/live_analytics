@@ -1,19 +1,18 @@
 package com.kaltura.live.webservice.model;
 
-import java.util.List;
 
 public class LiveEventsListResponse {
 	
-	protected LiveEvent[] objects;
+	protected String objects;
 	protected int totalCount;
 	
 	public LiveEventsListResponse() {
 		super();
 	}
 	
-	public LiveEventsListResponse(List<LiveEvent> events) {
-		this.totalCount = events.size();
-		this.objects = events.toArray(new LiveEvent[totalCount]);
+	public LiveEventsListResponse(int size, String events) {
+		this.totalCount = size;
+		this.objects = events;
 	}
 
 	public int getTotalCount() {
@@ -24,11 +23,11 @@ public class LiveEventsListResponse {
 		this.totalCount = totalCount;
 	}
 
-	public LiveEvent[] getObjects() {
+	public String getObjects() {
 		return objects;
 	}
 
-	public void setObjects(LiveEvent[] objects) {
+	public void setObjects(String objects) {
 		this.objects = objects;
 	}
 
