@@ -1,7 +1,6 @@
 package com.kaltura.live.webservice.reporters;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -10,7 +9,6 @@ import com.datastax.driver.core.Row;
 import com.kaltura.live.infra.utils.DateUtils;
 import com.kaltura.live.model.aggregation.dao.LiveEntryEventDAO;
 import com.kaltura.live.webservice.model.AnalyticsException;
-import com.kaltura.live.webservice.model.LiveEvent;
 import com.kaltura.live.webservice.model.LiveEventsListResponse;
 import com.kaltura.live.webservice.model.LiveReportInputFilter;
 import com.kaltura.live.webservice.model.LiveReportPager;
@@ -23,17 +21,19 @@ public class EntryTimeLineReporter extends BaseReporter {
 		ResultSet results = session.getSession().execute(query);
 		
 		Iterator<Row> itr = results.iterator();
-		
-		List<LiveEvent> result = new ArrayList<LiveEvent>();
+		List<String> result = new ArrayList<String>();
 		while(itr.hasNext()) {
 			LiveEntryEventDAO dao = new LiveEntryEventDAO(itr.next());
-			
-			LiveEvent event = new LiveEvent(dao.getAlive(), dao.getEventTime().getTime() / 1000);
-			result.add(event);
+			result.add((dao.getEventTime().getTime() / 1000) + "," + dao.getAlive());
 		}
 		
-		Collections.reverse(result);
-		return new LiveEventsListResponse(result);
+		StringBuffer sb = new StringBuffer();
+		for (int i = result.size() - 1; i >= 0 ; --i) {
+			sb.append(result.get(i));
+			sb.append(";");
+		}
+		
+		return new LiveEventsListResponse(result.size(), sb.toString());
 	}
 
 	private String generateQuery(LiveReportInputFilter filter) {
@@ -42,8 +42,8 @@ public class EntryTimeLineReporter extends BaseReporter {
 		sb.append(addEntryIdsCondition(filter.getEntryIds()));
 		sb.append(" and ");
 		sb.append(addTimeRangeCondition(
-				DateUtils.roundDate(filter.getFromTime() * 1000), 
-				DateUtils.roundDate(filter.getToTime() * 1000)));
+				DateUtils.roundDate(filter.getFromTime()), 
+				DateUtils.roundDate(filter.getToTime())));
 		sb.append(";");
 		
 		String query = sb.toString();

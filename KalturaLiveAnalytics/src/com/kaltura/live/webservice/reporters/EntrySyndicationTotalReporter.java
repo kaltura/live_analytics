@@ -9,7 +9,6 @@ import java.util.TreeMap;
 
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
-import com.kaltura.live.infra.utils.DateUtils;
 import com.kaltura.live.model.aggregation.dao.LiveEntryReferrerEventDAO;
 import com.kaltura.live.webservice.model.AnalyticsException;
 import com.kaltura.live.webservice.model.EntryReferrerLiveStats;
@@ -36,7 +35,7 @@ public class EntrySyndicationTotalReporter extends BaseReporter {
 				value += map.get(key).getPlays();
 				map.get(key).setPlays(value);
 			} else {
-				map.put(key, new EntryReferrerLiveStats(value, 0, 0, 0, 0, 0, 0, null, key));
+				map.put(key, new EntryReferrerLiveStats(value, 0, 0, 0, 0, 0, null, key));
 			}
 		}
 		
@@ -65,7 +64,7 @@ public class EntrySyndicationTotalReporter extends BaseReporter {
 		sb.append("select * from kaltura_live.hourly_live_events_referrer where ");
 		sb.append(addEntryIdsCondition(filter.getEntryIds()));
 		sb.append(" and ");
-		sb.append(addHoursBeforeCondition(DateUtils.getCurrentTime().getTime(), filter.getHoursBefore()));
+		sb.append(addTimeInHourRangeCondition(filter.getFromTime(), filter.getToTime()));
 		sb.append(";");
 		
 		String query = sb.toString();
@@ -79,8 +78,6 @@ public class EntrySyndicationTotalReporter extends BaseReporter {
 		String validation = "";
 		if(filter.getEntryIds() == null)
 			validation = " Entry Ids can't be null. ";
-		if(filter.getHoursBefore() < 0)
-			validation += " Hours before must be a positive number.";
 		
 		if(!validation.isEmpty())
 			throw new AnalyticsException("Illegal filter input: " + validation);

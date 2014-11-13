@@ -50,6 +50,10 @@ public class PartnerEventDAO extends LiveEventDAO {
 		session.getSession().execute(boundStatement.bind(aggregatedResult.getPartnerId(), aggregatedResult.getEventTime(), aggregatedResult.getPlays(), aggregatedResult.getAlive(), aggregatedResult.getBitrate(), aggregatedResult.getBitrateCount(), aggregatedResult.getBufferTime()));
 		
 	}
+	
+	public int getPartnerId() {
+		return partnerId;
+	}
 
 	@Override
 	protected int getTTL() {

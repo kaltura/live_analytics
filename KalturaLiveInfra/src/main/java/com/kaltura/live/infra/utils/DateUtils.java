@@ -43,7 +43,7 @@ public class DateUtils {
 	}
 	
 	public static Date roundDate(long dateLong) {
-		Date date = new Date(dateLong);
+		Date date = new Date(dateLong * 1000);
 		return roundDate(date);
 	}
 	

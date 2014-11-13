@@ -11,14 +11,13 @@ public class LiveStats {
 	protected float bufferTime;
 	protected float avgBitrate;
 	protected long timestamp;
-	protected long startEvent;
 	
 	public LiveStats() {
 		super();
 	}
 	
 	public LiveStats(long plays, long audience, long secondsViewed,
-			float bufferTime, float avgBitrate, long timestamp, long startEvent) {
+			float bufferTime, float avgBitrate, long timestamp) {
 		super();
 		this.plays = plays;
 		this.audience = audience;
@@ -26,7 +25,6 @@ public class LiveStats {
 		this.bufferTime = bufferTime;
 		this.avgBitrate = avgBitrate;
 		this.timestamp = timestamp;
-		this.startEvent = startEvent;
 	}
 
 	public long getPlays() {
@@ -99,25 +97,12 @@ public class LiveStats {
 		this.timestamp = timestamp;
 	}
 
-
-
-	public long getStartEvent() {
-		return startEvent;
-	}
-
-
-
-	public void setStartEvent(long startEvent) {
-		this.startEvent = startEvent;
-	}
-
-
 	@Override
 	public String toString() {
 		return "KalturaLiveStats [plays=" + plays + ", audience=" + audience
 				+ ", secondsViewed=" + secondsViewed + ", bufferTime="
 				+ bufferTime + ", avgBitrate=" + avgBitrate + ", timestamp="
-				+ timestamp + ", startEvent=" + startEvent + "]";
+				+ timestamp + "]";
 	}
 	
 	

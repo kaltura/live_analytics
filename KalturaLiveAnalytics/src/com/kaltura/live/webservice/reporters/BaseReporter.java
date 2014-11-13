@@ -21,8 +21,6 @@ public abstract class BaseReporter {
 	
 	protected static Logger logger = LoggerFactory.getLogger(BaseReporter.class);
 	
-	private static final int TIME_FRAME_INTERVAL = 60;
-	
 	protected static SerializableSession session;
 	
 	public BaseReporter() {
@@ -70,41 +68,40 @@ public abstract class BaseReporter {
 		return sb.toString();
 	}
 	
-	protected String addHoursBeforeCondition(Date curTime, int hoursBefore) {
+	protected String addRangeCondition(Date fromDate, Date toDate, int secs) {
 		Calendar cal = Calendar.getInstance();
-		cal.setTime(DateUtils.roundHourDate(curTime));
+		cal.setTime(fromDate);
 		
 		StringBuffer sb = new StringBuffer();
 		sb.append("event_time IN (");
-		sb.append(cal.getTime().getTime());
 		
-		for(int i = 0 ; i < hoursBefore ; ++i) {
-			cal.add(Calendar.HOUR, -1);
-			Date startTime = DateUtils.roundHourDate(cal.getTime());
-			sb.append("," + startTime.getTime());
+		boolean isFirst = true;
+		while(!cal.getTime().after(toDate)) {
+			if(isFirst)
+				isFirst = false;
+			else
+				sb.append(",");
+			sb.append(cal.getTime().getTime());
+			cal.add(Calendar.SECOND, secs);
 		}
 		sb.append(")");
 		return sb.toString();
 	}
 	
-	protected String addNowCondition() {
-		// Since we aggregate data, now is not really now but 30 seconds before.
-		Calendar cal = DateUtils.getCurrentTime();
-		cal.add(Calendar.SECOND, -TIME_FRAME_INTERVAL);
-		Date roundTime = DateUtils.roundDate(cal.getTime());
+	protected String addTimeInRangeCondition(Date fromDate, Date toDate) {
+		return addRangeCondition(fromDate, toDate, 10);
+	}
+	
+	protected String addTimeInHourRangeCondition(long fromTime, long toTime) {
 		
-		return addExactTimeCondition(roundTime);
-	}
-	
-	protected String addExactTimeCondition(Date curTime) {
-		return "event_time = " + curTime.getTime(); 
-	}
-	
-	protected float calcAverageBufferTime(long bufferTime, long alive) {
-		if(alive > 0)
-			// Round to 2 decimal points
-			// And set it to be average on one minute
-			return (float) (Math.round((6 * 100.0 * bufferTime) / alive) / 100.0);
-		return 0;
+		Date fromTimeDate = new Date(fromTime * 1000);
+		Date roundedDate = DateUtils.roundHourDate(fromTimeDate);
+		if (!fromTimeDate.before(roundedDate)) {
+			Calendar cal = Calendar.getInstance(); 
+			cal.setTime(roundedDate); 
+			cal.add(Calendar.HOUR_OF_DAY, 1);
+			roundedDate = cal.getTime();
+		}
+		return addRangeCondition(roundedDate, new Date(toTime * 1000), 60*60);
 	}
 }
