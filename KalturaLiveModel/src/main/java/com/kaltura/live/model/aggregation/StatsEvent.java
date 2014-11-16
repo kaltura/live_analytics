@@ -3,6 +3,7 @@ package com.kaltura.live.model.aggregation;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -122,6 +123,15 @@ public class StatsEvent implements Serializable {
 			            int eventIndex = Integer.parseInt(paramsMap.containsKey("event:eventIndex") ? paramsMap.get("event:eventIndex") : "0");
 			            plays = eventIndex == 1 ? 1 : 0;
 			            alive = eventIndex > 1 ? 1 : 0;
+			            long clientEventTime = Long.parseLong(paramsMap.containsKey("event:startTime") ? paramsMap.get("event:startTime") : "0");
+			            
+			            Calendar calendar = Calendar.getInstance();
+			            calendar.setTimeInMillis(clientEventTime);
+			            int seconds = calendar.get(Calendar.SECOND);
+			            int offset = 5 - seconds;
+			            
+			            eventTime = DateUtils.roundDate(date, offset);
+			            
 	            	} catch (NumberFormatException ex) {
 	            		LOG.error("Failed to parse line " + line );
 	            	}

@@ -12,7 +12,7 @@ public class LiveEventMaxAudience implements Function2<StatsEvent, StatsEvent, S
 	@Override
 	public StatsEvent call(StatsEvent v1, StatsEvent v2) throws Exception {
 		// TODO Auto-generated method stub
-		return v1.getAlive() + v1.getPlays() > v2.getAlive() + v2.getPlays() ? v1 : v2;
+		return v1.getAlive() > v2.getAlive()  ? v1 : v2;
 			
 	} 
 
