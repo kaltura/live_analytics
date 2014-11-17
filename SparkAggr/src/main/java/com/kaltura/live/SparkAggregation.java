@@ -1,6 +1,9 @@
 package com.kaltura.live;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -131,7 +134,9 @@ public class SparkAggregation {
 				loadedEvents.unpersist();
 
 				long endTime = System.currentTimeMillis();
-				System.out.println("Iteration time (msec): "
+				DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+				Date date = new Date();				 
+				System.out.println(dateFormat.format(date) + " : Iteration time (msec): "
 						+ (endTime - startTime));
 				
 			}

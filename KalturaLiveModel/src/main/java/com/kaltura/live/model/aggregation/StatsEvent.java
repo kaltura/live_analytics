@@ -79,6 +79,11 @@ public class StatsEvent implements Serializable {
         	String query = m.group(3);
             try {
 				query = URLDecoder.decode(query, "UTF-8");
+				// remove the HTTP protocol at the end of the query string
+				int querySuffixIndex = query.lastIndexOf(" HTTP/");
+				if (querySuffixIndex >= 0)
+					query = query.substring(0, querySuffixIndex);
+				
 			} catch (UnsupportedEncodingException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

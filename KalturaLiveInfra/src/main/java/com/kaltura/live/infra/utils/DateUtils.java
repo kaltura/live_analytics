@@ -18,12 +18,43 @@ public class DateUtils {
 	
 	// TODO discuss with orly timestamp to query issues.
 
+	public static Date roundDate(String eventDate, int centeringOffset) {
+		  SimpleDateFormat formatDate = new SimpleDateFormat(DATE_FORMAT);
+			
+			try {
+				Date date = formatDate.parse(eventDate);
+				return roundDate(date, centeringOffset);
+			} catch (ParseException e) {
+				LOG.error("failed to round date", e);
+			}
+			return null;
+		
+	}
+	
+	public static Date roundDate(Date eventDate, int centeringOffset ) {
+		Calendar c = Calendar.getInstance();
+		c.setTime(eventDate);
+		c.add(Calendar.SECOND, centeringOffset);
+		
+		int seconds = c.get(Calendar.SECOND);
+		int decSeconds = seconds / 10 * 10;
+		c.set(Calendar.SECOND, decSeconds);
+		c.set(Calendar.MILLISECOND, 0);
+		
+		return c.getTime();
+	}
+	
+	public static Date roundDate(long dateLong, int centeringOffset) {
+		Date date = new Date(dateLong);
+		return roundDate(date, centeringOffset);
+	}
+	
 	public static Date roundDate(String eventDate) {
 		  SimpleDateFormat formatDate = new SimpleDateFormat(DATE_FORMAT);
 			
 			try {
 				Date date = formatDate.parse(eventDate);
-				return roundDate(date);
+				return roundDate(date, 0);
 			} catch (ParseException e) {
 				LOG.error("failed to round date", e);
 			}
@@ -44,7 +75,7 @@ public class DateUtils {
 	
 	public static Date roundDate(long dateLong) {
 		Date date = new Date(dateLong * 1000);
-		return roundDate(date);
+		return roundDate(date, 0);
 	}
 	
 	public static Date roundHourDate(Date eventDate) {
