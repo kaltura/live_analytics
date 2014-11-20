@@ -119,17 +119,20 @@ public class SparkAggregation {
 				loadedEvents.cache();
 				loadedEvents.count();
 
-				entryAggr.init(loadedEvents);
-				entryHourlyAggr.init(loadedEvents);
-				locationEntryAggr.init(loadedEvents);
-				referrerHourlyAggr.init(loadedEvents);
-				partnerHourlyAggr.init(loadedEvents);
-				
-				entryAggr.run();
-				entryHourlyAggr.run();
-				locationEntryAggr.run();
-				referrerHourlyAggr.run();
-				partnerHourlyAggr.run();
+				if (loadedEvents.count() > 0)
+				{
+					entryAggr.init(loadedEvents);
+					entryHourlyAggr.init(loadedEvents);
+					locationEntryAggr.init(loadedEvents);
+					referrerHourlyAggr.init(loadedEvents);
+					partnerHourlyAggr.init(loadedEvents);
+					
+					entryAggr.run();
+					entryHourlyAggr.run();
+					locationEntryAggr.run();
+					referrerHourlyAggr.run();
+					partnerHourlyAggr.run();
+				}
 				
 				loadedEvents.unpersist();
 
