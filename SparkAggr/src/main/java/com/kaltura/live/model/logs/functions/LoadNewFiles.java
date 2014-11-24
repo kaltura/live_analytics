@@ -29,6 +29,7 @@ public class LoadNewFiles implements FlatMapFunction<String, String> {
 
 	@Override
 	public Iterable<String> call(String fileId) {
+		LOG.warn("Start: LoadNewFiles");
 		List<String> lines = new ArrayList<String>();
 
 		byte[] fileData = null;
@@ -36,8 +37,10 @@ public class LoadNewFiles implements FlatMapFunction<String, String> {
 		String q1 = "SELECT * FROM kaltura_live.log_data WHERE file_id = '"
 				+ fileId + "';";
 
+		LOG.warn("LoadNewFiles: before get file data from cassandra");
 		ResultSet results = session.getSession()
 				.execute(q1);
+		LOG.warn("LoadNewFiles: after get file data from cassandra");
 		for (Row row : results) {
 			ByteBuffer data = row.getBytes("data");
 			byte[] result = new byte[data.remaining()];
@@ -77,6 +80,7 @@ public class LoadNewFiles implements FlatMapFunction<String, String> {
 	            }
 			}
 		}
+		LOG.warn("End: LoadNewFiles");
 		return lines;
 	}
 }

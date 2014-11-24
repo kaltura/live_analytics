@@ -30,7 +30,7 @@ public class GetNewFileIds implements FlatMapFunction<Long, String> {
 	
 	@Override
 	public Iterable<String> call(Long hourTimestamp) throws Exception {
-		
+		LOG.warn("Start: GetNewFileIds");
 		List<String> allKeys = new ArrayList<String>();
 		
 		String query = "SELECT file_id from kaltura_live.log_files where hour_id = "
@@ -38,8 +38,9 @@ public class GetNewFileIds implements FlatMapFunction<Long, String> {
 					+ ";";
 		
 		try {
+			LOG.warn("GetNewFileIds: before query");
 			ResultSet results = session.getSession().execute(query);
-		
+			LOG.warn("GetNewFileIds: after query");
 			
 			for (Row row : results) {
 				String fileId = row.getString("file_id");
@@ -48,8 +49,9 @@ public class GetNewFileIds implements FlatMapFunction<Long, String> {
 		} catch (QueryExecutionException ex) {
 			LOG.error("Failed to run query: " + query + "\n" + ex.getMessage());
 		}
-
+		LOG.warn("End: GetNewFileIds");
 		return allKeys;
+		
 	}
 
 }
