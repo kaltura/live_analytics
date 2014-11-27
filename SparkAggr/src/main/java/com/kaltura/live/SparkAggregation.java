@@ -1,6 +1,9 @@
 package com.kaltura.live;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -85,9 +88,11 @@ public class SparkAggregation {
 			}
 
 			// if new files were added
-			if (fileIdsToLoad.count() > 0) {
+			LOG.warn("Before fileIdsToLoad.count()");
+			long fileIdsToLoadCount = fileIdsToLoad.count();
+			LOG.warn("After fileIdsToLoad.count()");
+			if (fileIdsToLoadCount > 0) {
 				long startTime = System.currentTimeMillis();
-				LOG.debug("Start: " + startTime);
 				// load new files
 				// need to repartitions according to the number of new files to load
 				JavaRDD<String> loadedLines = fileIdsToLoad.flatMap(new LoadNewFiles());
@@ -105,7 +110,9 @@ public class SparkAggregation {
 					iterCount = 0;
 				}
 				++iterCount;
+				LOG.warn("Before loadedDates.count()");
 				loadedDates.count();
+				LOG.warn("After loadedDates.count()");
 
 				// Map each line events to statsEvent object
 				JavaRDD<StatsEvent> loadedEvents = loadedLines
@@ -114,24 +121,47 @@ public class SparkAggregation {
 								new StatsEventMap(config.getIp2locationPath()));
 				
 				loadedEvents.cache();
-				loadedEvents.count();
+				LOG.warn("Before loadedEvents.count() - map log lines to StatsEvent");
+				long loadedEventCount = loadedEvents.count();
+				LOG.warn("After loadedEvents.count()");
 
-				entryAggr.init(loadedEvents);
-				entryHourlyAggr.init(loadedEvents);
-				locationEntryAggr.init(loadedEvents);
-				referrerHourlyAggr.init(loadedEvents);
-				partnerHourlyAggr.init(loadedEvents);
-				
-				entryAggr.run();
-				entryHourlyAggr.run();
-				locationEntryAggr.run();
-				referrerHourlyAggr.run();
-				partnerHourlyAggr.run();
+				if (loadedEventCount > 0)
+				{
+					LOG.warn("Start Aggregate new events");
+					long aggrStartTime = System.currentTimeMillis();
+					entryAggr.init(loadedEvents);
+					entryHourlyAggr.init(loadedEvents);
+					locationEntryAggr.init(loadedEvents);
+					referrerHourlyAggr.init(loadedEvents);
+					partnerHourlyAggr.init(loadedEvents);
+					
+					LOG.warn("Before entry aggregation");
+					entryAggr.run();
+					LOG.warn("After entry aggregation");
+					LOG.warn("Before entry hourly aggregation");
+					entryHourlyAggr.run();
+					LOG.warn("After entry hourly aggregation");
+					LOG.warn("Before location aggregation");
+					locationEntryAggr.run();
+					LOG.warn("After location aggregation");
+					LOG.warn("Before referrer aggregation");
+					referrerHourlyAggr.run();
+					LOG.warn("After referrer aggregation");
+					LOG.warn("Before partner aggregation");
+					partnerHourlyAggr.run();
+					LOG.warn("After partner aggregation");
+					long aggrEndTime = System.currentTimeMillis();
+									 
+					LOG.warn("Aggregation Iteration time (msec): "
+							+ (aggrEndTime - aggrStartTime));
+				}
 				
 				loadedEvents.unpersist();
 
 				long endTime = System.currentTimeMillis();
-				System.out.println("Iteration time (msec): "
+				DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+				Date date = new Date();				 
+				LOG.warn(dateFormat.format(date) + " : Iteration time (msec): "
 						+ (endTime - startTime));
 				
 			}
@@ -159,7 +189,7 @@ public class SparkAggregation {
 		
 		final JavaSparkContext jsc = new JavaSparkContext(config.getSparkMaster(),
                 "SparkAggr", config.getSparkHome(), jars, env);
-		jsc.setCheckpointDir("/tmp/checkpoint/");
+		jsc.setCheckpointDir(config.getCheckpointDir());
 		return jsc;
 	}
 

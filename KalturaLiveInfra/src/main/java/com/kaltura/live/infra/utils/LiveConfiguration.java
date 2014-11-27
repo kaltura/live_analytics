@@ -28,6 +28,8 @@ public class LiveConfiguration {
 	
 	private String ip2locationPath;
 	
+	private String checkpointDir; 
+	
 	protected LiveConfiguration(String confPath) {
 		try {
 			InputStream file = new FileInputStream(confPath);
@@ -47,6 +49,8 @@ public class LiveConfiguration {
 					.getProperty("aggr.minutes_to_save"));
 			ip2locationPath = props.getProperty("aggr.ip2location_path");
 			repositoryHome = props.getProperty("repository_home");
+			checkpointDir = props.getProperty("spark.checkpointDir");
+			
 		} catch (Exception e) {
 			System.out.println("error" + e);
 		}
@@ -108,8 +112,12 @@ public class LiveConfiguration {
 	public String getIp2locationPath() {
 		return ip2locationPath;
 	}
+	
+	 public String getCheckpointDir() {
+         return checkpointDir;
+	 }
 
-	public void setCassandraNodeName(String cassandraNodeName) {
-		this.cassandraNodeName = cassandraNodeName;
-	}
+	 public void setCassandraNodeName(String cassandraNodeName) {
+		 this.cassandraNodeName = cassandraNodeName;
+	 }
 }

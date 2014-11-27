@@ -3,6 +3,7 @@ package com.kaltura.live.model.aggregation;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -31,7 +32,7 @@ public class StatsEvent implements Serializable {
 			"^([\\d.]+) \\[([\\w\\d:/]+\\s[+\\-]\\d{4})\\] \"(.+?)\" (\\d{3}) \"([^\"]+)\".*");
 	
 	/** Stats events fields */
-	private Date eventTime;
+	private Date eventTime = new Date(0);
 	private int partnerId = 0;
 	private String entryId = "N/A";
 	private String country = "N/A";
@@ -78,6 +79,11 @@ public class StatsEvent implements Serializable {
         	String query = m.group(3);
             try {
 				query = URLDecoder.decode(query, "UTF-8");
+				// remove the HTTP protocol at the end of the query string
+				int querySuffixIndex = query.lastIndexOf(" HTTP/");
+				if (querySuffixIndex >= 0)
+					query = query.substring(0, querySuffixIndex);
+				
 			} catch (UnsupportedEncodingException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -107,8 +113,8 @@ public class StatsEvent implements Serializable {
 	            Map<String, String> paramsMap = RequestUtils.splitQuery(query);
 	            if (paramsMap != null && paramsMap.size() > 0) {
 	            	try {
-			            entryId = paramsMap.containsKey("event:entryId") ? paramsMap.get("event:entryId") : null;
-			            partnerId = Integer.parseInt(paramsMap.containsKey("event:partnerId") ? paramsMap.get("event:partnerId") : null);
+			            entryId = paramsMap.containsKey("event:entryId") ? paramsMap.get("event:entryId") : "N/A";
+			            partnerId = Integer.parseInt(paramsMap.containsKey("event:partnerId") ? paramsMap.get("event:partnerId") : "0");
 			            float fBufferTime = Float.parseFloat(paramsMap.containsKey("event:bufferTime") ? paramsMap.get("event:bufferTime") : "0");
 			            bufferTime = (long)(fBufferTime);
 			            bitrate = Long.parseLong(paramsMap.containsKey("event:bitrate") ? paramsMap.get("event:bitrate") : "-1");
@@ -122,6 +128,15 @@ public class StatsEvent implements Serializable {
 			            int eventIndex = Integer.parseInt(paramsMap.containsKey("event:eventIndex") ? paramsMap.get("event:eventIndex") : "0");
 			            plays = eventIndex == 1 ? 1 : 0;
 			            alive = eventIndex > 1 ? 1 : 0;
+			            long clientEventTime = Long.parseLong(paramsMap.containsKey("event:startTime") ? paramsMap.get("event:startTime") : "0");
+			            
+			            Calendar calendar = Calendar.getInstance();
+			            calendar.setTimeInMillis(clientEventTime);
+			            int seconds = calendar.get(Calendar.SECOND);
+			            int offset = 5 - seconds;
+			            
+			            eventTime = DateUtils.roundDate(date, offset);
+			            
 	            	} catch (NumberFormatException ex) {
 	            		LOG.error("Failed to parse line " + line );
 	            	}
