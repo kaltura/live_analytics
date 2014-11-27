@@ -28,8 +28,8 @@ public class EntryGeoTimeLineTest extends BaseReporterTest {
     protected LiveReportInputFilter createFilter() {
 		LiveReportInputFilter filter = new LiveReportInputFilter();
 		filter.setEntryIds("test_entry");
-		filter.setFromTime(1387121900);
-		filter.setToTime(1387121900);
+		filter.setFromTime(1387100000);
+		filter.setToTime(1387121910);
 		return filter;
     }
     
@@ -38,10 +38,11 @@ public class EntryGeoTimeLineTest extends BaseReporterTest {
     	EntryGeoTimeLineReporter reporter = new EntryGeoTimeLineReporterMock(cassandraCQLUnit.session);
     	LiveStatsListResponse results = reporter.query(createFilter(), null);
     	
-    	Assert.assertEquals(3, results.getTotalCount());
+    	Assert.assertEquals(4, results.getTotalCount());
     	LiveStats[] events = results.getObjects();
     	
-    	boolean foundBoth = false, foundCountry = false, foundNone = false;
+    	boolean foundBoth = false, foundCountry = false;
+    	int foundNone = 0;
     	for (LiveStats event : events) {
     		GeoTimeLiveStats geoEvent = (GeoTimeLiveStats)event;
     		String country = geoEvent.getCountry().getName();
@@ -56,13 +57,13 @@ public class EntryGeoTimeLineTest extends BaseReporterTest {
 					foundCountry = true;
 				}
 			} else if(country.equals("-") && city.equals("-")) {
-				foundNone = true;
+				foundNone++;
 			}
 		}
     	
     	Assert.assertTrue(foundBoth);
     	Assert.assertTrue(foundCountry);
-    	Assert.assertTrue(foundNone);
+    	Assert.assertEquals(2, foundNone);
     }
     
     protected void testCountryAndCity(GeoTimeLiveStats event, String city, String country) {
