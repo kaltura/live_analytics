@@ -133,6 +133,7 @@ public class StatsEvent implements Serializable {
 			            Calendar calendar = Calendar.getInstance();
 			            calendar.setTimeInMillis(clientEventTime);
 			            int seconds = calendar.get(Calendar.SECOND);
+			            seconds = seconds % 10;
 			            int offset = 5 - seconds;
 			            
 			            eventTime = DateUtils.roundDate(date, offset);
