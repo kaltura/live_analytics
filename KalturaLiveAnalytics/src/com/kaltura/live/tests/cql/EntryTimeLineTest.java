@@ -36,6 +36,7 @@ public class EntryTimeLineTest extends BaseReporterTest{
     	LiveEventsListResponse results = reporter.eventsQuery(createFilter(), null);
     	
     	Assert.assertEquals(4, results.getTotalCount());
+    	System.out.println(results.getObjects());
     }
     
 }

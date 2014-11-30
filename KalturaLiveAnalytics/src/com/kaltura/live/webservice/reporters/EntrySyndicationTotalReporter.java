@@ -78,6 +78,8 @@ public class EntrySyndicationTotalReporter extends BaseReporter {
 		String validation = "";
 		if(filter.getEntryIds() == null)
 			validation = " Entry Ids can't be null. ";
+		if(!isValidateEntryIds(filter.getEntryIds())) 
+			validation += "Entry Ids contain illegal characters. ";
 		
 		if(!validation.isEmpty())
 			throw new AnalyticsException("Illegal filter input: " + validation);

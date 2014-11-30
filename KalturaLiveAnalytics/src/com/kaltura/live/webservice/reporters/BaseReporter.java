@@ -104,4 +104,8 @@ public abstract class BaseReporter {
 		}
 		return addRangeCondition(roundedDate, new Date(toTime * 1000), 60*60);
 	}
+	
+	protected boolean isValidateEntryIds(String entryId) {
+		return entryId.matches("^([\\w]+,?)*$");
+	}
 }

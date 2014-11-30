@@ -57,6 +57,8 @@ public class EntryTimeLineReporter extends BaseReporter {
 		String validation = "";
 		if(filter.getEntryIds() == null)
 			validation = "Entry Ids can't be null. ";
+		if(!isValidateEntryIds(filter.getEntryIds())) 
+			validation += "Entry Ids contain illegal characters. ";
 		if(filter.getFromTime() < 0)
 			validation += "From Time must be a positive number.";
 		if(filter.getToTime() < 0)

@@ -175,6 +175,9 @@ public class EntryTotalReporter extends BaseReporter {
 		if(filter.getEntryIds() == null)
 			validation = "Entry Ids can't be null. ";
 		
+		if(!isValidateEntryIds(filter.getEntryIds())) 
+			validation += "Entry Ids contain illegal characters. ";
+		
 		if(filter.getFromTime() <= 0)
 			validation += "From time must be a timestamp ";
 		

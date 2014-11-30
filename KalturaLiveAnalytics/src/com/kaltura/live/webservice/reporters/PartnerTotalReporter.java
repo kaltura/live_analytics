@@ -98,6 +98,7 @@ public class PartnerTotalReporter extends BaseReporter {
 			stat.getValue().fillObject(statObj);
 			result.add(statObj);
 		}
+		
 		return new LiveStatsListResponse(result);
 	}
 	
@@ -109,6 +110,8 @@ public class PartnerTotalReporter extends BaseReporter {
 		if(filter.isLive()) {
 			if(filter.getEntryIds() == null)
 				validation = "Entry Ids can't be null. ";
+			if(!isValidateEntryIds(filter.getEntryIds())) 
+				validation += "Entry Ids contain illegal characters. ";
 		} else {
 			if(filter.getPartnerId() < 0)
 				validation += "Partner Id must be a positive number.";
