@@ -20,14 +20,13 @@ public abstract class LiveEventDAO extends LiveDAO {
 	/** Auto generated serial UID */
 	private static final long serialVersionUID = 3957419748277847064L;
 	
-	
 	/** --- Object fields --- */
 	
 	 protected Date eventTime;
 	 protected long alive;
 	 protected long bitrate;
 	 protected long bitrateCount;
-	 protected long bufferTime;
+	 protected double bufferTime;
 	 protected long plays;
 
 	/**
@@ -47,7 +46,7 @@ public abstract class LiveEventDAO extends LiveDAO {
 		this.alive = row.getLong("alive");
 		this.bitrate = row.getLong("bitrate");
 		this.bitrateCount = row.getLong("bitrate_count");
-		this.bufferTime = row.getLong("buffer_time");
+		this.bufferTime = row.getDouble("buffer_time");
 		this.plays = row.getLong("plays");
 	}
 	
@@ -121,11 +120,11 @@ public abstract class LiveEventDAO extends LiveDAO {
 		this.bitrateCount = bitrateCount;
 	}
 	
-	public long getBufferTime() {
+	public double getBufferTime() {
 		return bufferTime;
 	}
 	
-	public void setBufferTime(long bufferTime) {
+	public void setBufferTime(double bufferTime) {
 		this.bufferTime = bufferTime;
 	}
 
