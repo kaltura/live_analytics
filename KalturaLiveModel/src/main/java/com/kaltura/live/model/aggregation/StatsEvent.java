@@ -42,14 +42,14 @@ public class StatsEvent implements Serializable {
 	private long alive = 0;
 	private long bitrate = 0;
 	private long bitrateCount = 0;
-	private long bufferTime = 0;
+	private float bufferTime = 0;
 	private String ipAddress;
 	
 	
 	/**
 	 * Constructor by fields 
 	 */
-	public StatsEvent(Date eventTime, int partnerId, String entryId, String country, String city,  String referrer, long plays, long alive, long bitrate, long bitrateCount, long bufferTime) {
+	public StatsEvent(Date eventTime, int partnerId, String entryId, String country, String city,  String referrer, long plays, long alive, long bitrate, long bitrateCount, float bufferTime) {
 		this.eventTime = eventTime;
 		this.partnerId = partnerId;
 		this.entryId = entryId;
@@ -115,8 +115,8 @@ public class StatsEvent implements Serializable {
 	            	try {
 			            entryId = paramsMap.containsKey("event:entryId") ? paramsMap.get("event:entryId") : "N/A";
 			            partnerId = Integer.parseInt(paramsMap.containsKey("event:partnerId") ? paramsMap.get("event:partnerId") : "0");
-			            float fBufferTime = Float.parseFloat(paramsMap.containsKey("event:bufferTime") ? paramsMap.get("event:bufferTime") : "0");
-			            bufferTime = (long)(fBufferTime);
+			            bufferTime = Float.parseFloat(paramsMap.containsKey("event:bufferTime") ? paramsMap.get("event:bufferTime") : "0");
+			            
 			            bitrate = Long.parseLong(paramsMap.containsKey("event:bitrate") ? paramsMap.get("event:bitrate") : "-1");
 			            referrer = paramsMap.containsKey("event:referrer") ? paramsMap.get("event:referrer") : null; 
 			            bitrateCount = 1;
@@ -206,7 +206,7 @@ public class StatsEvent implements Serializable {
 		return this.bitrateCount;
 	}
 	
-	public long getBufferTime() {
+	public float getBufferTime() {
 		return this.bufferTime;
 	}
 	
