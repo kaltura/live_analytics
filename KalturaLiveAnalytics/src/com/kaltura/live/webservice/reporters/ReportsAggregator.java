@@ -10,11 +10,11 @@ public class ReportsAggregator {
 	protected long secondsViewed = 0;
 	
 	// Average per minute
-	protected long bufferTime = 0;
+	protected double bufferTime = 0;
 	protected long bitRate = 0;
 	protected long bitrateCnt = 0;
 	
-	public void aggregateResult(long plays, long audience, long bufferTime, long bitRate, long bitrateCount) {
+	public void aggregateResult(long plays, long audience, double bufferTime, long bitRate, long bitrateCount) {
 		this.plays += plays;
 		this.audience += audience;
 		this.secondsViewed += audience * 10;
@@ -34,7 +34,7 @@ public class ReportsAggregator {
 	}
 	
 	
-	protected static float calcAveragePerMinute(long parts, long denominator, int normFactor) {
+	protected static float calcAveragePerMinute(double parts, double denominator, int normFactor) {
 		if(denominator > 0)
 			// Round to 2 decimal points
 			// And set it to be average on one minute
