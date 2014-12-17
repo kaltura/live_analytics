@@ -20,13 +20,35 @@ public class EntryGeoTimeLineReporter extends BaseReporter {
 	
 	@Override
 	public LiveStatsListResponse query(LiveReportInputFilter filter, LiveReportPager pager) {
-		String query = generateQuery(filter);
+		
+		int pageIdx = (pager == null) ? 1 : pager.getPageIndex();
+		int pageSize = (pager == null) ? Integer.MAX_VALUE : pager.getPageSize();
+		
+		// Select count
+		int count = getRecordsCount(filter);
+		
+		String query = generateQuery(filter, false);
 		ResultSet results = session.getSession().execute(query);
 		
 		Iterator<Row> itr = results.iterator();
 		List<LiveStats> result = new ArrayList<LiveStats>();
+		int i = 0;
 		while(itr.hasNext()) {
-			LiveEntryLocationEventDAO dao = new LiveEntryLocationEventDAO(itr.next());
+			Row row = itr.next();
+			
+			// Pager check -->
+			// This code was written as a result of unsuccessful use of paging with Cassandra, once you overcome this - 
+			// Please remove this code
+			if(i >= pageIdx * pageSize)
+				break;
+			
+			boolean inRange = (i >= (pageIdx - 1) * pageSize);
+			i++;
+			if(!inRange)
+				continue;
+			// <-- End of pager check
+			
+			LiveEntryLocationEventDAO dao = new LiveEntryLocationEventDAO(row);
 			
 			GeoTimeLiveStats res = new GeoTimeLiveStats();
 			res.setEntryId(dao.getEntryId());
@@ -46,13 +68,22 @@ public class EntryGeoTimeLineReporter extends BaseReporter {
 			result.add(res);
 		}
 		
-		return new LiveStatsListResponse(result);
+		return new LiveStatsListResponse(result, count);
 	}
 
-	private String generateQuery(LiveReportInputFilter filter) {
+	private int getRecordsCount(LiveReportInputFilter filter) {
+		String query = generateQuery(filter, true);
+		ResultSet results = session.getSession().execute(query);
+		Iterator<Row> itr = results.iterator();
+		return (int) itr.next().getLong("count");
+	}
+
+	private String generateQuery(LiveReportInputFilter filter, boolean count) {
 		
 		StringBuffer sb = new StringBuffer();
-		sb.append("select * from kaltura_live.live_events_location where ");
+		sb.append("select ");
+		sb.append(count ? "count(*)" : "*");
+		sb.append(" from kaltura_live.live_events_location where ");
 		sb.append(addEntryIdsCondition(filter.getEntryIds()));
 		sb.append(" and ");
 		sb.append(addTimeInRangeCondition(DateUtils.roundDate(filter.getFromTime()), DateUtils.roundDate(filter.getToTime())));

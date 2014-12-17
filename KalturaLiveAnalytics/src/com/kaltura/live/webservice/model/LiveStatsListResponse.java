@@ -24,6 +24,12 @@ public class LiveStatsListResponse {
 		this.totalCount = events.size();
 	}
 	
+	public LiveStatsListResponse(Collection<LiveStats> events, int count) {
+		super();
+		this.objects = events.toArray(new LiveStats[events.size()]);
+		this.totalCount = count;
+	}
+	
 	public LiveStats[] getObjects() {
 		return objects;
 	}
