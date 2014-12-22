@@ -3,6 +3,9 @@ package com.kaltura.live.model.aggregation.dao;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.Row;
 import com.kaltura.live.infra.cache.SerializableSession;
@@ -12,6 +15,8 @@ public class LiveEntryReferrerEventDAO extends LiveEventDAO {
 	
 	private static final long serialVersionUID = -4766071091288393800L;
 	
+	private static Logger LOG = LoggerFactory.getLogger(LiveEntryReferrerEventDAO.class); 
+
 	protected String referrer;
 
 	protected String entryId;
@@ -41,7 +46,11 @@ public class LiveEntryReferrerEventDAO extends LiveEventDAO {
 	public void saveOrUpdate(SerializableSession session, StatsEvent aggregatedResult) {
 		createStatement(session);
 		BoundStatement boundStatement = new BoundStatement(statement);
-		session.getSession().execute(boundStatement.bind(aggregatedResult.getEntryId(), aggregatedResult.getEventTime(), aggregatedResult.getReferrer(), aggregatedResult.getPlays(), aggregatedResult.getAlive(), aggregatedResult.getBitrate(), aggregatedResult.getBitrateCount(), aggregatedResult.getBufferTime()));
+		try {
+			session.execute(boundStatement.bind(aggregatedResult.getEntryId(), aggregatedResult.getEventTime(), aggregatedResult.getReferrer(), aggregatedResult.getPlays(), aggregatedResult.getAlive(), aggregatedResult.getBitrate(), aggregatedResult.getBitrateCount(), aggregatedResult.getBufferTime()), RETRIES_NUM);
+		} catch (Exception ex) {
+			LOG.error("Failed to save referrer aggregation result for entry [" + aggregatedResult.getEntryId() + "] referrer [" + aggregatedResult.getReferrer() + "] at [" + aggregatedResult.getEventTime() + "]", ex);
+		}
 		
 	}
 

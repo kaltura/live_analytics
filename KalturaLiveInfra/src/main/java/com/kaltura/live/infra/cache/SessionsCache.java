@@ -3,16 +3,24 @@ package com.kaltura.live.infra.cache;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.Metadata;
 import com.datastax.driver.core.Session;
+import com.datastax.driver.core.exceptions.DriverException;
+import com.kaltura.live.infra.exception.KalturaInternalException;
 
 public class SessionsCache {
 	
 	private static Map<String, Cluster> clusters = new HashMap<String, Cluster>();
 	private static Map<String, Session> sessions = new HashMap<String, Session>();
 	
-	public static Session getSession(String node) {
+	private static Logger LOG = LoggerFactory.getLogger(SessionsCache.class);
+
+	
+	public static Session getSession(String node) throws KalturaInternalException {
 		if (!sessions.containsKey(node)) 
 			connect(node);
 		
@@ -20,14 +28,16 @@ public class SessionsCache {
 		
 	}
 	
-	private static void connect(String node) {
+	private static void connect(String node) throws KalturaInternalException {
+		try {
 	        Cluster cluster = Cluster.builder().addContactPoint(node).build();
-	        Metadata metadata = cluster.getMetadata();
-	        System.out.printf("Connected to %s\n", metadata.getClusterName());
 	        
 	     // TODO - Discuss with Orly the possibility to connect to a given key-space cluster.connect(key-space)
 	        clusters.put(node, cluster);
 	        sessions.put(node, cluster.connect());
+		} catch (Exception ex) {
+			throw new KalturaInternalException("Failed to connect to host [" + node + "]", ex);
+		}
 	}
 	    
 	@Override

@@ -4,6 +4,9 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.Row;
 import com.kaltura.live.infra.cache.SerializableSession;
@@ -12,6 +15,8 @@ import com.kaltura.live.model.aggregation.StatsEvent;
 public class LivePartnerEntryDAO extends LiveDAO {
 
 	private static final long serialVersionUID = 2179416653993486273L;
+	
+	private static Logger LOG = LoggerFactory.getLogger(LivePartnerEntryDAO.class); 
 	
 	protected int partnerId;
 	public int getPartnerId() {
@@ -43,7 +48,11 @@ public class LivePartnerEntryDAO extends LiveDAO {
 	public void saveOrUpdate(SerializableSession session, StatsEvent aggregatedResult) {
 		createStatement(session);
 		BoundStatement boundStatement = new BoundStatement(statement);
-		session.getSession().execute(boundStatement.bind(aggregatedResult.getPartnerId(), aggregatedResult.getEntryId(), aggregatedResult.getEventTime()));
+		try {
+			session.execute(boundStatement.bind(aggregatedResult.getPartnerId(), aggregatedResult.getEntryId(), aggregatedResult.getEventTime()), RETRIES_NUM );
+		} catch (Exception ex) {
+			LOG.error("Failed to save aggregation result for partner [" + aggregatedResult.getPartnerId() + "] entry [" + aggregatedResult.getEntryId() + "] at [" + aggregatedResult.getEventTime() + "]", ex);
+		}
 		
 	}
 

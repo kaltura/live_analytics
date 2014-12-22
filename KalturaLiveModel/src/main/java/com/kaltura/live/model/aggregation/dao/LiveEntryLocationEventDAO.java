@@ -2,6 +2,9 @@ package com.kaltura.live.model.aggregation.dao;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.Row;
 import com.kaltura.live.infra.cache.SerializableSession;
@@ -14,6 +17,8 @@ public class LiveEntryLocationEventDAO extends LiveEventDAO {
 	protected String city;
 	protected String country;
 	protected String entryId;
+	
+	private static Logger LOG = LoggerFactory.getLogger(LiveEntryLocationEventDAO.class); 
 	
 	public LiveEntryLocationEventDAO() {
 		super();
@@ -39,7 +44,11 @@ public class LiveEntryLocationEventDAO extends LiveEventDAO {
 	public void saveOrUpdate(SerializableSession session, StatsEvent aggregatedResult) {
 		createStatement(session);
 		BoundStatement boundStatement = new BoundStatement(statement);
-		session.getSession().execute(boundStatement.bind(aggregatedResult.getEntryId(), aggregatedResult.getEventTime(), aggregatedResult.getCountry(), aggregatedResult.getCity(), aggregatedResult.getPlays(), aggregatedResult.getAlive(), aggregatedResult.getBitrate(), aggregatedResult.getBitrateCount(), aggregatedResult.getBufferTime()));
+		try {
+			session.execute(boundStatement.bind(aggregatedResult.getEntryId(), aggregatedResult.getEventTime(), aggregatedResult.getCountry(), aggregatedResult.getCity(), aggregatedResult.getPlays(), aggregatedResult.getAlive(), aggregatedResult.getBitrate(), aggregatedResult.getBitrateCount(), aggregatedResult.getBufferTime()), RETRIES_NUM);
+		} catch (Exception ex) {
+			LOG.error("Failed to save location aggregation result for entry [" + aggregatedResult.getEntryId() + "] country [" + aggregatedResult.getCountry() + "] city [ " + aggregatedResult.getCity() + "] at [" + aggregatedResult.getEventTime() + "]", ex);
+		}
 		
 	}
 

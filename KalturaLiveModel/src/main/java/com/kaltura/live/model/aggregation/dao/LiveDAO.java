@@ -15,6 +15,8 @@ public abstract class LiveDAO implements Serializable {
 
 	private static final long serialVersionUID = 5605895483242146183L;
 	
+	public static final int RETRIES_NUM = 3;
+	
 	/** Prepared statement for cassandra update */
 	protected PreparedStatement statement;
 	

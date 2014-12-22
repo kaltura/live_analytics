@@ -4,14 +4,20 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.Row;
 import com.kaltura.live.infra.cache.SerializableSession;
+import com.kaltura.live.infra.exception.KalturaInternalException;
 import com.kaltura.live.model.aggregation.StatsEvent;
 
 public class PartnerEventDAO extends LiveEventDAO {
 	
 	private static final long serialVersionUID = 1506062076872874654L;
+	
+	private static Logger LOG = LoggerFactory.getLogger(PartnerEventDAO.class); 
 	
 	protected String tableName;
 	protected int ttl;
@@ -47,7 +53,11 @@ public class PartnerEventDAO extends LiveEventDAO {
 	public void saveOrUpdate(SerializableSession session, StatsEvent aggregatedResult) {
 		createStatement(session);
 		BoundStatement boundStatement = new BoundStatement(statement);
-		session.getSession().execute(boundStatement.bind(aggregatedResult.getPartnerId(), aggregatedResult.getEventTime(), aggregatedResult.getPlays(), aggregatedResult.getAlive(), aggregatedResult.getBitrate(), aggregatedResult.getBitrateCount(), aggregatedResult.getBufferTime()));
+		try {
+			session.execute(boundStatement.bind(aggregatedResult.getPartnerId(), aggregatedResult.getEventTime(), aggregatedResult.getPlays(), aggregatedResult.getAlive(), aggregatedResult.getBitrate(), aggregatedResult.getBitrateCount(), aggregatedResult.getBufferTime()), RETRIES_NUM);
+		} catch (Exception ex) {
+			LOG.error("Failed to save partner aggregation result for partner [" + aggregatedResult.getPartnerId() +  "] at [" + aggregatedResult.getEventTime() + "]", ex);
+		}
 		
 	}
 	
