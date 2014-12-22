@@ -45,7 +45,7 @@ public class LiveEntryPeakDAO extends LiveEventDAO {
 		createStatement(session);
 		BoundStatement boundStatement = new BoundStatement(statement);
 		try {
-		session.execute(boundStatement.bind(aggregatedResult.getEntryId(), aggregatedResult.getEventTime(), aggregatedResult.getAlive() + aggregatedResult.getPlays()), RETRIES_NUM);
+		session.execute(boundStatement.bind(aggregatedResult.getEntryId(), aggregatedResult.getEventTime(), aggregatedResult.getAlive()), RETRIES_NUM);
 		} catch (Exception ex) {
 			LOG.error("Failed to save peak aggregation result for entry [" + aggregatedResult.getEntryId() +  "] at [" + aggregatedResult.getEventTime() + "]", ex);
 		}

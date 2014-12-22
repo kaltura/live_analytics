@@ -88,9 +88,9 @@ public class SparkAggregation {
 			}
 
 			// if new files were added
-			LOG.warn("Before fileIdsToLoad.count()");
+			LOG.debug("Before fileIdsToLoad.count()");
 			long fileIdsToLoadCount = fileIdsToLoad.count();
-			LOG.warn("After fileIdsToLoad.count()");
+			LOG.debug("After fileIdsToLoad.count()");
 			if (fileIdsToLoadCount > 0) {
 				long startTime = System.currentTimeMillis();
 				// load new files
@@ -110,9 +110,9 @@ public class SparkAggregation {
 					iterCount = 0;
 				}
 				++iterCount;
-				LOG.warn("Before loadedDates.count()");
+				LOG.debug("Before loadedDates.count()");
 				loadedDates.count();
-				LOG.warn("After loadedDates.count()");
+				LOG.debug("After loadedDates.count()");
 
 				// Map each line events to statsEvent object
 				JavaRDD<StatsEvent> loadedEvents = loadedLines
@@ -121,13 +121,13 @@ public class SparkAggregation {
 								new StatsEventMap(config.getIp2locationPath()));
 				
 				loadedEvents.cache();
-				LOG.warn("Before loadedEvents.count() - map log lines to StatsEvent");
+				LOG.debug("Before loadedEvents.count() - map log lines to StatsEvent");
 				long loadedEventCount = loadedEvents.count();
-				LOG.warn("After loadedEvents.count()");
+				LOG.debug("After loadedEvents.count()");
 
 				if (loadedEventCount > 0)
 				{
-					LOG.warn("Start Aggregate new events");
+					LOG.debug("Start Aggregate new events");
 					long aggrStartTime = System.currentTimeMillis();
 					entryAggr.init(loadedEvents);
 					entryHourlyAggr.init(loadedEvents);
@@ -135,24 +135,24 @@ public class SparkAggregation {
 					referrerHourlyAggr.init(loadedEvents);
 					partnerHourlyAggr.init(loadedEvents);
 					
-					LOG.warn("Before entry aggregation");
+					LOG.debug("Before entry aggregation");
 					entryAggr.run();
-					LOG.warn("After entry aggregation");
-					LOG.warn("Before entry hourly aggregation");
+					LOG.debug("After entry aggregation");
+					LOG.debug("Before entry hourly aggregation");
 					entryHourlyAggr.run();
-					LOG.warn("After entry hourly aggregation");
-					LOG.warn("Before location aggregation");
+					LOG.debug("After entry hourly aggregation");
+					LOG.debug("Before location aggregation");
 					locationEntryAggr.run();
-					LOG.warn("After location aggregation");
-					LOG.warn("Before referrer aggregation");
+					LOG.debug("After location aggregation");
+					LOG.debug("Before referrer aggregation");
 					referrerHourlyAggr.run();
-					LOG.warn("After referrer aggregation");
-					LOG.warn("Before partner aggregation");
+					LOG.debug("After referrer aggregation");
+					LOG.debug("Before partner aggregation");
 					partnerHourlyAggr.run();
-					LOG.warn("After partner aggregation");
+					LOG.debug("After partner aggregation");
 					long aggrEndTime = System.currentTimeMillis();
 									 
-					LOG.warn("Aggregation Iteration time (msec): "
+					LOG.debug("Aggregation Iteration time (msec): "
 							+ (aggrEndTime - aggrStartTime));
 				}
 				
@@ -161,7 +161,7 @@ public class SparkAggregation {
 				long endTime = System.currentTimeMillis();
 				DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 				Date date = new Date();				 
-				LOG.warn(dateFormat.format(date) + " : Iteration time (msec): "
+				LOG.debug(dateFormat.format(date) + " : Iteration time (msec): "
 						+ (endTime - startTime));
 				
 			}
@@ -180,7 +180,7 @@ public class SparkAggregation {
 		System.setProperty("spark.executor.memory", config.getSparkExectorMem());
 		
 		String[] jars = { config.getRepositoryHome() + "/spark-aggr-1.0.0.jar",
-				 config.getRepositoryHome() + "/cassandra-driver-core-2.0.3.jar",
+				 config.getRepositoryHome() + "/cassandra-driver-core-2.0.7.jar",
 				 config.getRepositoryHome() + "/live-model-1.0.0.jar", 
 				 config.getRepositoryHome() + "/live-infra-1.0.0.jar",
 				 config.getRepositoryHome() + "/ip-2-location-1.0.0.jar" };
