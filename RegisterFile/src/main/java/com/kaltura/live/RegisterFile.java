@@ -2,29 +2,32 @@ package com.kaltura.live;
 
 import java.io.FileInputStream;
 import java.nio.ByteBuffer;
-
-
 import java.util.Date;
 
 import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.kaltura.live.infra.cache.SerializableSession;
-import com.kaltura.live.infra.cache.SessionsCache;
+import com.kaltura.live.infra.exception.KalturaInternalException;
 import com.kaltura.live.infra.utils.DateUtils;
 
 public class RegisterFile {
 
 	private SerializableSession cassandraSession;
 	
+	private static final int RETRIES = 3;
+	
 	private static final int LOGS_TTL = 60 * 60 * 3; 
     
-
+	private static Logger LOG = LoggerFactory.getLogger(RegisterFile.class);
+	
     public RegisterFile(String node) {
-        cassandraSession = new SerializableSession(node);
+    	cassandraSession = new SerializableSession(node);
     }
     
     private long getTimeStamp(String fileName) {
@@ -35,15 +38,17 @@ public class RegisterFile {
     }
     
     public void insertIntoTable(String key, byte[] data) {
-    	long hourKey = getTimeStamp(key);
-    	PreparedStatement statement = cassandraSession.getSession().prepare("INSERT INTO kaltura_live.log_data (file_id,data) VALUES (?, ?) USING TTL ?");
-    	BoundStatement boundStatement = new BoundStatement(statement);
-        cassandraSession.getSession().execute(boundStatement.bind(key,ByteBuffer.wrap(data), LOGS_TTL));
-    	statement = cassandraSession.getSession().prepare("INSERT INTO kaltura_live.log_files (hour_id,file_id) VALUES (?, ?) USING TTL ?");
-        boundStatement = new BoundStatement(statement);
-        cassandraSession.getSession().execute(boundStatement.bind(new Date(hourKey),key, LOGS_TTL));
-        
-        System.out.println("After Insert");
+    	try {
+	    	long hourKey = getTimeStamp(key);
+	    	PreparedStatement statement = cassandraSession.getSession().prepare("INSERT INTO kaltura_live.log_data (file_id,data) VALUES (?, ?) USING TTL ?");
+	    	BoundStatement boundStatement = new BoundStatement(statement);
+	        cassandraSession.execute(boundStatement.bind(key,ByteBuffer.wrap(data), LOGS_TTL), RETRIES);
+	    	statement = cassandraSession.getSession().prepare("INSERT INTO kaltura_live.log_files (hour_id,file_id) VALUES (?, ?) USING TTL ?");
+	        boundStatement = new BoundStatement(statement);
+	        cassandraSession.execute(boundStatement.bind(new Date(hourKey),key, LOGS_TTL), RETRIES);
+    	} catch (Exception ex) {
+    		LOG.error("Failed to insert log file: " + key, ex);
+    	}
     }
 
     public byte[] readFromTable(String key) {
@@ -101,17 +106,19 @@ public class RegisterFile {
     		
     	}
     	
-		RegisterFile insertFile = new RegisterFile(node);
-        
-	
+    	RegisterFile insertFile = null;
     	try {
+    		
+    		insertFile = new RegisterFile(node);
+        	
     		String fileNameNoExt = fileName.substring(0, fileName.length()-3);
 			insertFile.insertIntoTable(fileNameNoExt, readFile(logsFolder + fileName));
 			insertFile.disconnect();
     	} catch (Exception ex) {
-    		ex.printStackTrace();
+    		LOG.error("Failed to insert file [" + fileName + "]", ex);
 		} finally {
-			insertFile.disconnect();
+			if (insertFile != null)
+				insertFile.disconnect();
     	}
 		
 		/**

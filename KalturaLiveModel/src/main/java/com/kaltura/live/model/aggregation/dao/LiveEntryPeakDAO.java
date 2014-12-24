@@ -4,6 +4,9 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.Row;
 import com.kaltura.live.infra.cache.SerializableSession;
@@ -16,6 +19,9 @@ public class LiveEntryPeakDAO extends LiveEventDAO {
 	protected String entryId;
 	protected Date eventTime;
 	protected Long audience;
+	
+	private static Logger LOG = LoggerFactory.getLogger(LiveEntryPeakDAO.class); 
+
 		
 	public LiveEntryPeakDAO() {
 		super();
@@ -38,7 +44,11 @@ public class LiveEntryPeakDAO extends LiveEventDAO {
 	public void saveOrUpdate(SerializableSession session, StatsEvent aggregatedResult) {
 		createStatement(session);
 		BoundStatement boundStatement = new BoundStatement(statement);
-		session.getSession().execute(boundStatement.bind(aggregatedResult.getEntryId(), aggregatedResult.getEventTime(), aggregatedResult.getAlive() + aggregatedResult.getPlays()));
+		try {
+		session.execute(boundStatement.bind(aggregatedResult.getEntryId(), aggregatedResult.getEventTime(), aggregatedResult.getAlive()), RETRIES_NUM);
+		} catch (Exception ex) {
+			LOG.error("Failed to save peak aggregation result for entry [" + aggregatedResult.getEntryId() +  "] at [" + aggregatedResult.getEventTime() + "]", ex);
+		}
 		
 	}
 

@@ -5,12 +5,20 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.datastax.driver.core.Session;
+import com.datastax.driver.core.Statement;
+import com.datastax.driver.core.exceptions.DriverException;
+import com.kaltura.live.infra.exception.KalturaInternalException;
 
 public class SerializableSession implements Externalizable {
 	
 	protected String node;
 	protected Session session;
+	private static Logger LOG = LoggerFactory.getLogger(SerializableSession.class);
+
 	
 	public SerializableSession() {
 		node = "test";
@@ -34,6 +42,23 @@ public class SerializableSession implements Externalizable {
 	
 	public Session getSession() {
 		return session;
+	}
+	
+	public void execute(Statement statement, int retries) throws KalturaInternalException {
+		int retriesCount = 0;
+		boolean success = false;
+		do {
+			try {
+				session.execute(statement);
+				++retriesCount;
+				success = true;
+			} catch (DriverException e) {
+				if (retriesCount >= retries) {
+					LOG.error("Failed to execute statement after " + retries + "retries with the following exception: " + e.getMessage()) ;
+					throw new KalturaInternalException(e);
+				}
+			}
+		} while (!success);
 	}
 	
 	public void disconnect() {

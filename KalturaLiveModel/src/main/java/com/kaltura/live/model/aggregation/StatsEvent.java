@@ -84,9 +84,9 @@ public class StatsEvent implements Serializable {
 				if (querySuffixIndex >= 0)
 					query = query.substring(0, querySuffixIndex);
 				
-			} catch (UnsupportedEncodingException e) {
+			} catch (Exception e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				LOG.warn("Failed to decode query string: " + query, e );
 			}
             
             if (query.indexOf("service=LiveStats") > -1 && query.indexOf("action=collect") > -1) {
