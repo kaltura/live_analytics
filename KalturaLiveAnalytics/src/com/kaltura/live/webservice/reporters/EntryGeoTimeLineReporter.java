@@ -1,6 +1,8 @@
 package com.kaltura.live.webservice.reporters;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
@@ -12,6 +14,7 @@ import com.kaltura.live.model.aggregation.dao.LiveEntryLocationEventDAO;
 import com.kaltura.live.webservice.model.AnalyticsException;
 import com.kaltura.live.webservice.model.GeoTimeLiveStats;
 import com.kaltura.live.webservice.model.LiveReportInputFilter;
+import com.kaltura.live.webservice.model.LiveReportOrderBy;
 import com.kaltura.live.webservice.model.LiveReportPager;
 import com.kaltura.live.webservice.model.LiveStats;
 import com.kaltura.live.webservice.model.LiveStatsListResponse;
@@ -23,6 +26,7 @@ public class EntryGeoTimeLineReporter extends BaseReporter {
 		
 		int pageIdx = (pager == null) ? 1 : pager.getPageIndex();
 		int pageSize = (pager == null) ? Integer.MAX_VALUE : pager.getPageSize();
+		boolean orderByPlays = LiveReportOrderBy.PLAYS_DESC.equals(filter.getOrderByType());
 		
 		// Select count
 		int count = getRecordsCount(filter);
@@ -36,17 +40,18 @@ public class EntryGeoTimeLineReporter extends BaseReporter {
 		while(itr.hasNext()) {
 			Row row = itr.next();
 			
-			// Pager check -->
+			// Pager check 
 			// This code was written as a result of unsuccessful use of paging with Cassandra, once you overcome this - 
 			// Please remove this code
-			if(i >= pageIdx * pageSize)
-				break;
-			
-			boolean inRange = (i >= (pageIdx - 1) * pageSize);
-			i++;
-			if(!inRange)
-				continue;
-			// <-- End of pager check
+			if(!orderByPlays) {
+				if(i >= pageIdx * pageSize)
+					break;
+				
+				boolean inRange = (i >= (pageIdx - 1) * pageSize);
+				i++;
+				if(!inRange)
+					continue;
+			}
 			
 			LiveEntryLocationEventDAO dao = new LiveEntryLocationEventDAO(row);
 			
@@ -68,7 +73,33 @@ public class EntryGeoTimeLineReporter extends BaseReporter {
 			result.add(res);
 		}
 		
+		if(orderByPlays) 
+			result = orderByPlays(pageIdx, pageSize, count, result);
+		
 		return new LiveStatsListResponse(result, count);
+	}
+
+	/**
+	 * This function orders all the results by plays. Sadly, as cassandara doesn't support order by anything by the PK
+	 * we must read all results and order in memory.
+	 * @return
+	 */
+	protected List<LiveStats> orderByPlays(int pageIdx, int pageSize, int count,
+			List<LiveStats> result) {
+		if((pageIdx - 1) * pageSize > result.size()) {
+			return new ArrayList<LiveStats>(); 
+		}
+		
+		Collections.sort(result, new Comparator<LiveStats>() {
+
+			@Override
+			public int compare(LiveStats arg0, LiveStats arg1) {
+				return (int) (arg1.getPlays() - arg0.getPlays());
+			}
+		});
+		
+		result = result.subList((pageIdx - 1) * pageSize, Math.min(pageIdx * pageSize, count));
+		return result;
 	}
 
 	private int getRecordsCount(LiveReportInputFilter filter) {
