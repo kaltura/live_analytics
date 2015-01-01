@@ -118,7 +118,7 @@ public class StatsEvent implements Serializable {
 			            bufferTime = Double.parseDouble(paramsMap.containsKey("event:bufferTime") ? paramsMap.get("event:bufferTime") : "0");
 			            
 			            bitrate = Long.parseLong(paramsMap.containsKey("event:bitrate") ? paramsMap.get("event:bitrate") : "-1");
-			            referrer = paramsMap.containsKey("event:referrer") ? paramsMap.get("event:referrer") : null; 
+			            referrer = paramsMap.containsKey("event:referrer") ? paramsMap.get("event:referrer") : "N/A"; 
 			            bitrateCount = 1;
 			            if (bitrate < 0)
 			            {
