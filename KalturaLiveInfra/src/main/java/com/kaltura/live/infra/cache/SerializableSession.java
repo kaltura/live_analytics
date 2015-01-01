@@ -49,14 +49,15 @@ public class SerializableSession implements Externalizable {
 		boolean success = false;
 		do {
 			try {
-				session.execute(statement);
 				++retriesCount;
+				session.execute(statement);
 				success = true;
 			} catch (DriverException e) {
 				if (retriesCount >= retries) {
 					LOG.error("Failed to execute statement after " + retries + "retries with the following exception: " + e.getMessage()) ;
 					throw new KalturaInternalException(e);
 				}
+				LOG.warn("Failed to execute statement, try #" + retriesCount + "with the following exception: "+ e.getMessage()) ;
 			}
 		} while (!success);
 	}
