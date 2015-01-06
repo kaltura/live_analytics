@@ -53,10 +53,10 @@ public class EntryGeoTimeLineReporter extends BaseReporter {
 			GeoTimeLiveStats res = new GeoTimeLiveStats();
 			res.setEntryId(dao.getEntryId());
 			
-			Coordinate country = GeographicalLocatorsCache.getCountryLocator().getCountryCoordinates(dao.getCountry());
+			Coordinate country = GeographicalLocatorsCache.getCountryLocator().getCountryCoordinates(dao.getCountry().toUpperCase());
 			res.setCountry(country);
 			
-			Coordinate city = GeographicalLocatorsCache.getCityLocator().getCityCoordinates(dao.getCountry(), dao.getCity());
+			Coordinate city = GeographicalLocatorsCache.getCityLocator().getCityCoordinates(dao.getCountry().toUpperCase(), dao.getCity().toUpperCase());
 			res.setCity(city);
 			
 			res.setTimestamp(dao.getEventTime().getTime() / 1000);
