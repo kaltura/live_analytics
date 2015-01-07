@@ -21,6 +21,8 @@ public class LiveEntryPeakDAO extends LiveEventDAO {
 	protected Long audience;
 	
 	private static Logger LOG = LoggerFactory.getLogger(LiveEntryPeakDAO.class); 
+	
+	private static final int PAEK_AGGR_TTL = 60 * 60 *37;
 
 		
 	public LiveEntryPeakDAO() {
@@ -54,7 +56,7 @@ public class LiveEntryPeakDAO extends LiveEventDAO {
 
 	@Override
 	protected int getTTL() {
-		return 60 * 60 * 37;
+		return PAEK_AGGR_TTL;
 	}
 
 	@Override
