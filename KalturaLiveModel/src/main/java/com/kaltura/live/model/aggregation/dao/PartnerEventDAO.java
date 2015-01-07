@@ -67,7 +67,7 @@ public class PartnerEventDAO extends LiveEventDAO {
 
 	@Override
 	protected int getTTL() {
-		return AGGR_TTL + 1;
+		return ttl;
 	}
 
 }
