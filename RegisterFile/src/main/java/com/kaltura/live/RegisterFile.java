@@ -2,6 +2,7 @@ package com.kaltura.live;
 
 import java.io.FileInputStream;
 import java.nio.ByteBuffer;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.apache.commons.io.IOUtils;
@@ -30,22 +31,30 @@ public class RegisterFile {
     	cassandraSession = new SerializableSession(node);
     }
     
-    private long getTimeStamp(String fileName) {
+    /**
+     * return the date and hour from the file name which is HOSTNAME-yyyyMMddHHMMSS 
+     * @param fileName
+     * @return
+     * @throws Exception
+     */
+	private Date getFileDateTime(String fileName) throws Exception {
     	String[] parts = fileName.split("-");
-    	long longUnixSeconds = Long.parseLong(parts[1]);
-    	return DateUtils.roundHourDate(new Date(longUnixSeconds * 1000L)).getTime();
-    	 
+    	
+    	String fileTime = parts[parts.length - 1];
+    	String dateHour= fileTime.substring(0,10);
+    	SimpleDateFormat hourFormat = new SimpleDateFormat("yyyyMMddHH");
+    	return hourFormat.parse(dateHour);
     }
     
     public void insertIntoTable(String key, byte[] data) {
     	try {
-	    	long hourKey = getTimeStamp(key);
+	    	Date hourKey = getFileDateTime(key);
 	    	PreparedStatement statement = cassandraSession.getSession().prepare("INSERT INTO kaltura_live.log_data (file_id,data) VALUES (?, ?) USING TTL ?");
 	    	BoundStatement boundStatement = new BoundStatement(statement);
 	        cassandraSession.execute(boundStatement.bind(key,ByteBuffer.wrap(data), LOGS_TTL), RETRIES);
 	    	statement = cassandraSession.getSession().prepare("INSERT INTO kaltura_live.log_files (hour_id,file_id) VALUES (?, ?) USING TTL ?");
 	        boundStatement = new BoundStatement(statement);
-	        cassandraSession.execute(boundStatement.bind(new Date(hourKey),key, LOGS_TTL), RETRIES);
+	        cassandraSession.execute(boundStatement.bind(hourKey,key, LOGS_TTL), RETRIES);
     	} catch (Exception ex) {
     		LOG.error("Failed to insert log file: " + key, ex);
     	}
@@ -90,8 +99,8 @@ public class RegisterFile {
     
     public static void main(String[] args) {
     	
-    	String node = "pa-erans";
-    	String fileName = "access_log";
+    	String node = "";
+    	String fileName = "";
     	String logsFolder = "";
     	
     	if (args.length == 1)
@@ -121,28 +130,5 @@ public class RegisterFile {
 				insertFile.disconnect();
     	}
 		
-		/**
-		// TODO - remove hack and get file name as argument
-		try {
-			
-			int startTime = 1387121430;
-			while (startTime <= 1387125000) {
-				
-				//String fileName = formatDate.format(c.getTime());
-				fileName = Integer.toString(startTime) + "_live_stats";
-				insertFile.insertIntoTable(fileName, readFile("/home/dev/orly/" + fileName + ".gz"));
-				startTime = startTime + 30;
-				Thread.sleep(30*1000);
-			}
-			
-		
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-			insertFile.disconnect();
-		}
-		*/
-
 	}
 }
