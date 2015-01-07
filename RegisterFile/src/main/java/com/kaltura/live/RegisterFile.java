@@ -31,14 +31,13 @@ public class RegisterFile {
     	cassandraSession = new SerializableSession(node);
     }
     
-    private long getTimeStamp(String fileName) {
-    	String[] parts = fileName.split("-");
-    	long longUnixSeconds = Long.parseLong(parts[1]);
-    	return DateUtils.roundHourDate(new Date(longUnixSeconds * 1000L)).getTime();
-    	 
-    }
-    
-	private Date getFileHour(String fileName) throws Exception {
+    /**
+     * return the date and hour from the file name which is HOSTNAME-yyyyMMddHHMMSS 
+     * @param fileName
+     * @return
+     * @throws Exception
+     */
+	private Date getFileDateTime(String fileName) throws Exception {
     	String[] parts = fileName.split("-");
     	
     	String fileTime = parts[parts.length - 1];
@@ -49,7 +48,7 @@ public class RegisterFile {
     
     public void insertIntoTable(String key, byte[] data) {
     	try {
-	    	Date hourKey = getFileHour(key);
+	    	Date hourKey = getFileDateTime(key);
 	    	PreparedStatement statement = cassandraSession.getSession().prepare("INSERT INTO kaltura_live.log_data (file_id,data) VALUES (?, ?) USING TTL ?");
 	    	BoundStatement boundStatement = new BoundStatement(statement);
 	        cassandraSession.execute(boundStatement.bind(key,ByteBuffer.wrap(data), LOGS_TTL), RETRIES);
