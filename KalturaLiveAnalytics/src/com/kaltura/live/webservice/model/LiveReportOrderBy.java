@@ -2,21 +2,22 @@ package com.kaltura.live.webservice.model;
 
 public enum LiveReportOrderBy {
 
-	EVENT_TIME_DESC(0), PLAYS_DESC(1);
+	EVENT_TIME_DESC("-eventTime"), 
+	PLAYS_DESC("-plays");
 	
-	protected final int value;
+	protected final String value;
 	
-	private LiveReportOrderBy(int value) {
+	private LiveReportOrderBy(String value) {
 		this.value = value;
 	}
 	
-	public int getValue() {
+	public String getValue() {
 		return value;
 	}
 	
-	public static LiveReportOrderBy getByValue(int value) {
+	public static LiveReportOrderBy getByValue(String value) {
 		for (LiveReportOrderBy orderBy : LiveReportOrderBy.values()) {
-			if(orderBy.getValue() == value)
+			if(value.equals(orderBy.getValue()))
 				return orderBy;
 		}
 		return null;

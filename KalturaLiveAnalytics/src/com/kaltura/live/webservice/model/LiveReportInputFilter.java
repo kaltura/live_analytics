@@ -50,11 +50,11 @@ public class LiveReportInputFilter {
 		this.partnerId = partnerId;
 	}
 	
-	public int getOrderBy() {
+	public String getOrderBy() {
 		return orderByType.getValue();
 	}
 	
-	public void setOrderBy(int orderBy) {
+	public void setOrderBy(String orderBy) {
 		this.orderByType = LiveReportOrderBy.getByValue(orderBy);
 	}
 	
