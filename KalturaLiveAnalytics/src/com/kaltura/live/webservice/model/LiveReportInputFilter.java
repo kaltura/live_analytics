@@ -1,5 +1,6 @@
 package com.kaltura.live.webservice.model;
 
+
 public class LiveReportInputFilter {
 	
 	protected String entryIds;
@@ -9,6 +10,8 @@ public class LiveReportInputFilter {
 	
 	protected long fromTime;
 	protected long toTime;
+	
+	protected LiveReportOrderBy orderByType;
 	
 	public LiveReportInputFilter() {
 		super();
@@ -46,6 +49,19 @@ public class LiveReportInputFilter {
 	public void setPartnerId(long partnerId) {
 		this.partnerId = partnerId;
 	}
+	
+	public String getOrderBy() {
+		return orderByType.getValue();
+	}
+	
+	public void setOrderBy(String orderBy) {
+		this.orderByType = LiveReportOrderBy.getByValue(orderBy);
+	}
+	
+	public LiveReportOrderBy getOrderByType() {
+		return orderByType;
+	}
+
 	public void validate() throws AnalyticsException {
 		 if((entryIds != null) && (!entryIds.matches("^[\\w_, ]*"))) {
 			 throw new AnalyticsException("Entry ids contains illegal string request.");
