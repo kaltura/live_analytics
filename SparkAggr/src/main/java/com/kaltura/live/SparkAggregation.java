@@ -160,7 +160,7 @@ public class SparkAggregation {
 
 				long endTime = System.currentTimeMillis();
 				DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-				Date date = new Date();				 
+				Date date = new Date();
 				LOG.debug(dateFormat.format(date) + " : Iteration time (msec): "
 						+ (endTime - startTime));
 				
@@ -178,12 +178,14 @@ public class SparkAggregation {
 		System.setProperty("spark.default.parallelism", config.getSparkParallelism());
 		System.setProperty("spark.cores.max", config.getSparkMaxCores());
 		System.setProperty("spark.executor.memory", config.getSparkExectorMem());
-		
-		String[] jars = { config.getRepositoryHome() + "/spark-aggr-1.0.0.jar",
-				 config.getRepositoryHome() + "/cassandra-driver-core-2.0.7.jar",
-				 config.getRepositoryHome() + "/live-model-1.0.0.jar", 
-				 config.getRepositoryHome() + "/live-infra-1.0.0.jar",
-				 config.getRepositoryHome() + "/ip-2-location-1.0.0.jar" };
+
+		String[] jars = { config.getRepositoryHome() + "/spark-aggr.jar",
+				config.getRepositoryHome() + "/cassandra-driver-core-2.0.7.jar"};
+//		String[] jars = { config.getRepositoryHome() + "/spark-aggr-1.0.0.jar",
+//				 config.getRepositoryHome() + "/cassandra-driver-core-2.0.7.jar",
+//				 config.getRepositoryHome() + "/live-model-1.0.0.jar",
+//				 config.getRepositoryHome() + "/live-infra-1.0.0.jar",
+//				 config.getRepositoryHome() + "/ip-2-location-1.0.0.jar" };
 		Map<String, String> env = new HashMap<String, String>();
 		env.put("KALTURA_CONF_PATH", System.getenv().get("KALTURA_CONF_PATH"));
 		
