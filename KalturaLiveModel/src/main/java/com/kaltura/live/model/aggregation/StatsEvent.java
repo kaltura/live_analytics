@@ -113,28 +113,49 @@ public class StatsEvent implements Serializable {
 	            Map<String, String> paramsMap = RequestUtils.splitQuery(query);
 	            if (paramsMap != null && paramsMap.size() > 0) {
 	            	try {
-			            entryId = paramsMap.containsKey("event:entryId") ? paramsMap.get("event:entryId") : "N/A";
-			            partnerId = Integer.parseInt(paramsMap.containsKey("event:partnerId") ? paramsMap.get("event:partnerId") : "0");
-			            bufferTime = Double.parseDouble(paramsMap.containsKey("event:bufferTime") ? paramsMap.get("event:bufferTime") : "0");
-			            
-			            bitrate = Long.parseLong(paramsMap.containsKey("event:bitrate") ? paramsMap.get("event:bitrate") : "-1");
-			            referrer = paramsMap.containsKey("event:referrer") ? paramsMap.get("event:referrer") : "N/A"; 
-			            bitrateCount = 1;
-			            if (bitrate < 0)
-			            {
-			            	bitrate = 0;
-			            	bitrateCount = 0;
-			            }
-			            int eventIndex = Integer.parseInt(paramsMap.containsKey("event:eventIndex") ? paramsMap.get("event:eventIndex") : "0");
-			            plays = eventIndex == 1 ? 1 : 0;
-			            alive = eventIndex > 1 ? 1 : 0;
-			            long clientEventTime = Long.parseLong(paramsMap.containsKey("event:startTime") ? paramsMap.get("event:startTime") : "0");
-			            
-			            Calendar calendar = Calendar.getInstance();
-			            calendar.setTimeInMillis(clientEventTime);
-			            int seconds = calendar.get(Calendar.SECOND);
-			            seconds = seconds % 10;
-			            int offset = 5 - seconds;
+						entryId = paramsMap.containsKey("event:entryId") ? paramsMap.get("event:entryId") : "N/A";
+						partnerId = Integer.parseInt(paramsMap.containsKey("event:partnerId") ? paramsMap.get("event:partnerId") : "0");
+						bufferTime = Double.parseDouble(paramsMap.containsKey("event:bufferTime") ? paramsMap.get("event:bufferTime") : "0");
+
+						bitrate = Long.parseLong(paramsMap.containsKey("event:bitrate") ? paramsMap.get("event:bitrate") : "-1");
+						referrer = paramsMap.containsKey("event:referrer") ? paramsMap.get("event:referrer") : "N/A";
+						bitrateCount = 1;
+						if (bitrate < 0) {
+							bitrate = 0;
+							bitrateCount = 0;
+						}
+						int eventIndex = Integer.parseInt(paramsMap.containsKey("event:eventIndex") ? paramsMap.get("event:eventIndex") : "0");
+						plays = eventIndex == 1 ? 1 : 0;
+						alive = eventIndex > 1 ? 1 : 0;
+
+						int seconds = 0; // default
+						if ( paramsMap.containsKey("event:startTime") )
+						{
+							String clientEventTime = paramsMap.get("event:startTime");
+
+							if ( clientEventTime.length() > 10 )
+							{
+//								int gmtPos = clientEventTime.length() - 3;
+//
+//								if ( clientEventTime.substring(gmtPos).equalsIgnoreCase("GMT") )
+
+								//this check is for avoiding fault when using old viewer sending long startTime format
+								if ( clientEventTime.lastIndexOf(':') >= 0 )
+								{
+									String secondsString = clientEventTime.substring(clientEventTime.lastIndexOf(':') + 1,
+											clientEventTime.lastIndexOf(' '));
+									seconds = Integer.parseInt(secondsString);
+								}
+							}
+						}
+						//String clientEventTime = paramsMap.containsKey("event:startTime") ? paramsMap.get("event:startTime") : "0";
+
+			            //Calendar calendar = Calendar.getInstance();
+			            //calendar.setTimeInMillis(clientEventTime);
+			            //int seconds = calendar.get(Calendar.SECOND);
+			            //seconds = seconds % 10;
+			            int secondsLastDigit = seconds % 10;
+						int offset = 5 - secondsLastDigit;
 			            
 			            eventTime = DateUtils.roundDate(date, offset);
 			            
