@@ -88,8 +88,9 @@ public class StatsEvent implements Serializable {
 				// TODO Auto-generated catch block
 				LOG.warn("Failed to decode query string: " + query, e );
 			}
-            
-            if (query.indexOf("service=LiveStats") > -1 && query.indexOf("action=collect") > -1) {
+
+			if (query.toLowerCase().indexOf("service=livestats") > -1 && query.toLowerCase().indexOf("action=collect") > -1)
+            //if (query.indexOf("service=LiveStats") > -1 && query.indexOf("action=collect") > -1) {
 	            ipAddress = m.group(1);
 	           
 	            try {
@@ -128,7 +129,7 @@ public class StatsEvent implements Serializable {
 						plays = eventIndex == 1 ? 1 : 0;
 						alive = eventIndex > 1 ? 1 : 0;
 
-						int seconds = 0; // default
+						int seconds = 5; // default 5 so that offset is 0
 						if ( paramsMap.containsKey("event:startTime") )
 						{
 							String clientEventTime = paramsMap.get("event:startTime");
