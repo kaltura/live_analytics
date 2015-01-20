@@ -26,7 +26,7 @@ public class EntryGeoTimeLineReporter extends BaseReporter {
 		
 		int pageIdx = (pager == null) ? 1 : pager.getPageIndex();
 		int pageSize = (pager == null) ? Integer.MAX_VALUE : pager.getPageSize();
-		boolean orderByPlays = LiveReportOrderBy.PLAYS_DESC.equals(filter.getOrderByType());
+		boolean specificOrderBy = !LiveReportOrderBy.EVENT_TIME_DESC.equals(filter.getOrderByType());
 		
 		// Select count
 		int count = getRecordsCount(filter);
@@ -43,7 +43,7 @@ public class EntryGeoTimeLineReporter extends BaseReporter {
 			// Pager check 
 			// This code was written as a result of unsuccessful use of paging with Cassandra, once you overcome this - 
 			// Please remove this code
-			if(!orderByPlays) {
+			if(!specificOrderBy) {
 				if(i >= pageIdx * pageSize)
 					break;
 				
@@ -73,8 +73,8 @@ public class EntryGeoTimeLineReporter extends BaseReporter {
 			result.add(res);
 		}
 		
-		if(orderByPlays) 
-			result = orderByPlays(pageIdx, pageSize, count, result);
+		if(specificOrderBy) 
+			result = orderBy(filter.getOrderByType(), pageIdx, pageSize, count, result);
 		
 		return new LiveStatsListResponse(result, count);
 	}
@@ -84,7 +84,7 @@ public class EntryGeoTimeLineReporter extends BaseReporter {
 	 * we must read all results and order in memory.
 	 * @return
 	 */
-	protected List<LiveStats> orderByPlays(int pageIdx, int pageSize, int count,
+	protected List<LiveStats> orderBy(final LiveReportOrderBy liveReportOrderBy, int pageIdx, int pageSize, int count,
 			List<LiveStats> result) {
 		if((pageIdx - 1) * pageSize > result.size()) {
 			return new ArrayList<LiveStats>(); 
@@ -94,7 +94,11 @@ public class EntryGeoTimeLineReporter extends BaseReporter {
 
 			@Override
 			public int compare(LiveStats arg0, LiveStats arg1) {
-				return (int) (arg1.getPlays() - arg0.getPlays());
+				if(LiveReportOrderBy.PLAYS_DESC.equals(liveReportOrderBy))
+					return (int) (arg1.getPlays() - arg0.getPlays());
+				if(LiveReportOrderBy.AUDIENCE_DESC.equals(liveReportOrderBy))
+					return (int) (arg1.getAudience() - arg0.getAudience());
+				return 0;
 			}
 		});
 		

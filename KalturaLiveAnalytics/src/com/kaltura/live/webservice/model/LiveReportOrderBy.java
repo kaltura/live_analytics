@@ -3,7 +3,9 @@ package com.kaltura.live.webservice.model;
 public enum LiveReportOrderBy {
 
 	EVENT_TIME_DESC("-eventTime"), 
-	PLAYS_DESC("-plays");
+	PLAYS_DESC("-plays"),
+	AUDIENCE_DESC("-audience");
+	
 	
 	protected final String value;
 	
@@ -17,10 +19,10 @@ public enum LiveReportOrderBy {
 	
 	public static LiveReportOrderBy getByValue(String value) {
 		for (LiveReportOrderBy orderBy : LiveReportOrderBy.values()) {
-			if(value.equals(orderBy.getValue()))
+			if(orderBy.getValue().equals(value))
 				return orderBy;
 		}
-		return null;
+		return EVENT_TIME_DESC;
 	}
 	
 }
