@@ -89,7 +89,7 @@ public class StatsEvent implements Serializable {
 				LOG.warn("Failed to decode query string: " + query, e );
 			}
 
-			if (query.toLowerCase().indexOf("service=livestats") > -1 && query.toLowerCase().indexOf("action=collect") > -1)
+			if (query.toLowerCase().indexOf("service=livestats") > -1 && query.toLowerCase().indexOf("action=collect") > -1) {
             //if (query.indexOf("service=LiveStats") > -1 && query.indexOf("action=collect") > -1) {
 	            ipAddress = m.group(1);
 	           
