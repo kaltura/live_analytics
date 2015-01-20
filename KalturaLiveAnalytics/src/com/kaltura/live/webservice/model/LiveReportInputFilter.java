@@ -11,7 +11,7 @@ public class LiveReportInputFilter {
 	protected long fromTime;
 	protected long toTime;
 	
-	protected LiveReportOrderBy orderByType;
+	protected LiveReportOrderBy orderByType = LiveReportOrderBy.EVENT_TIME_DESC;
 	
 	public LiveReportInputFilter() {
 		super();
