@@ -8,13 +8,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.kaltura.live.model.aggregation.StatsEvent;
-//import com.kaltura.live.model.aggregation.filter.StatsEventsHourlyFilter;
 import com.kaltura.live.model.aggregation.filter.StatsEventsFilter;
 import com.kaltura.live.model.aggregation.functions.map.LiveEventMap;
 import com.kaltura.live.model.aggregation.functions.reduce.LiveEventReduce;
 import com.kaltura.live.model.aggregation.functions.save.LiveEventSave;
 import com.kaltura.live.model.aggregation.keys.EventKey;
 
+//imp.. com.kaltura.live.model.aggregation.filter.StatsEventsHourlyFilter;
 /**
  * This thread is responsible for aggregating results over a given event list and save them
  */
@@ -69,7 +69,7 @@ public abstract class LiveAggregationCycle implements /*Runnable,*/ Serializable
 
 		long endProcessTime = System.currentTimeMillis();
 
-		LOG.info("LiveAggregationCycle " + "  process time (msec): " + (endProcessTime - startTime));
+		LOG.warn("LiveAggregationCycle " + "  process time (msec): " + (endProcessTime - startTime));
 
         JavaRDD<Boolean> result = mergedEventsByKey.mapPartitions(saveFunction);
 
@@ -82,7 +82,7 @@ public abstract class LiveAggregationCycle implements /*Runnable,*/ Serializable
 
 		long endSaveTime = System.currentTimeMillis();
 
-		LOG.info("LiveAggregationCycle " + "  save time (msec): " + (endSaveTime - startTime));
+		LOG.warn("LiveAggregationCycle " + "  save time (msec): " + (endSaveTime - startTime));
 
         if (aggregatedEvents != null)
                 aggregatedEvents.unpersist();
