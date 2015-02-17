@@ -38,14 +38,14 @@ public class LiveEntryLocationEventDAO extends LiveEventDAO {
 	
 	@Override
 	protected List<String> getTableSpecificFields() {
-		return java.util.Arrays.asList(new String[]{"country", "city"});
+		return java.util.Arrays.<String>asList("country", "city");
 	}
 	
 	public void saveOrUpdate(SerializableSession session, StatsEvent aggregatedResult) {
 		createStatement(session);
 		BoundStatement boundStatement = new BoundStatement(statement);
 		try {
-			session.execute(boundStatement.bind(aggregatedResult.getEntryId(), aggregatedResult.getEventTime(), aggregatedResult.getCountry(), aggregatedResult.getCity(), aggregatedResult.getPlays(), aggregatedResult.getAlive(), aggregatedResult.getBitrate(), aggregatedResult.getBitrateCount(), aggregatedResult.getBufferTime()), RETRIES_NUM);
+			session.execute(boundStatement.bind(aggregatedResult.getEntryId(), aggregatedResult.getEventTime(), aggregatedResult.getCountry(), aggregatedResult.getCity(), aggregatedResult.getPlays(), aggregatedResult.getAlive(), aggregatedResult.getDVRAlive(), aggregatedResult.getBitrate(), aggregatedResult.getBitrateCount(), aggregatedResult.getBufferTime()), RETRIES_NUM);
 		} catch (Exception ex) {
 			LOG.error("Failed to save location aggregation result for entry [" + aggregatedResult.getEntryId() + "] country [" + aggregatedResult.getCountry() + "] city [ " + aggregatedResult.getCity() + "] at [" + aggregatedResult.getEventTime() + "]", ex);
 		}

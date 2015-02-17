@@ -29,7 +29,6 @@ public abstract class LiveDAO implements Serializable {
 	
 	/**
 	 * Constructor based on reads event.
-	 * @param row
 	 */
 	public LiveDAO(Row row) {
 		
@@ -64,7 +63,6 @@ public abstract class LiveDAO implements Serializable {
 	/**
 	 * Saves a single event to a given cassandra session
 	 * @param session The session connecting to the cassandra
-	 * @param event The event we'd like to save
 	 */
 	abstract public void saveOrUpdate(SerializableSession session, StatsEvent aggregatedResult);
 	
