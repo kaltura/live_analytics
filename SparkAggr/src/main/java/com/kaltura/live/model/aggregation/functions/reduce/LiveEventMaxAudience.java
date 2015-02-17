@@ -10,9 +10,9 @@ public class LiveEventMaxAudience implements Function2<StatsEvent, StatsEvent, S
 	private static final long serialVersionUID = 6275764970460440047L;
 
 	@Override
-	public StatsEvent call(StatsEvent v1, StatsEvent v2) throws Exception {
-		// TODO Auto-generated method stub
-		return v1.getAlive() > v2.getAlive()  ? v1 : v2;
+	public StatsEvent call(StatsEvent stats, StatsEvent stats2) throws Exception {
+        return stats.maxAudience(stats2);
+		//return v1.getAlive() > v2.getAlive()  ? v1 : v2;
 			
 	} 
 

@@ -51,7 +51,7 @@ public class LiveEntryEventDAO extends LiveEventDAO {
 		createStatement(session);
 		BoundStatement boundStatement = new BoundStatement(statement);
 		try {
-			session.execute(boundStatement.bind(aggregatedResult.getEntryId(), aggregatedResult.getEventTime(), aggregatedResult.getPlays(), aggregatedResult.getAlive(), aggregatedResult.getBitrate(), aggregatedResult.getBitrateCount(), aggregatedResult.getBufferTime()), RETRIES_NUM);
+			session.execute(boundStatement.bind(aggregatedResult.getEntryId(), aggregatedResult.getEventTime(), aggregatedResult.getPlays(), aggregatedResult.getAlive(), aggregatedResult.getDVRAlive(), aggregatedResult.getBitrate(), aggregatedResult.getBitrateCount(), aggregatedResult.getBufferTime()), RETRIES_NUM);
 		} catch (Exception ex) {
 			LOG.error("Failed to save aggregation result for entry [" + aggregatedResult.getEntryId() + "] at [" + aggregatedResult.getEventTime() + "]", ex);
 		}

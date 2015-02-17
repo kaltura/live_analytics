@@ -54,25 +54,37 @@ public abstract class LiveAggregationCycle implements /*Runnable,*/ Serializable
 	
 	//@Override
 	public void run() {
-		
+
+		long startTime = System.currentTimeMillis();
+
 	    JavaPairRDD<EventKey, StatsEvent> eventByKeyMap = events.mapToPair(mapFunction);
 
         if (aggregatedEvents != null) {
                 eventByKeyMap = eventByKeyMap.union(aggregatedEvents);
         }
 
-
         JavaPairRDD<EventKey, StatsEvent> mergedEventsByKey = eventByKeyMap.reduceByKey(reduceFunction);
+
+
+		mergedEventsByKey.count(); // added to force action for time calculation
+
+		long endProcessTime = System.currentTimeMillis();
+
+		LOG.info("LiveAggregationCycle " + "  process time (msec): " + (endProcessTime - startTime));
+
         JavaRDD<Boolean> result = mergedEventsByKey.mapPartitions(saveFunction);
 
         // filter old hours aggregated results
         mergedEventsByKey = mergedEventsByKey.filter(getFilterFunction());
-        if (iterCount > 50) {
+
+		if (iterCount > 50) {
                 result.checkpoint();
         }
         result.count();
-        
-        
+
+		long endSaveTime = System.currentTimeMillis();
+
+		LOG.info("LiveAggregationCycle " + "  save time (msec): " + (endSaveTime - startTime));
 
         if (aggregatedEvents != null)
                 aggregatedEvents.unpersist();
