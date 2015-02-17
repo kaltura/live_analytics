@@ -8,13 +8,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.kaltura.live.model.aggregation.StatsEvent;
-import com.kaltura.live.model.aggregation.filter.StatsEventsHourlyFilter;
 import com.kaltura.live.model.aggregation.filter.StatsEventsFilter;
 import com.kaltura.live.model.aggregation.functions.map.LiveEventMap;
 import com.kaltura.live.model.aggregation.functions.reduce.LiveEventReduce;
 import com.kaltura.live.model.aggregation.functions.save.LiveEventSave;
 import com.kaltura.live.model.aggregation.keys.EventKey;
 
+//imp.. com.kaltura.live.model.aggregation.filter.StatsEventsHourlyFilter;
 /**
  * This thread is responsible for aggregating results over a given event list and save them
  */
@@ -54,15 +54,23 @@ public abstract class LiveAggregationCycle implements /*Runnable,*/ Serializable
 	
 	//@Override
 	public void run() {
-		
+
+		long startTime = System.currentTimeMillis();
+
 	    JavaPairRDD<EventKey, StatsEvent> eventByKeyMap = events.mapToPair(mapFunction);
 
         if (aggregatedEvents != null) {
                 eventByKeyMap = eventByKeyMap.union(aggregatedEvents);
         }
 
-
         JavaPairRDD<EventKey, StatsEvent> mergedEventsByKey = eventByKeyMap.reduceByKey(reduceFunction);
+
+		mergedEventsByKey.count(); // added to force action for time calculation
+
+		long endProcessTime = System.currentTimeMillis();
+
+		LOG.warn("LiveAggregationCycle " + "  process time (msec): " + (endProcessTime - startTime));
+
         JavaRDD<Boolean> result = mergedEventsByKey.mapPartitions(saveFunction);
 
         // filter old hours aggregated results
@@ -71,8 +79,10 @@ public abstract class LiveAggregationCycle implements /*Runnable,*/ Serializable
                 result.checkpoint();
         }
         result.count();
-        
-        
+
+		long endSaveTime = System.currentTimeMillis();
+
+		LOG.warn("LiveAggregationCycle " + "  save time (msec): " + (endSaveTime - startTime));
 
         if (aggregatedEvents != null)
                 aggregatedEvents.unpersist();

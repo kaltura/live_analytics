@@ -67,16 +67,18 @@ public class SparkAggregation {
 		HourlyLiveAggregationCycle referrerHourlyAggr = new HourlyLiveAggregationCycle(new LiveEntryReferrerMap(), new LiveEventReduce(), new LiveEntryReferrerSave(session));
 		HourlyLiveAggregationCycle partnerHourlyAggr = new HourlyLiveAggregationCycle(new PartnerHourlyMap(), new LiveEventReduce(), new PartnerHourlySave(session));
 		
-		long executionStartTime = System.currentTimeMillis();
+//		long executionStartTime = System.currentTimeMillis();
 
 		JavaRDD<String> loadedDates = null;
-		Set<Long> hoursToLoad = new HashSet<Long>();
+		Set<Long> hoursToLoad = new HashSet<>();
 		int iterCount = 0;
-		boolean resume = true;
-		while (resume) {
+
+		//boolean resume = true;
+
+		while ( !checkNeedExit() ) {
 			
 			hoursToLoad.add(DateUtils.getCurrentHourInMillis());
-			List<Long> hoursToLoadList = new ArrayList<Long>();
+			List<Long> hoursToLoadList = new ArrayList<>();
 			hoursToLoadList.addAll(hoursToLoad);
 			JavaRDD<Long> dates = jsc.parallelize(hoursToLoadList, 8);
 			
@@ -121,39 +123,47 @@ public class SparkAggregation {
 								new StatsEventMap(config.getIp2locationPath()));
 				
 				loadedEvents.cache();
-				LOG.debug("Before loadedEvents.count() - map log lines to StatsEvent");
+				LOG.warn("Before loadedEvents.count() - map log lines to StatsEvent");
 				long loadedEventCount = loadedEvents.count();
-				LOG.debug("After loadedEvents.count()");
+				LOG.warn("After loadedEvents.count()" + loadedEventCount);
 
 				if (loadedEventCount > 0)
 				{
+					LOG.info("EventsCycle num of events: " + loadedEventCount);
+
 					LOG.debug("Start Aggregate new events");
+
 					long aggrStartTime = System.currentTimeMillis();
+
 					entryAggr.init(loadedEvents);
 					entryHourlyAggr.init(loadedEvents);
 					locationEntryAggr.init(loadedEvents);
 					referrerHourlyAggr.init(loadedEvents);
 					partnerHourlyAggr.init(loadedEvents);
-					
+
 					LOG.debug("Before entry aggregation");
 					entryAggr.run();
 					LOG.debug("After entry aggregation");
+
 					LOG.debug("Before entry hourly aggregation");
 					entryHourlyAggr.run();
 					LOG.debug("After entry hourly aggregation");
+
 					LOG.debug("Before location aggregation");
 					locationEntryAggr.run();
 					LOG.debug("After location aggregation");
+
 					LOG.debug("Before referrer aggregation");
 					referrerHourlyAggr.run();
 					LOG.debug("After referrer aggregation");
+
 					LOG.debug("Before partner aggregation");
 					partnerHourlyAggr.run();
+
 					LOG.debug("After partner aggregation");
 					long aggrEndTime = System.currentTimeMillis();
-									 
-					LOG.debug("Aggregation Iteration time (msec): "
-							+ (aggrEndTime - aggrStartTime));
+
+					LOG.debug("Aggregation Iteration time (msec): " + (aggrEndTime - aggrStartTime));
 				}
 				
 				loadedEvents.unpersist();
@@ -163,7 +173,6 @@ public class SparkAggregation {
 				Date date = new Date();
 				LOG.debug(dateFormat.format(date) + " : Iteration time (msec): "
 						+ (endTime - startTime));
-				
 			}
 
 		}
@@ -173,6 +182,10 @@ public class SparkAggregation {
 
 	}
 
+	private static boolean checkNeedExit() {
+		return false;
+	}
+
 	private static JavaSparkContext initializeEnvironment() {
 		LiveConfiguration config = LiveConfiguration.instance();
 		System.setProperty("spark.default.parallelism", config.getSparkParallelism());
@@ -180,13 +193,14 @@ public class SparkAggregation {
 		System.setProperty("spark.executor.memory", config.getSparkExectorMem());
 
 		String[] jars = { config.getRepositoryHome() + "/spark-aggr.jar",
-				config.getRepositoryHome() + "/cassandra-driver-core-2.0.7.jar"};
-//		String[] jars = { config.getRepositoryHome() + "/spark-aggr-1.0.0.jar",
-//				 config.getRepositoryHome() + "/cassandra-driver-core-2.0.7.jar",
-//				 config.getRepositoryHome() + "/live-model-1.0.0.jar",
-//				 config.getRepositoryHome() + "/live-infra-1.0.0.jar",
-//				 config.getRepositoryHome() + "/ip-2-location-1.0.0.jar" };
-		Map<String, String> env = new HashMap<String, String>();
+				config.getRepositoryHome() + "/cassandra-driver-core-2.1.0.jar",
+//				config.getRepositoryHome() + "/netty-3.9.0.Final.jar",
+//				config.getRepositoryHome() + "/guava-16.0.1.jar",
+//				config.getRepositoryHome() + "/metrics-core-3.0.0.jar",
+//				config.getRepositoryHome() + "/slf4j-api-1.7.5.jar"
+		};
+
+		Map<String, String> env = new HashMap<>();
 		env.put("KALTURA_CONF_PATH", System.getenv().get("KALTURA_CONF_PATH"));
 		
 		final JavaSparkContext jsc = new JavaSparkContext(config.getSparkMaster(),

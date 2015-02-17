@@ -6,10 +6,12 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.datastax.driver.core.Cluster;
-import com.datastax.driver.core.Metadata;
-import com.datastax.driver.core.Session;
-import com.datastax.driver.core.exceptions.DriverException;
+import com.datastax.driver.core.*;
+import com.datastax.driver.core.policies.ConstantReconnectionPolicy;
+import com.datastax.driver.core.policies.DCAwareRoundRobinPolicy;
+import com.datastax.driver.core.policies.DefaultRetryPolicy;
+import com.datastax.driver.core.policies.TokenAwarePolicy;
+
 import com.kaltura.live.infra.exception.KalturaInternalException;
 
 public class SessionsCache {
@@ -30,7 +32,15 @@ public class SessionsCache {
 	
 	private static void connect(String node) throws KalturaInternalException {
 		try {
-	        Cluster cluster = Cluster.builder().addContactPoint(node).build();
+			String[] nodesArray = node.split(",");
+
+			Cluster cluster = Cluster.builder()
+					.addContactPoints(nodesArray)
+					.withReconnectionPolicy(new ConstantReconnectionPolicy(100L))
+					.withQueryOptions(new QueryOptions().setConsistencyLevel(ConsistencyLevel.ONE) )
+					.withRetryPolicy(DefaultRetryPolicy.INSTANCE)
+					.withLoadBalancingPolicy(new TokenAwarePolicy(new DCAwareRoundRobinPolicy()))
+					.build();
 	        
 	     // TODO - Discuss with Orly the possibility to connect to a given key-space cluster.connect(key-space)
 	        clusters.put(node, cluster);
