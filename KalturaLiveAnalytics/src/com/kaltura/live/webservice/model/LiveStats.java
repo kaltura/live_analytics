@@ -7,6 +7,7 @@ public class LiveStats {
 	
 	protected long plays;
 	protected long audience;
+    protected long dvrAudience;
 	protected long secondsViewed;
 	protected float bufferTime;
 	protected float avgBitrate;
@@ -16,11 +17,12 @@ public class LiveStats {
 		super();
 	}
 	
-	public LiveStats(long plays, long audience, long secondsViewed,
+	public LiveStats(long plays, long audience, long dvrAudience, long secondsViewed,
 			float bufferTime, float avgBitrate, long timestamp) {
 		super();
 		this.plays = plays;
 		this.audience = audience;
+        this.dvrAudience = dvrAudience;
 		this.secondsViewed = secondsViewed;
 		this.bufferTime = bufferTime;
 		this.avgBitrate = avgBitrate;
@@ -44,11 +46,19 @@ public class LiveStats {
 	}
 
 
+    public long getDvrAudience() {
+        return dvrAudience;
+    }
+
 
 	public void setAudience(long audience) {
 		this.audience = audience;
 	}
 
+
+    public void setDvrAudience(long dvrAudience) {
+        this.dvrAudience = dvrAudience;
+    }
 
 
 	public long getSecondsViewed() {
@@ -99,7 +109,7 @@ public class LiveStats {
 
 	@Override
 	public String toString() {
-		return "KalturaLiveStats [plays=" + plays + ", audience=" + audience
+		return "KalturaLiveStats [plays=" + plays + ", audience=" + audience + ", dvrAudience=" + dvrAudience
 				+ ", secondsViewed=" + secondsViewed + ", bufferTime="
 				+ bufferTime + ", avgBitrate=" + avgBitrate + ", timestamp="
 				+ timestamp + "]";

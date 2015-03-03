@@ -59,7 +59,7 @@ public class EntryTotalReporter extends BaseReporter {
 				map.put(key, new ReportsAggregator());
 			}
 			
-			map.get(key).aggregateResult(dao.getPlays(), dao.getAlive(), dao.getBufferTime(), dao.getBitrate(), dao.getBitrateCount());
+			map.get(key).aggregateResult(dao.getPlays(), dao.getAlive(), dao.getDVRAlive(), dao.getBufferTime(), dao.getBitrate(), dao.getBitrateCount());
 		}
 
 		List<LiveStats> result = new ArrayList<LiveStats>();
@@ -113,7 +113,7 @@ public class EntryTotalReporter extends BaseReporter {
 				map.put(key, new ReportsAggregator());
 			}
 			
-			map.get(key).aggregateResult(dao.getPlays(), dao.getAlive(), dao.getBufferTime(), dao.getBitrate(), dao.getBitrateCount());
+			map.get(key).aggregateResult(dao.getPlays(), dao.getAlive(), dao.getDVRAlive(), dao.getBufferTime(), dao.getBitrate(), dao.getBitrateCount());
 		}
 		
 		List<LiveStats> result = new ArrayList<LiveStats>();

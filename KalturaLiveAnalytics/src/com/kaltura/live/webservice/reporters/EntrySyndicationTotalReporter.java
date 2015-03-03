@@ -35,7 +35,7 @@ public class EntrySyndicationTotalReporter extends BaseReporter {
 				value += map.get(key).getPlays();
 				map.get(key).setPlays(value);
 			} else {
-				map.put(key, new EntryReferrerLiveStats(value, 0, 0, 0, 0, 0, null, key));
+				map.put(key, new EntryReferrerLiveStats(value, 0, 0, 0, 0, 0, 0, null, key));
 			}
 		}
 		

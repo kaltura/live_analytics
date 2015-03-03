@@ -9,10 +9,10 @@ public class EntryLiveStats extends LiveStats {
 		super();
 	}
 
-	public EntryLiveStats(long plays, long audience, long secondsViewed,
+	public EntryLiveStats(long plays, long audience, long dvrAudience, long secondsViewed,
 			float bufferTime, float avgBitrate, long timestamp,
 			String entryId) {
-		super(plays, audience, secondsViewed, bufferTime, avgBitrate,
+		super(plays, audience, dvrAudience, secondsViewed, bufferTime, avgBitrate,
 				timestamp);
 		this.entryId = entryId;
 	}
