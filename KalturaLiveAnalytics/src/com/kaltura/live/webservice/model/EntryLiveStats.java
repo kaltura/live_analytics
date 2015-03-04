@@ -4,6 +4,7 @@ public class EntryLiveStats extends LiveStats {
 	
 	protected String entryId;
 	protected long peakAudience;
+    protected long peakDvrAudience;
 	
 	public EntryLiveStats() {
 		super();
@@ -32,4 +33,12 @@ public class EntryLiveStats extends LiveStats {
 	public long getPeakAudience() {
 		return peakAudience;
 	}
+
+    public void setPeakDvrAudience(long peakDvrAudience) {
+        this.peakDvrAudience = peakDvrAudience;
+    }
+
+    public long getPeakDvrAudience() {
+        return peakDvrAudience;
+    }
 }

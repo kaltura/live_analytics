@@ -147,15 +147,22 @@ public class EntryTotalReporter extends BaseReporter {
 		
 		// Retrieve entryId-peakAudience
 		Map<String, Long> peakAudience = new HashMap<String, Long>();
+        Map<String, Long> peakDvrAudience = new HashMap<String, Long>();
 		Iterator<Row> itr = results.iterator();
 		while(itr.hasNext()) {
 			LiveEntryPeakDAO dao = new LiveEntryPeakDAO(itr.next());
 			String key = dao.getEntryId();
 			Long value = dao.getAudience();
+            Long dvrValue = dao.getDVRAudience();
 			
 			Long curVal = peakAudience.get(key);
 			if((curVal == null) || (curVal < value))
 				peakAudience.put(key, value);
+
+            Long curDvrVal = peakDvrAudience.get(key);
+            if((curDvrVal == null) || (curDvrVal < dvrValue))
+                peakDvrAudience.put(key, dvrValue);
+
 		}
 		
 		// Fill peak audience
@@ -163,8 +170,11 @@ public class EntryTotalReporter extends BaseReporter {
 			EntryLiveStats stat = (EntryLiveStats)liveStat;
 			String entryId = stat.getEntryId();
 			Long peakAudienceVal = peakAudience.get(entryId);
+            Long peakDvrAudienceVal = peakDvrAudience.get(entryId);
 			if(peakAudienceVal != null)
 				stat.setPeakAudience(peakAudienceVal);
+            if(peakDvrAudienceVal != null)
+                stat.setPeakDvrAudience(peakDvrAudienceVal);
 		}
 	}
 	
