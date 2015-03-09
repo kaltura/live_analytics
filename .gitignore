@@ -9,3 +9,4 @@ IP2Location/.settings/org.eclipse.wst.common.project.facet.core.xml
 KalturaLiveAnalytics/target/
 .idea/
 *.iml
+out/

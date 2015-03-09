@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS kaltura_live.live_events (
 	dvr_alive bigint,
 	bitrate bigint,
 	bitrate_count bigint,
-	buffer_time bigint,
+	buffer_time double,
 	PRIMARY KEY (entry_id,event_time)
 )
 WITH CLUSTERING ORDER BY (event_time DESC);
@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS kaltura_live.hourly_live_events (
 	dvr_alive bigint,
 	bitrate bigint,
 	bitrate_count bigint,
-	buffer_time bigint,
+	buffer_time double,
 	PRIMARY KEY (entry_id,event_time)
 )
 WITH CLUSTERING ORDER BY (event_time DESC);
@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS kaltura_live.live_events_location (
 	dvr_alive bigint,
 	bitrate bigint,
 	bitrate_count bigint,
-	buffer_time bigint,
+	buffer_time double,
 	PRIMARY KEY ((entry_id,event_time), country, city));
 
 CREATE TABLE IF NOT EXISTS kaltura_live.hourly_live_events_partner (
@@ -58,7 +58,7 @@ CREATE TABLE IF NOT EXISTS kaltura_live.hourly_live_events_partner (
 	dvr_alive bigint,
 	bitrate bigint,
 	bitrate_count bigint,
-	buffer_time bigint,
+	buffer_time double,
 	PRIMARY KEY (partner_id,event_time)
 )
 WITH CLUSTERING ORDER BY (event_time DESC);
@@ -72,7 +72,7 @@ CREATE TABLE IF NOT EXISTS kaltura_live.hourly_live_events_referrer (
 	dvr_alive bigint,
 	bitrate bigint,
 	bitrate_count bigint,
-	buffer_time bigint,
+	buffer_time double,
 	PRIMARY KEY ((entry_id,event_time), referrer));
 
 CREATE TABLE IF NOT EXISTS kaltura_live.live_partner_entry (

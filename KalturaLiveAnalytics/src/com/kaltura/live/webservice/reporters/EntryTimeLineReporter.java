@@ -24,7 +24,7 @@ public class EntryTimeLineReporter extends BaseReporter {
 		List<String> result = new ArrayList<String>();
 		while(itr.hasNext()) {
 			LiveEntryEventDAO dao = new LiveEntryEventDAO(itr.next());
-			result.add((dao.getEventTime().getTime() / 1000) + "," + dao.getAlive());
+			result.add((dao.getEventTime().getTime() / 1000) + "," + dao.getAlive() + "," + dao.getDVRAlive());
 		}
 		
 		StringBuffer sb = new StringBuffer();
