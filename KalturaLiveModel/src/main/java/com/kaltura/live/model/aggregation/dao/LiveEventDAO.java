@@ -22,12 +22,14 @@ public abstract class LiveEventDAO extends LiveDAO {
 	
 	/** --- Object fields --- */
 	
-	 protected Date eventTime;
-	 protected long alive;
-	 protected long bitrate;
-	 protected long bitrateCount;
-	 protected double bufferTime;
-	 protected long plays;
+    protected Date eventTime;
+    protected long alive;
+    protected long bitrate;
+    protected long bitrateCount;
+    protected double bufferTime;
+    protected long plays;
+
+    protected long dvrAlive;
 
 	/**
 	 * Empty constructor
@@ -38,7 +40,7 @@ public abstract class LiveEventDAO extends LiveDAO {
 	
 	/**
 	 * Constructor based on reads event.
-	 * @param row
+	 * @param row nothing
 	 */
 	public LiveEventDAO(Row row) {
 		super();
@@ -48,6 +50,7 @@ public abstract class LiveEventDAO extends LiveDAO {
 		this.bitrateCount = row.getLong("bitrate_count");
 		this.bufferTime = row.getDouble("buffer_time");
 		this.plays = row.getLong("plays");
+        this.dvrAlive = row.getLong("dvr_alive");
 	}
 	
 	/**
@@ -59,7 +62,7 @@ public abstract class LiveEventDAO extends LiveDAO {
 	 * @return List<String> the list of key fields
 	 */
 	protected List<String> getKeyFields() {
-		return Arrays.asList(new String[]{"entry_id", "event_time"});
+		return Arrays.<String>asList("entry_id", "event_time");
 	}
 	
 	/**
@@ -71,7 +74,7 @@ public abstract class LiveEventDAO extends LiveDAO {
 	 * @return List<String> List of all fields that are common between all live events tables
 	 */
 	protected List<String> getCommonFields() {
-		return Arrays.asList(new String[]{"plays", "alive", "bitrate", "bitrate_count", "buffer_time"});
+		return Arrays.<String>asList("plays", "alive", "dvr_alive", "bitrate", "bitrate_count", "buffer_time");
 	}
 	
 	/**
@@ -103,6 +106,14 @@ public abstract class LiveEventDAO extends LiveDAO {
 	public void setAlive(long alive) {
 		this.alive = alive;
 	}
+
+    public long getDVRAlive() {
+        return dvrAlive;
+    }
+
+    public void setDVRAlive(long dvrAlive) {
+        this.dvrAlive = dvrAlive;
+    }
 
 	public long getBitrate() {
 		return bitrate;

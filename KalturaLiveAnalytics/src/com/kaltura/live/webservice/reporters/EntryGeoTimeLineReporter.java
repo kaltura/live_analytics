@@ -67,7 +67,7 @@ public class EntryGeoTimeLineReporter extends BaseReporter {
 			res.setTimestamp(dao.getEventTime().getTime() / 1000);
 			
 			ReportsAggregator aggr = new ReportsAggregator();
-			aggr.aggregateResult(dao.getPlays(), dao.getAlive(), dao.getBufferTime(), dao.getBitrate(), dao.getBitrateCount());
+			aggr.aggregateResult(dao.getPlays(), dao.getAlive(), dao.getDVRAlive(), dao.getBufferTime(), dao.getBitrate(), dao.getBitrateCount());
 			aggr.fillObject(res);
 			
 			result.add(res);

@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.Row;
 import com.kaltura.live.infra.cache.SerializableSession;
-import com.kaltura.live.infra.exception.KalturaInternalException;
 import com.kaltura.live.model.aggregation.StatsEvent;
 
 public class PartnerEventDAO extends LiveEventDAO {
@@ -41,7 +40,7 @@ public class PartnerEventDAO extends LiveEventDAO {
 	
 	@Override
 	protected List<String> getKeyFields() {
-		return Arrays.asList(new String[]{"partner_id", "event_time"});
+        return Arrays.<String>asList("partner_id", "event_time");
 	}
 
 	@Override
@@ -54,7 +53,7 @@ public class PartnerEventDAO extends LiveEventDAO {
 		createStatement(session);
 		BoundStatement boundStatement = new BoundStatement(statement);
 		try {
-			session.execute(boundStatement.bind(aggregatedResult.getPartnerId(), aggregatedResult.getEventTime(), aggregatedResult.getPlays(), aggregatedResult.getAlive(), aggregatedResult.getBitrate(), aggregatedResult.getBitrateCount(), aggregatedResult.getBufferTime()), RETRIES_NUM);
+			session.execute(boundStatement.bind(aggregatedResult.getPartnerId(), aggregatedResult.getEventTime(), aggregatedResult.getPlays(), aggregatedResult.getAlive(), aggregatedResult.getDVRAlive(), aggregatedResult.getBitrate(), aggregatedResult.getBitrateCount(), aggregatedResult.getBufferTime()), RETRIES_NUM);
 		} catch (Exception ex) {
 			LOG.error("Failed to save partner aggregation result for partner [" + aggregatedResult.getPartnerId() +  "] at [" + aggregatedResult.getEventTime() + "]", ex);
 		}

@@ -8,10 +8,10 @@ public class EntryReferrerLiveStats extends EntryLiveStats {
 		super();
 	}
 	
-	public EntryReferrerLiveStats(long plays, long audience,
+	public EntryReferrerLiveStats(long plays, long audience, long dvrAudience,
 			long secondsViewed, long bufferTime, float avgBitrate,
 			long timestamp, String entryId, String referrer) {
-		super(plays, audience, secondsViewed, bufferTime, avgBitrate,
+		super(plays, audience, dvrAudience, secondsViewed, bufferTime, avgBitrate,
 				timestamp, entryId);
 		this.referrer = referrer;
 	}

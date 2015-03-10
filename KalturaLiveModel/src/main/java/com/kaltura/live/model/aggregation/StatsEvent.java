@@ -20,6 +20,7 @@ import com.kaltura.ip2location.SerializableIP2LocationReader;
 /**
  *	Represents a single stats event 
  */
+
 public class StatsEvent implements Serializable {
 	
 	
@@ -40,16 +41,21 @@ public class StatsEvent implements Serializable {
 	private String referrer = "N/A";
 	private long plays = 0;
 	private long alive = 0;
+    private long dvrAlive = 0;
 	private long bitrate = 0;
 	private long bitrateCount = 0;
 	private double bufferTime = 0;
 	private String ipAddress;
-	
-	
+
+
+
+
+
 	/**
 	 * Constructor by fields 
 	 */
-	public StatsEvent(Date eventTime, int partnerId, String entryId, String country, String city,  String referrer, long plays, long alive, long bitrate, long bitrateCount, double bufferTime) {
+	public StatsEvent(Date eventTime, int partnerId, String entryId, String country, String city,  String referrer, long plays,
+					  long alive, long dvrAlive, long bitrate, long bitrateCount, double bufferTime) {
 		this.eventTime = eventTime;
 		this.partnerId = partnerId;
 		this.entryId = entryId;
@@ -57,6 +63,7 @@ public class StatsEvent implements Serializable {
 		this.city = city;
 		this.plays = plays;
 	    this.alive = alive;
+        this.dvrAlive = dvrAlive;
 	    this.bitrate = bitrate;
 	    this.bitrateCount = bitrateCount;
 	    this.bufferTime = bufferTime;
@@ -67,7 +74,6 @@ public class StatsEvent implements Serializable {
 	 * This function parses a single apache log line and creates a single stats event from it
 	 * @param line
 	 * @param reader
-	 * @param cache
 	 */
 	public StatsEvent(String line , SerializableIP2LocationReader reader) {
 		Matcher m = apacheLogRegex.matcher(line);
@@ -126,8 +132,20 @@ public class StatsEvent implements Serializable {
 							bitrateCount = 0;
 						}
 						int eventIndex = Integer.parseInt(paramsMap.containsKey("event:eventIndex") ? paramsMap.get("event:eventIndex") : "0");
-						plays = eventIndex == 1 ? 1 : 0;
-						alive = eventIndex > 1 ? 1 : 0;
+
+						int eventTypeInt = Integer.parseInt(paramsMap.containsKey("event:eventType") ? paramsMap.get("event:eventType") : "1");
+                        LiveEventType eventType = (eventTypeInt ==  1) ? LiveEventType.LIVE_EVENT: LiveEventType.DVR_EVENT;
+
+						if ( eventType == LiveEventType.LIVE_EVENT )
+						{
+							plays = eventIndex == 1 ? 1 : 0;
+							alive = eventIndex > 1 ? 1 : 0;
+						}
+						else
+						{
+							dvrAlive = eventIndex > 1 ? 1 : 0;
+						}
+
 
 						int seconds = 5; // default 5 so that offset is 0
 						if ( paramsMap.containsKey("event:startTime") )
@@ -176,8 +194,14 @@ public class StatsEvent implements Serializable {
 	 * @return The merged stats events
 	 */
 	public StatsEvent merge(StatsEvent other) {
-		return new StatsEvent(eventTime, partnerId, entryId, country, city, referrer, plays + other.plays, alive + other.alive, bitrate + other.bitrate, bitrateCount + other.bitrateCount, bufferTime + other.bufferTime);
+		return new StatsEvent(eventTime, partnerId, entryId, country, city, referrer, plays + other.plays,
+				alive + other.alive, dvrAlive + other.dvrAlive, bitrate + other.bitrate, bitrateCount + other.bitrateCount,
+				bufferTime + other.bufferTime);
 	}
+
+    public StatsEvent maxAudience(StatsEvent other) {
+        return new StatsEvent(eventTime, partnerId, entryId, "", "", "", 0, Math.max(alive, +other.alive), Math.max(dvrAlive, other.dvrAlive), 0, 0, 0);
+    }
 
 	public Date getEventTime() {
 		return this.eventTime;
@@ -219,7 +243,11 @@ public class StatsEvent implements Serializable {
 	public long getAlive() {
 		return this.alive;
 	}
-	
+
+    public long getDVRAlive() {
+        return this.dvrAlive;
+    }
+
 	public long getBitrate() {
 		return this.bitrate;
 	}
