@@ -19,7 +19,7 @@ public class ReportsAggregator {
 		this.plays += plays;
 		this.audience += audience;
         this.dvrAudience += dvrAudience;
-		this.secondsViewed += audience * 10;
+		this.secondsViewed += (audience + dvrAudience) * 10;
 		
 		this.bufferTime += bufferTime;
 		this.bitRate += bitRate;
@@ -32,7 +32,7 @@ public class ReportsAggregator {
         stats.setDvrAudience(dvrAudience);
 		stats.setSecondsViewed(secondsViewed);
 		
-		stats.setBufferTime(calcAveragePerMinute(bufferTime, plays + audience, 6));
+		stats.setBufferTime(calcAveragePerMinute(bufferTime, plays + audience + dvrAudience, 6));
 		stats.setAvgBitrate(calcAveragePerMinute(bitRate, bitrateCnt, 1));
 	}
 	
