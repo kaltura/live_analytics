@@ -51,7 +51,7 @@ public class PartnerTotalReporter extends BaseReporter {
 		ReportsAggregator aggr = new ReportsAggregator();
 		while(itr.hasNext()) {
 			LiveEntryEventDAO dao = new LiveEntryEventDAO(itr.next());
-			aggr.aggregateResult(dao.getPlays(), dao.getAlive(), dao.getBufferTime(), dao.getBitrate(), dao.getBitrateCount());
+			aggr.aggregateResult(dao.getPlays(), dao.getAlive(), dao.getDVRAlive(), dao.getBufferTime(), dao.getBitrate(), dao.getBitrateCount());
 		}
 		
 		LiveStats entry = new LiveStats();
@@ -89,7 +89,7 @@ public class PartnerTotalReporter extends BaseReporter {
 			if(!map.containsKey(key)) {
 				map.put(key, new ReportsAggregator());
 			}
-			map.get(key).aggregateResult(dao.getPlays(), dao.getAlive(), dao.getBufferTime(), dao.getBitrate(), dao.getBitrateCount());
+			map.get(key).aggregateResult(dao.getPlays(), dao.getAlive(), dao.getDVRAlive(), dao.getBufferTime(), dao.getBitrate(), dao.getBitrateCount());
 		}
 		
 		List<LiveStats> result = new ArrayList<LiveStats>();

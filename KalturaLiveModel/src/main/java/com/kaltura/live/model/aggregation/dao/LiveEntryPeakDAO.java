@@ -19,6 +19,7 @@ public class LiveEntryPeakDAO extends LiveEventDAO {
 	protected String entryId;
 	protected Date eventTime;
 	protected Long audience;
+    protected Long dvrAudience;
 	
 	private static Logger LOG = LoggerFactory.getLogger(LiveEntryPeakDAO.class); 
 	
@@ -33,6 +34,7 @@ public class LiveEntryPeakDAO extends LiveEventDAO {
 		this.entryId = row.getString("entry_id");
 		this.eventTime = row.getDate("event_time");
 		this.audience = row.getLong("audience");
+        this.dvrAudience = row.getLong("dvr_audience");
 		
 	}
 	
@@ -47,7 +49,7 @@ public class LiveEntryPeakDAO extends LiveEventDAO {
 		createStatement(session);
 		BoundStatement boundStatement = new BoundStatement(statement);
 		try {
-		session.execute(boundStatement.bind(aggregatedResult.getEntryId(), aggregatedResult.getEventTime(), aggregatedResult.getAlive()), RETRIES_NUM);
+		session.execute(boundStatement.bind(aggregatedResult.getEntryId(), aggregatedResult.getEventTime(), aggregatedResult.getAlive(), aggregatedResult.getDVRAlive()), RETRIES_NUM);
 		} catch (Exception ex) {
 			LOG.error("Failed to save peak aggregation result for entry [" + aggregatedResult.getEntryId() +  "] at [" + aggregatedResult.getEventTime() + "]", ex);
 		}
@@ -61,7 +63,7 @@ public class LiveEntryPeakDAO extends LiveEventDAO {
 
 	@Override
 	protected List<String> getTableFields() {
-		return Arrays.asList(new String[]{"entry_id", "event_time", "audience"});
+		return Arrays.<String>asList("entry_id", "event_time", "audience", "dvr_audience");
 	}
 
 	public String getEntryId() {
@@ -87,6 +89,14 @@ public class LiveEntryPeakDAO extends LiveEventDAO {
 	public void setAudience(Long audience) {
 		this.audience = audience;
 	}
+
+    public Long getDVRAudience() {
+        return dvrAudience;
+    }
+
+    public void setDVRAudience(Long dvrAudience) {
+        this.dvrAudience= dvrAudience;
+    }
 
 	@Override
 	protected List<String> getTableSpecificFields() {

@@ -7,6 +7,7 @@ public class ReportsAggregator {
 	// Sum based
 	protected long plays = 0;
 	protected long audience = 0;
+    protected long dvrAudience = 0;
 	protected long secondsViewed = 0;
 	
 	// Average per minute
@@ -14,10 +15,11 @@ public class ReportsAggregator {
 	protected long bitRate = 0;
 	protected long bitrateCnt = 0;
 	
-	public void aggregateResult(long plays, long audience, double bufferTime, long bitRate, long bitrateCount) {
+	public void aggregateResult(long plays, long audience, long dvrAudience, double bufferTime, long bitRate, long bitrateCount) {
 		this.plays += plays;
 		this.audience += audience;
-		this.secondsViewed += audience * 10;
+        this.dvrAudience += dvrAudience;
+		this.secondsViewed += (audience + dvrAudience) * 10;
 		
 		this.bufferTime += bufferTime;
 		this.bitRate += bitRate;
@@ -27,9 +29,10 @@ public class ReportsAggregator {
 	public void fillObject(LiveStats stats) {
 		stats.setPlays(plays);
 		stats.setAudience(audience);
+        stats.setDvrAudience(dvrAudience);
 		stats.setSecondsViewed(secondsViewed);
 		
-		stats.setBufferTime(calcAveragePerMinute(bufferTime, plays + audience, 6));
+		stats.setBufferTime(calcAveragePerMinute(bufferTime, plays + audience + dvrAudience, 6));
 		stats.setAvgBitrate(calcAveragePerMinute(bitRate, bitrateCnt, 1));
 	}
 	
