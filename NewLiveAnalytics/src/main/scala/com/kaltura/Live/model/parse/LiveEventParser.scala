@@ -24,7 +24,10 @@ object LiveEventParser extends Serializable with MetaLog[BaseLog]
           val m: Matcher = apacheLogRegex.matcher(line)
 
           if ( !m.find )
-               throw new IllegalArgumentException("bad")
+          {
+               logger.warn(s"Failed to match pattern event: $line")
+               return  event
+          }
 
           val date: String = m.group(2)
 
@@ -42,7 +45,7 @@ object LiveEventParser extends Serializable with MetaLog[BaseLog]
           {
                case e: Exception =>
                {
-                    logger.warn("Failed to decode query string: " + query, e)
+                    logger.warn(s"Failed to decode query string: $query", e)
                }
           }
 
@@ -86,7 +89,7 @@ object LiveEventParser extends Serializable with MetaLog[BaseLog]
                               event.partnerId = paramsMap("event:partnerId").toInt
 
                          if (paramsMap.contains("event:bufferTime"))
-                              event.bufferTime = paramsMap("event:bufferTime").toDouble
+                              event.bufferTime = (paramsMap("event:bufferTime").toDouble * EnvParams.bufferTimeResolution).toLong
 
                          if (paramsMap.contains("event:bitrate"))
                               event.bitrate = paramsMap("event:bitrate").toLong

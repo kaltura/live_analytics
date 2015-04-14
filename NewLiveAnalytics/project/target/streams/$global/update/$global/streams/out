@@ -1,4 +1,4 @@
-[info] Updating {file:/home/didi/Workspace/Kaltura/Live/NewLiveAnalytics/project/}newliveanalytics-build...
+[info] Updating {file:/home/didi/Workspace/Kaltura/Live/live_analytics/NewLiveAnalytics/project/}newliveanalytics-build...
 [debug] :: resolving dependencies :: default#newliveanalytics-build;0.1-SNAPSHOT
 [debug] 	confs: [compile, runtime, test, provided, optional, compile-internal, runtime-internal, test-internal, plugin, sources, docs, pom, scala-tool]
 [debug] 	validate = true
@@ -16,7 +16,7 @@
 [debug] == resolving dependencies for default#newliveanalytics-build;0.1-SNAPSHOT [provided]
 [debug] == resolving dependencies default#newliveanalytics-build;0.1-SNAPSHOT->org.scala-lang#scala-library;2.10.4 [provided->default(compile)]
 [info] Resolving org.scala-lang#scala-library;2.10.4 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@67070cef
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@74e2bc64
 [debug] sbt-chain: module revision found in cache: org.scala-lang#scala-library;2.10.4
 [debug] 	typesafe-ivy-releases: revision in cache: org.scala-lang#scala-library;2.10.4
 [debug] 	found org.scala-lang#scala-library;2.10.4 in sbt-chain
@@ -1337,19 +1337,19 @@
 [debug] 	[NOT REQUIRED] org.scala-sbt#apply-macro;0.13.5!apply-macro.jar
 [debug] 	[NOT REQUIRED] org.scala-lang#jline;2.10.4!jline.jar
 [debug] 	[NOT REQUIRED] org.fusesource.jansi#jansi;1.4!jansi.jar
-[debug] :: resolution report :: resolve 1621ms :: artifacts dl 55ms
-[debug] 	report for default#newliveanalytics-build;0.1-SNAPSHOT compile produced in /home/didi/Workspace/Kaltura/Live/NewLiveAnalytics/project/target/resolution-cache/reports/default-newliveanalytics-build-compile.xml
-[debug] 	report for default#newliveanalytics-build;0.1-SNAPSHOT runtime produced in /home/didi/Workspace/Kaltura/Live/NewLiveAnalytics/project/target/resolution-cache/reports/default-newliveanalytics-build-runtime.xml
-[debug] 	report for default#newliveanalytics-build;0.1-SNAPSHOT test produced in /home/didi/Workspace/Kaltura/Live/NewLiveAnalytics/project/target/resolution-cache/reports/default-newliveanalytics-build-test.xml
-[debug] 	report for default#newliveanalytics-build;0.1-SNAPSHOT provided produced in /home/didi/Workspace/Kaltura/Live/NewLiveAnalytics/project/target/resolution-cache/reports/default-newliveanalytics-build-provided.xml
-[debug] 	report for default#newliveanalytics-build;0.1-SNAPSHOT optional produced in /home/didi/Workspace/Kaltura/Live/NewLiveAnalytics/project/target/resolution-cache/reports/default-newliveanalytics-build-optional.xml
-[debug] 	report for default#newliveanalytics-build;0.1-SNAPSHOT compile-internal produced in /home/didi/Workspace/Kaltura/Live/NewLiveAnalytics/project/target/resolution-cache/reports/default-newliveanalytics-build-compile-internal.xml
-[debug] 	report for default#newliveanalytics-build;0.1-SNAPSHOT runtime-internal produced in /home/didi/Workspace/Kaltura/Live/NewLiveAnalytics/project/target/resolution-cache/reports/default-newliveanalytics-build-runtime-internal.xml
-[debug] 	report for default#newliveanalytics-build;0.1-SNAPSHOT test-internal produced in /home/didi/Workspace/Kaltura/Live/NewLiveAnalytics/project/target/resolution-cache/reports/default-newliveanalytics-build-test-internal.xml
-[debug] 	report for default#newliveanalytics-build;0.1-SNAPSHOT plugin produced in /home/didi/Workspace/Kaltura/Live/NewLiveAnalytics/project/target/resolution-cache/reports/default-newliveanalytics-build-plugin.xml
-[debug] 	report for default#newliveanalytics-build;0.1-SNAPSHOT sources produced in /home/didi/Workspace/Kaltura/Live/NewLiveAnalytics/project/target/resolution-cache/reports/default-newliveanalytics-build-sources.xml
-[debug] 	report for default#newliveanalytics-build;0.1-SNAPSHOT docs produced in /home/didi/Workspace/Kaltura/Live/NewLiveAnalytics/project/target/resolution-cache/reports/default-newliveanalytics-build-docs.xml
-[debug] 	report for default#newliveanalytics-build;0.1-SNAPSHOT pom produced in /home/didi/Workspace/Kaltura/Live/NewLiveAnalytics/project/target/resolution-cache/reports/default-newliveanalytics-build-pom.xml
-[debug] 	report for default#newliveanalytics-build;0.1-SNAPSHOT scala-tool produced in /home/didi/Workspace/Kaltura/Live/NewLiveAnalytics/project/target/resolution-cache/reports/default-newliveanalytics-build-scala-tool.xml
-[debug] 	resolve done (1621ms resolve - 55ms download)
+[debug] :: resolution report :: resolve 2823ms :: artifacts dl 68ms
+[debug] 	report for default#newliveanalytics-build;0.1-SNAPSHOT compile produced in /home/didi/Workspace/Kaltura/Live/live_analytics/NewLiveAnalytics/project/target/resolution-cache/reports/default-newliveanalytics-build-compile.xml
+[debug] 	report for default#newliveanalytics-build;0.1-SNAPSHOT runtime produced in /home/didi/Workspace/Kaltura/Live/live_analytics/NewLiveAnalytics/project/target/resolution-cache/reports/default-newliveanalytics-build-runtime.xml
+[debug] 	report for default#newliveanalytics-build;0.1-SNAPSHOT test produced in /home/didi/Workspace/Kaltura/Live/live_analytics/NewLiveAnalytics/project/target/resolution-cache/reports/default-newliveanalytics-build-test.xml
+[debug] 	report for default#newliveanalytics-build;0.1-SNAPSHOT provided produced in /home/didi/Workspace/Kaltura/Live/live_analytics/NewLiveAnalytics/project/target/resolution-cache/reports/default-newliveanalytics-build-provided.xml
+[debug] 	report for default#newliveanalytics-build;0.1-SNAPSHOT optional produced in /home/didi/Workspace/Kaltura/Live/live_analytics/NewLiveAnalytics/project/target/resolution-cache/reports/default-newliveanalytics-build-optional.xml
+[debug] 	report for default#newliveanalytics-build;0.1-SNAPSHOT compile-internal produced in /home/didi/Workspace/Kaltura/Live/live_analytics/NewLiveAnalytics/project/target/resolution-cache/reports/default-newliveanalytics-build-compile-internal.xml
+[debug] 	report for default#newliveanalytics-build;0.1-SNAPSHOT runtime-internal produced in /home/didi/Workspace/Kaltura/Live/live_analytics/NewLiveAnalytics/project/target/resolution-cache/reports/default-newliveanalytics-build-runtime-internal.xml
+[debug] 	report for default#newliveanalytics-build;0.1-SNAPSHOT test-internal produced in /home/didi/Workspace/Kaltura/Live/live_analytics/NewLiveAnalytics/project/target/resolution-cache/reports/default-newliveanalytics-build-test-internal.xml
+[debug] 	report for default#newliveanalytics-build;0.1-SNAPSHOT plugin produced in /home/didi/Workspace/Kaltura/Live/live_analytics/NewLiveAnalytics/project/target/resolution-cache/reports/default-newliveanalytics-build-plugin.xml
+[debug] 	report for default#newliveanalytics-build;0.1-SNAPSHOT sources produced in /home/didi/Workspace/Kaltura/Live/live_analytics/NewLiveAnalytics/project/target/resolution-cache/reports/default-newliveanalytics-build-sources.xml
+[debug] 	report for default#newliveanalytics-build;0.1-SNAPSHOT docs produced in /home/didi/Workspace/Kaltura/Live/live_analytics/NewLiveAnalytics/project/target/resolution-cache/reports/default-newliveanalytics-build-docs.xml
+[debug] 	report for default#newliveanalytics-build;0.1-SNAPSHOT pom produced in /home/didi/Workspace/Kaltura/Live/live_analytics/NewLiveAnalytics/project/target/resolution-cache/reports/default-newliveanalytics-build-pom.xml
+[debug] 	report for default#newliveanalytics-build;0.1-SNAPSHOT scala-tool produced in /home/didi/Workspace/Kaltura/Live/live_analytics/NewLiveAnalytics/project/target/resolution-cache/reports/default-newliveanalytics-build-scala-tool.xml
+[debug] 	resolve done (2823ms resolve - 68ms download)
 [info] Done updating.

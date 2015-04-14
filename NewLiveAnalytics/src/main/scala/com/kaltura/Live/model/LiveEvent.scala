@@ -21,7 +21,7 @@ case class LiveEventWrap (
     val dvrAlive : Long,
     val bitrate : Long,
     val bitrateCount : Long,
-    val bufferTime : Double,
+    val bufferTime : Long,
     val ipAddress : String
 ) extends LiveEventWrapBase
 
@@ -45,11 +45,16 @@ class LiveEvent (
      var dvrAlive : Long,
      var bitrate : Long,
      var bitrateCount : Long,
-     var bufferTime : Double,
+     var bufferTime : Long,
      var ipAddress : String
 ) extends Serializable with MetaLog[BaseLog]
 {
      val apacheLogRegex: Pattern = Pattern.compile("^([\\d.]+) \\[([\\w\\d:/]+\\s[+\\-]\\d{4})\\] \"(.+?)\" (\\d{3}) \"([^\"]+)\".*")
+
+     def isNull() : Boolean =
+     {
+          eventTime == 0
+     }
 
      def roundTimeToHour() =
      {

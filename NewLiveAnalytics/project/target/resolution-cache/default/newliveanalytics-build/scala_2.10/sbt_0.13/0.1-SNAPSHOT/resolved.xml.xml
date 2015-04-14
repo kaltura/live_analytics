@@ -4,7 +4,7 @@
 		module="newliveanalytics-build"
 		revision="0.1-SNAPSHOT"
 		status="integration"
-		publication="20150318143140"
+		publication="20150408163929"
 		e:sbtVersion="0.13" e:scalaVersion="2.10"
 	>
 		<description>

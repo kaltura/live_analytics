@@ -13,5 +13,5 @@ class LoggedDataCF( session: com.datastax.driver.core.Session ) extends Serializ
 
      implicit val cache = new SessionQueryCache[PlainConverter](session)
 
-     def selectFile( fileId: String ) = cql"select * from log_data where file_id = $fileId".one[LoggedData]
+     def selectFile( fileId: String ) = cql"select * from log_data where file_id = $fileId".oneOption[LoggedData]
 }

@@ -10,6 +10,8 @@ libraryDependencies += "org.scalatest" % "scalatest_2.10" % "2.1.0" % "test"
 
 libraryDependencies += "org.apache.spark" %% "spark-core" % "1.1.1"
 
+//libraryDependencies += "org.apache.spark" % "spark-core_2.10" % "1.3.0"
+
 libraryDependencies += "com.datastax.spark" %% "spark-cassandra-connector" % "1.1.1"
 
 //libraryDependencies += "com.datastax.spark" % "spark-cassandra-connector_2.10" % "1.2.0-rc3" // for writerBuilder TTL but SomeColumns fail!!!

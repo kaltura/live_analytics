@@ -2,12 +2,23 @@ package com.kaltura.Live.env
 
 object EnvParams
 {
+     val sparkMaxCores: String = "40"
+
+     val sparkExecutorMem: String = "8g"
+
+     val sparkParallelism: String = "20"
+
+     val sparkAddress = "spark://pa-ana1:7077"
      val cassandraAddress = "192.168.31.91"
      val kalturaKeySpace = "kaltura_live"
 
      val ip2locationFileName = "/opt/kaltura/data/geoip/IP-COUNTRY-CITY-ISP.BIN"
 
      val maxProcessFilesPerCycle = 2
+
+     val bufferTimeResolution = 100L
+
+     val repositoryHome = "/opt/kaltura/lib/"
 //     var _partner = ""
 //
 //     var _cassandraAddress = "192.168.31.91:9160"
