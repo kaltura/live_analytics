@@ -14,6 +14,8 @@ class EntryHourlyPeakAudienceCF( session: com.datastax.driver.core.Session ) ext
 
      implicit val cache = new SessionQueryCache[PlainConverter](session)
 
+     def insert( peakEvent: EntryHourlyPeakAudience ): Future[Unit] = cql"insert into live_entry_hourly_peak(entry_id, event_time, audience, dvr_audience) values (?, ?, ?, ?)".bind(peakEvent).execute()
+
      def insertIfNotExist(entry_id: String, event_time: Long/*java.util.Date*/, audience: Long, dvrAudience: Long): Future[Unit]
           = cql"UPDATE live_entry_hourly_peak SET audience=$audience AND dvr_audience=$dvrAudience WHERE entry_id='$entry_id' AND event_time=$event_time IF NOT EXIST".execute()
 

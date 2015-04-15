@@ -95,7 +95,7 @@ object MainDriver
      def processEvents( sc : SparkContext, events: RDD[LiveEvent] ): Unit =
      {
           val reducedLiveEvents = events
-               .map(event => ( (event.entryId, event.eventTime, event.partnerId), event) )
+               .map(event => ( (event.entryId, event.eventTime), event) )
                .reduceByKey(_ + _)
 
           reducedLiveEvents.persist()
@@ -109,17 +109,17 @@ object MainDriver
 
           //val temp11 = reducedLiveEvents.foreach(print(_))
 
-          val temp2 = events.map(event => ( (event.entryId, DateUtils.roundTimeToHour(event.eventTime), event.partnerId), event.roundTimeToHour ) )
+          val temp2 = events.map(event => ( (event.entryId, DateUtils.roundTimeToHour(event.eventTime) ), event.roundTimeToHour ) )
                .reduceByKey(_ + _)
                .map(x => x._2.wrap)
                .saveToCassandra(keyspace, entryHourlyTableName, entryHourlyTableFields)
 
-          val temp3 = events.map(event => ( (event.entryId, event.eventTime, event.partnerId, event.country, event.city), event) )
+          val temp3 = events.map(event => ( (event.entryId, event.eventTime, event.country, event.city), event) )
                .reduceByKey(_ + _)
                .map(x => x._2.wrap)
                .saveToCassandra(keyspace, locationEntryTableName, locationEntryTableFields)
 
-          val temp4 = events.map(event => ( (event.entryId, DateUtils.roundTimeToHour(event.eventTime), event.partnerId, event.referrer), event.roundTimeToHour) )
+          val temp4 = events.map(event => ( (event.entryId, DateUtils.roundTimeToHour(event.eventTime), event.referrer), event.roundTimeToHour) )
                .reduceByKey(_ + _)
                .map(x => x._2.wrap)
                .saveToCassandra(keyspace, referrerHourlyTableName, referrerHourlyTableFields)
@@ -129,7 +129,7 @@ object MainDriver
                .map(x => x._2.wrap)
                .saveToCassandra(keyspace, partnerHourlyTableName, partnerHourlyTableFields)
 
-          val temp7 = events.map(event => ( (event.partnerId, event.entryId), event.roundTimeToHour) )
+          val temp7 = events.map(event => (event.entryId, event.roundTimeToHour) )
                .reduceByKey(_ maxTime _)
                .map(x => x._2.wrap)
                .saveToCassandra(keyspace, livePartnerEntryTableName, livePartnerEntryTableFields)
