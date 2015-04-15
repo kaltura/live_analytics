@@ -80,7 +80,6 @@ class LiveEvent (
           new LiveEvent(math.max(this.eventTime, that.eventTime), this.partnerId, this.entryId, this.country, this.city, this.referrer, this.plays, this.alive,
                this.dvrAlive, this.bitrate, this.bitrateCount, this.bufferTime, this.ipAddress)
 
-
      def wrap() : LiveEventWrap =
      {
           LiveEventWrap(

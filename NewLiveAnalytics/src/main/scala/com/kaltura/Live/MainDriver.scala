@@ -3,16 +3,9 @@ package com.kaltura.Live
 import com.kaltura.Live.env.EnvParams
 import com.kaltura.Live.infra.EventsGenerator
 import com.kaltura.Live.model.LiveEvent
-import com.kaltura.Live.model.aggregation.save.SaveEntryHourlyPeakAudience
-import com.kaltura.Live.model.dao.EntryHourlyPeakAudienceCF
+import com.kaltura.Live.model.aggregation.processors.PeakAudienceProcessor
 import com.kaltura.Live.utils.DateUtils
 import org.apache.spark.rdd.RDD
-
-//import com.kaltura.Live.model.LiveEvent
-//import com.kaltura.live.model.aggregation.StatsEvent
-//import org.apache.spark.rdd.RDD
-
-//import org.apache.spark.{SparkContext, SparkConf}
 
 import com.datastax.spark.connector._
 import org.apache.spark.SparkContext._
@@ -31,6 +24,15 @@ import scala.util.control.Breaks._
 // TODO: data validation e.g. check bufferTime <= 0 if not override bitrate >=0 bitrate <= ~TBD etc...
 object MainDriver
 {
+     val jarDependencies: List[String] = List(
+          "newliveanalytics.jar",
+          "spark-cassandra-connector_2.10-1.1.1.jar",
+          "binders-cassandra_2.10-0.2.5.jar",
+          "binders-core_2.10-0.2.3.jar",
+          "cassandra-driver-core-2.1.3.jar",
+          "cassandra-thrift-2.1.2.jar",
+          "joda-time-2.3.jar")
+
      val keyspace = "kaltura_live"
 
      val baseFieldsList  = List(
@@ -90,15 +92,22 @@ object MainDriver
           rdd.take(1).size == 0
      }
 
-     def processEvents( events: RDD[LiveEvent] ): Unit =
+     def processEvents( sc : SparkContext, events: RDD[LiveEvent] ): Unit =
      {
-          val temp1 = events
+          val reducedLiveEvents = events
                .map(event => ( (event.entryId, event.eventTime, event.partnerId), event) )
                .reduceByKey(_ + _)
-               .map(x => x._2.wrap)
+
+          reducedLiveEvents.persist()
+
+          reducedLiveEvents.map(x => x._2.wrap)
                .saveToCassandra(keyspace, entryTableName, entryTableColumnFields)
 
-          //val temp11 = temp1.foreach(print(_))
+          PeakAudienceProcessor.process(sc, reducedLiveEvents)
+
+          reducedLiveEvents.unpersist()
+
+          //val temp11 = reducedLiveEvents.foreach(print(_))
 
           val temp2 = events.map(event => ( (event.entryId, DateUtils.roundTimeToHour(event.eventTime), event.partnerId), event.roundTimeToHour ) )
                .reduceByKey(_ + _)
@@ -119,14 +128,6 @@ object MainDriver
                .reduceByKey(_ + _)
                .map(x => x._2.wrap)
                .saveToCassandra(keyspace, partnerHourlyTableName, partnerHourlyTableFields)
-
-          val saveEntryHourlyPeakAudience = new SaveEntryHourlyPeakAudience
-
-          val temp6 = events.map(event => ( (event.entryId, DateUtils.roundTimeToHour(event.eventTime), event.partnerId), event.roundTimeToHour) )
-               .reduceByKey(_ max _)
-               //.map(x => x._2.wrap)
-               .map(x => x._2)
-               .map( saveEntryHourlyPeakAudience.update(_) )
 
           val temp7 = events.map(event => ( (event.partnerId, event.entryId), event.roundTimeToHour) )
                .reduceByKey(_ maxTime _)
@@ -152,16 +153,8 @@ object MainDriver
 
           val sc = new SparkContext(conf)
 
-          sc.addJar(EnvParams.repositoryHome + "/newliveanalytics.jar")
-          sc.addJar(EnvParams.repositoryHome + "/spark-cassandra-connector_2.10-1.1.1.jar")
-          sc.addJar(EnvParams.repositoryHome + "/binders-cassandra_2.10-0.2.5.jar")
-          sc.addJar(EnvParams.repositoryHome + "/binders-core_2.10-0.2.3.jar")
-          sc.addJar(EnvParams.repositoryHome + "/cassandra-driver-core-2.1.3.jar")
-          sc.addJar(EnvParams.repositoryHome + "/cassandra-thrift-2.1.2.jar")
-
-
-          // TODO: get properties from configuration file
-          //sc.setCheckpointDir("/home/didi/temp1")
+          for ( jarDependency <- jarDependencies )
+               sc.addJar(EnvParams.repositoryHome + "/" + jarDependency)
 
           // events are returned with 10sec resolution!!!
           val eventsGenerator = new EventsGenerator(sc, EnvParams.maxProcessFilesPerCycle)
@@ -175,7 +168,7 @@ object MainDriver
                     val noEvents = isEmpty(events)
 
                     if ( !noEvents )
-                         processEvents(events)
+                         processEvents(sc, events)
 
                     eventsGenerator.commit
 

@@ -35,8 +35,8 @@ class EventsGenerator( val sc : SparkContext, val maxProcessFilesPerCycle : Int 
      //final def logger = MustBeLightweight.logger
      //val cc = new CassandraSQLContext(sc)
 
-     val cluster = Cluster.builder().addContactPoint(EnvParams.cassandraAddress).build()
-     val session = cluster.connect(EnvParams.kalturaKeySpace)
+//     val cluster = Cluster.builder().addContactPoint(EnvParams.cassandraAddress).build()
+//     val session = cluster.connect(EnvParams.kalturaKeySpace)
 
      var batchId : Long = 0
 
@@ -52,13 +52,13 @@ class EventsGenerator( val sc : SparkContext, val maxProcessFilesPerCycle : Int 
      {
           //val rdd: SchemaRDD = cc.sql("SELECT * from kaltura_live.log_files WHERE batch_id=-1")
 
-          val batchIdCF = new BatchIdCF(session)
+          val batchIdCF = new BatchIdCF(SerializedSession.session)
           batchId = Await.result(batchIdCF.getBatchIdIfFound, scala.concurrent.duration.Duration.Inf).batch_id
      }
 
      def getNonProcessedLoggedFiles() : List[LoggedFile] =
      {
-          val loggedFilesCF = new LoggedFilesCF(session)
+          val loggedFilesCF = new LoggedFilesCF(SerializedSession.session)
 
           var nextLoggedFilesList: List[LoggedFile] = Nil
 
@@ -123,7 +123,7 @@ class EventsGenerator( val sc : SparkContext, val maxProcessFilesPerCycle : Int 
 
           needCommit_ = true
 
-          val loggedFilesCF = new LoggedFilesCF(session)
+          val loggedFilesCF = new LoggedFilesCF(SerializedSession.session)
 
           loggedFilesList.map(_.setBatchId(batchId) )
                .map(loggedFilesCF.update(_) )
@@ -136,14 +136,14 @@ class EventsGenerator( val sc : SparkContext, val maxProcessFilesPerCycle : Int 
 
           needCommit_ = false
           batchId += 1
-          val batchIdCF = new BatchIdCF(session)
+          val batchIdCF = new BatchIdCF(SerializedSession.session)
           batchIdCF.updateBatchId(batchId)
      }
 
      def close: Unit =
      {
-          session.close()
-          cluster.close()
+//          session.close()
+//          cluster.close()
      }
 
      //-----------------------------------------------------------------------------------------------

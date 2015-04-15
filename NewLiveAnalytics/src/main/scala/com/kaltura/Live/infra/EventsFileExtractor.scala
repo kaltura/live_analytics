@@ -17,8 +17,8 @@ object EventsFileExtractor extends Serializable with MetaLog[BaseLog]
           case None => "?"
      }
 
-     val cluster = Cluster.builder().addContactPoint(EnvParams.cassandraAddress).build()
-     val session = cluster.connect(EnvParams.kalturaKeySpace)
+//     val cluster = Cluster.builder().addContactPoint(EnvParams.cassandraAddress).build()
+//     val session = cluster.connect(EnvParams.kalturaKeySpace)
 
      def fileIdToLines( fileId: String ) : List[String] =
      {
@@ -28,7 +28,7 @@ object EventsFileExtractor extends Serializable with MetaLog[BaseLog]
 //          val cluster = Cluster.builder().addContactPoint(EnvParams.cassandraAddress).build()
 //          val session = cluster.connect(EnvParams.kalturaKeySpace)
 
-          val loggedDataCF = new LoggedDataCF(session)
+          val loggedDataCF = new LoggedDataCF(SerializedSession.session)
 
           val blob = Await.result(loggedDataCF.selectFile(fileId), scala.concurrent.duration.Duration.Inf)
 
@@ -43,9 +43,6 @@ object EventsFileExtractor extends Serializable with MetaLog[BaseLog]
 
           if ( lines.isEmpty )
                logger.warn(s"file id: $fileId, no lines found", fileId)
-
-//          session.close()
-//          cluster.close()
 
           lines
      }
