@@ -6,7 +6,7 @@
 [debug] == resolving dependencies for kaltura#newliveanalytics$sources_javadoc_2.10;1.0 [compile]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.scala-lang#scala-library;2.10.4 [compile->default(compile)]
 [info] Resolving org.scala-lang#scala-library;2.10.4 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@6529b124
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@a6ec220
 [debug] sbt-chain: module revision found in cache: org.scala-lang#scala-library;2.10.4
 [debug] 	local: revision in cache: org.scala-lang#scala-library;2.10.4
 [debug] 	found org.scala-lang#scala-library;2.10.4 in sbt-chain
@@ -16,7 +16,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.scala-lang#scala-library;2.10.4 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.apache.spark#spark-core_2.10;1.1.1 [compile->default(compile)]
 [info] Resolving org.apache.spark#spark-core_2.10;1.1.1 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@837d9f3
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@366f156a
 [debug] sbt-chain: module revision found in cache: org.apache.spark#spark-core_2.10;1.1.1
 [debug] 	local: revision in cache: org.apache.spark#spark-core_2.10;1.1.1
 [debug] 	found org.apache.spark#spark-core_2.10;1.1.1 in sbt-chain
@@ -25,7 +25,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.apache.spark#spark-core_2.10;1.1.1 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->commons-codec#commons-codec;1.5 [compile->default(compile)]
 [info] Resolving commons-codec#commons-codec;1.5 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@6d21cfdf
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@590cfd95
 [debug] sbt-chain: module revision found in cache: commons-codec#commons-codec;1.5
 [debug] 	local: revision in cache: commons-codec#commons-codec;1.5
 [debug] 	found commons-codec#commons-codec;1.5 in sbt-chain
@@ -34,7 +34,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->commons-codec#commons-codec;1.5 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.apache.commons#commons-math;2.1 [compile->default(compile)]
 [info] Resolving org.apache.commons#commons-math;2.1 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@42ec7ef1
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@7a732201
 [debug] sbt-chain: module revision found in cache: org.apache.commons#commons-math;2.1
 [debug] 	local: revision in cache: org.apache.commons#commons-math;2.1
 [debug] 	found org.apache.commons#commons-math;2.1 in sbt-chain
@@ -43,7 +43,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.apache.commons#commons-math;2.1 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->commons-configuration#commons-configuration;1.6 [compile->default(compile)]
 [info] Resolving commons-configuration#commons-configuration;1.6 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@26413278
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@7c93ded6
 [debug] sbt-chain: module revision found in cache: commons-configuration#commons-configuration;1.6
 [debug] 	local: revision in cache: commons-configuration#commons-configuration;1.6
 [debug] 	found commons-configuration#commons-configuration;1.6 in sbt-chain
@@ -52,7 +52,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->commons-configuration#commons-configuration;1.6 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->commons-collections#commons-collections;3.2.1 [compile->default(compile)]
 [info] Resolving commons-collections#commons-collections;3.2.1 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@39c83f74
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@6da34167
 [debug] sbt-chain: module revision found in cache: commons-collections#commons-collections;3.2.1
 [debug] 	local: revision in cache: commons-collections#commons-collections;3.2.1
 [debug] 	found commons-collections#commons-collections;3.2.1 in sbt-chain
@@ -61,7 +61,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->commons-collections#commons-collections;3.2.1 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->commons-lang#commons-lang;2.4 [compile->default(compile)]
 [info] Resolving commons-lang#commons-lang;2.4 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@56a338ec
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@3c8f5b93
 [debug] sbt-chain: module revision found in cache: commons-lang#commons-lang;2.4
 [debug] 	local: revision in cache: commons-lang#commons-lang;2.4
 [debug] 	found commons-lang#commons-lang;2.4 in sbt-chain
@@ -70,7 +70,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->commons-lang#commons-lang;2.4 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->commons-logging#commons-logging;1.1.1 [compile->default(compile)]
 [info] Resolving commons-logging#commons-logging;1.1.1 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@123edf1f
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@6260080
 [debug] sbt-chain: module revision found in cache: commons-logging#commons-logging;1.1.1
 [debug] 	local: revision in cache: commons-logging#commons-logging;1.1.1
 [debug] 	found commons-logging#commons-logging;1.1.1 in sbt-chain
@@ -79,7 +79,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->commons-logging#commons-logging;1.1.1 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->commons-digester#commons-digester;1.8 [compile->default(compile)]
 [info] Resolving commons-digester#commons-digester;1.8 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@128f6b18
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@36b94e51
 [debug] sbt-chain: module revision found in cache: commons-digester#commons-digester;1.8
 [debug] 	local: revision in cache: commons-digester#commons-digester;1.8
 [debug] 	found commons-digester#commons-digester;1.8 in sbt-chain
@@ -88,7 +88,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->commons-digester#commons-digester;1.8 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->commons-beanutils#commons-beanutils;1.7.0 [compile->default(compile)]
 [info] Resolving commons-beanutils#commons-beanutils;1.7.0 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@420095fe
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@1ffffead
 [debug] sbt-chain: module revision found in cache: commons-beanutils#commons-beanutils;1.7.0
 [debug] 	local: revision in cache: commons-beanutils#commons-beanutils;1.7.0
 [debug] 	found commons-beanutils#commons-beanutils;1.7.0 in sbt-chain
@@ -97,7 +97,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->commons-beanutils#commons-beanutils;1.7.0 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->commons-net#commons-net;2.2 [compile->default(compile)]
 [info] Resolving commons-net#commons-net;2.2 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@16126b9e
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@3bd1e26
 [debug] sbt-chain: module revision found in cache: commons-net#commons-net;2.2
 [debug] 	local: revision in cache: commons-net#commons-net;2.2
 [debug] 	found commons-net#commons-net;2.2 in sbt-chain
@@ -106,7 +106,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->commons-net#commons-net;2.2 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->commons-el#commons-el;1.0 [compile->default(compile)]
 [info] Resolving commons-el#commons-el;1.0 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@371d89aa
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@63d9662b
 [debug] sbt-chain: module revision found in cache: commons-el#commons-el;1.0
 [debug] 	local: revision in cache: commons-el#commons-el;1.0
 [debug] 	found commons-el#commons-el;1.0 in sbt-chain
@@ -115,7 +115,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->commons-el#commons-el;1.0 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->oro#oro;2.0.8 [compile->default(compile)]
 [info] Resolving oro#oro;2.0.8 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@4f73a1c
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@131cc01c
 [debug] sbt-chain: module revision found in cache: oro#oro;2.0.8
 [debug] 	local: revision in cache: oro#oro;2.0.8
 [debug] 	found oro#oro;2.0.8 in sbt-chain
@@ -124,7 +124,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->oro#oro;2.0.8 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.codehaus.jackson#jackson-mapper-asl;1.8.8 [compile->default(compile)]
 [info] Resolving org.codehaus.jackson#jackson-mapper-asl;1.8.8 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@3ea36902
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@1691466e
 [debug] sbt-chain: module revision found in cache: org.codehaus.jackson#jackson-mapper-asl;1.8.8
 [debug] 	local: revision in cache: org.codehaus.jackson#jackson-mapper-asl;1.8.8
 [debug] 	found org.codehaus.jackson#jackson-mapper-asl;1.8.8 in sbt-chain
@@ -133,7 +133,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.codehaus.jackson#jackson-mapper-asl;1.8.8 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.codehaus.jackson#jackson-core-asl;1.8.8 [compile->default(compile)]
 [info] Resolving org.codehaus.jackson#jackson-core-asl;1.8.8 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@36b80a87
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@53b43f1b
 [debug] sbt-chain: module revision found in cache: org.codehaus.jackson#jackson-core-asl;1.8.8
 [debug] 	local: revision in cache: org.codehaus.jackson#jackson-core-asl;1.8.8
 [debug] 	found org.codehaus.jackson#jackson-core-asl;1.8.8 in sbt-chain
@@ -142,7 +142,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.codehaus.jackson#jackson-core-asl;1.8.8 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->net.java.dev.jets3t#jets3t;0.7.1 [compile->default(compile)]
 [info] Resolving net.java.dev.jets3t#jets3t;0.7.1 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@d285183
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@2817633d
 [debug] sbt-chain: module revision found in cache: net.java.dev.jets3t#jets3t;0.7.1
 [debug] 	local: revision in cache: net.java.dev.jets3t#jets3t;0.7.1
 [debug] 	found net.java.dev.jets3t#jets3t;0.7.1 in sbt-chain
@@ -151,7 +151,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->net.java.dev.jets3t#jets3t;0.7.1 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->commons-httpclient#commons-httpclient;3.1 [compile->default(compile)]
 [info] Resolving commons-httpclient#commons-httpclient;3.1 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@5acd60d4
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@f78b658
 [debug] sbt-chain: module revision found in cache: commons-httpclient#commons-httpclient;3.1
 [debug] 	local: revision in cache: commons-httpclient#commons-httpclient;3.1
 [debug] 	found commons-httpclient#commons-httpclient;3.1 in sbt-chain
@@ -160,7 +160,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->commons-httpclient#commons-httpclient;3.1 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.apache.curator#curator-recipes;2.4.0 [compile->default(compile)]
 [info] Resolving org.apache.curator#curator-recipes;2.4.0 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@16157f73
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@b207f72
 [debug] sbt-chain: module revision found in cache: org.apache.curator#curator-recipes;2.4.0
 [debug] 	local: revision in cache: org.apache.curator#curator-recipes;2.4.0
 [debug] 	found org.apache.curator#curator-recipes;2.4.0 in sbt-chain
@@ -169,7 +169,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.apache.curator#curator-recipes;2.4.0 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.apache.curator#curator-framework;2.4.0 [compile->default(compile)]
 [info] Resolving org.apache.curator#curator-framework;2.4.0 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@7adda6e2
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@6c36742b
 [debug] sbt-chain: module revision found in cache: org.apache.curator#curator-framework;2.4.0
 [debug] 	local: revision in cache: org.apache.curator#curator-framework;2.4.0
 [debug] 	found org.apache.curator#curator-framework;2.4.0 in sbt-chain
@@ -178,7 +178,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.apache.curator#curator-framework;2.4.0 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.apache.curator#curator-client;2.4.0 [compile->default(compile)]
 [info] Resolving org.apache.curator#curator-client;2.4.0 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@102f5cf7
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@1a4937a9
 [debug] sbt-chain: module revision found in cache: org.apache.curator#curator-client;2.4.0
 [debug] 	local: revision in cache: org.apache.curator#curator-client;2.4.0
 [debug] 	found org.apache.curator#curator-client;2.4.0 in sbt-chain
@@ -187,7 +187,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.apache.curator#curator-client;2.4.0 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.slf4j#slf4j-api;1.7.5 [compile->default(compile)]
 [info] Resolving org.slf4j#slf4j-api;1.7.5 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@3a5d2ca2
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@6458bba8
 [debug] sbt-chain: module revision found in cache: org.slf4j#slf4j-api;1.7.5
 [debug] 	local: revision in cache: org.slf4j#slf4j-api;1.7.5
 [debug] 	found org.slf4j#slf4j-api;1.7.5 in sbt-chain
@@ -196,7 +196,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.slf4j#slf4j-api;1.7.5 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.apache.zookeeper#zookeeper;3.4.5 [compile->default(compile)]
 [info] Resolving org.apache.zookeeper#zookeeper;3.4.5 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@4ec05987
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@18d597e5
 [debug] sbt-chain: module revision found in cache: org.apache.zookeeper#zookeeper;3.4.5
 [debug] 	local: revision in cache: org.apache.zookeeper#zookeeper;3.4.5
 [debug] 	found org.apache.zookeeper#zookeeper;3.4.5 in sbt-chain
@@ -205,7 +205,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.apache.zookeeper#zookeeper;3.4.5 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.slf4j#slf4j-log4j12;1.7.5 [compile->default(compile)]
 [info] Resolving org.slf4j#slf4j-log4j12;1.7.5 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@758d6f51
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@11d4f3ef
 [debug] sbt-chain: module revision found in cache: org.slf4j#slf4j-log4j12;1.7.5
 [debug] 	local: revision in cache: org.slf4j#slf4j-log4j12;1.7.5
 [debug] 	found org.slf4j#slf4j-log4j12;1.7.5 in sbt-chain
@@ -214,7 +214,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.slf4j#slf4j-log4j12;1.7.5 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->log4j#log4j;1.2.17 [compile->default(compile)]
 [info] Resolving log4j#log4j;1.2.17 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@4abe6ad6
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@413f0491
 [debug] sbt-chain: module revision found in cache: log4j#log4j;1.2.17
 [debug] 	local: revision in cache: log4j#log4j;1.2.17
 [debug] 	found log4j#log4j;1.2.17 in sbt-chain
@@ -223,7 +223,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->log4j#log4j;1.2.17 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->jline#jline;0.9.94 [compile->default(compile)]
 [info] Resolving jline#jline;0.9.94 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@5ca70f0d
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@9dac8dc
 [debug] sbt-chain: module revision found in cache: jline#jline;0.9.94
 [debug] 	local: revision in cache: jline#jline;0.9.94
 [debug] 	found jline#jline;0.9.94 in sbt-chain
@@ -232,7 +232,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->jline#jline;0.9.94 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.eclipse.jetty#jetty-plus;8.1.14.v20131031 [compile->default(compile)]
 [info] Resolving org.eclipse.jetty#jetty-plus;8.1.14.v20131031 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@49cde743
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@3a3769d5
 [debug] sbt-chain: module revision found in cache: org.eclipse.jetty#jetty-plus;8.1.14.v20131031
 [debug] 	local: revision in cache: org.eclipse.jetty#jetty-plus;8.1.14.v20131031
 [debug] 	found org.eclipse.jetty#jetty-plus;8.1.14.v20131031 in sbt-chain
@@ -241,7 +241,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.eclipse.jetty#jetty-plus;8.1.14.v20131031 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.eclipse.jetty.orbit#javax.transaction;1.1.1.v201105210645 [compile->default(compile)]
 [info] Resolving org.eclipse.jetty.orbit#javax.transaction;1.1.1.v201105210645 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@183c1b73
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@65ff5365
 [debug] sbt-chain: module revision found in cache: org.eclipse.jetty.orbit#javax.transaction;1.1.1.v201105210645
 [debug] 	local: revision in cache: org.eclipse.jetty.orbit#javax.transaction;1.1.1.v201105210645
 [debug] 	found org.eclipse.jetty.orbit#javax.transaction;1.1.1.v201105210645 in sbt-chain
@@ -250,7 +250,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.eclipse.jetty.orbit#javax.transaction;1.1.1.v201105210645 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.eclipse.jetty#jetty-webapp;8.1.14.v20131031 [compile->default(compile)]
 [info] Resolving org.eclipse.jetty#jetty-webapp;8.1.14.v20131031 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@6a76bcb1
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@3932fc23
 [debug] sbt-chain: module revision found in cache: org.eclipse.jetty#jetty-webapp;8.1.14.v20131031
 [debug] 	local: revision in cache: org.eclipse.jetty#jetty-webapp;8.1.14.v20131031
 [debug] 	found org.eclipse.jetty#jetty-webapp;8.1.14.v20131031 in sbt-chain
@@ -259,7 +259,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.eclipse.jetty#jetty-webapp;8.1.14.v20131031 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.eclipse.jetty#jetty-xml;8.1.14.v20131031 [compile->default(compile)]
 [info] Resolving org.eclipse.jetty#jetty-xml;8.1.14.v20131031 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@53980d6e
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@1e0fa770
 [debug] sbt-chain: module revision found in cache: org.eclipse.jetty#jetty-xml;8.1.14.v20131031
 [debug] 	local: revision in cache: org.eclipse.jetty#jetty-xml;8.1.14.v20131031
 [debug] 	found org.eclipse.jetty#jetty-xml;8.1.14.v20131031 in sbt-chain
@@ -268,7 +268,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.eclipse.jetty#jetty-xml;8.1.14.v20131031 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.eclipse.jetty#jetty-util;8.1.14.v20131031 [compile->default(compile)]
 [info] Resolving org.eclipse.jetty#jetty-util;8.1.14.v20131031 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@25b35fb4
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@691155ca
 [debug] sbt-chain: module revision found in cache: org.eclipse.jetty#jetty-util;8.1.14.v20131031
 [debug] 	local: revision in cache: org.eclipse.jetty#jetty-util;8.1.14.v20131031
 [debug] 	found org.eclipse.jetty#jetty-util;8.1.14.v20131031 in sbt-chain
@@ -277,7 +277,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.eclipse.jetty#jetty-util;8.1.14.v20131031 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.eclipse.jetty#jetty-servlet;8.1.14.v20131031 [compile->default(compile)]
 [info] Resolving org.eclipse.jetty#jetty-servlet;8.1.14.v20131031 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@3cfbb8d7
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@1d6508f7
 [debug] sbt-chain: module revision found in cache: org.eclipse.jetty#jetty-servlet;8.1.14.v20131031
 [debug] 	local: revision in cache: org.eclipse.jetty#jetty-servlet;8.1.14.v20131031
 [debug] 	found org.eclipse.jetty#jetty-servlet;8.1.14.v20131031 in sbt-chain
@@ -286,7 +286,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.eclipse.jetty#jetty-servlet;8.1.14.v20131031 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.eclipse.jetty#jetty-security;8.1.14.v20131031 [compile->default(compile)]
 [info] Resolving org.eclipse.jetty#jetty-security;8.1.14.v20131031 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@1567261
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@6af76f6b
 [debug] sbt-chain: module revision found in cache: org.eclipse.jetty#jetty-security;8.1.14.v20131031
 [debug] 	local: revision in cache: org.eclipse.jetty#jetty-security;8.1.14.v20131031
 [debug] 	found org.eclipse.jetty#jetty-security;8.1.14.v20131031 in sbt-chain
@@ -295,7 +295,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.eclipse.jetty#jetty-security;8.1.14.v20131031 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.eclipse.jetty#jetty-server;8.1.14.v20131031 [compile->default(compile)]
 [info] Resolving org.eclipse.jetty#jetty-server;8.1.14.v20131031 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@1d572b64
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@1197a449
 [debug] sbt-chain: module revision found in cache: org.eclipse.jetty#jetty-server;8.1.14.v20131031
 [debug] 	local: revision in cache: org.eclipse.jetty#jetty-server;8.1.14.v20131031
 [debug] 	found org.eclipse.jetty#jetty-server;8.1.14.v20131031 in sbt-chain
@@ -304,7 +304,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.eclipse.jetty#jetty-server;8.1.14.v20131031 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.eclipse.jetty.orbit#javax.servlet;3.0.0.v201112011016 [compile->default(compile)]
 [info] Resolving org.eclipse.jetty.orbit#javax.servlet;3.0.0.v201112011016 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@6257475
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@7e5f5ad7
 [debug] sbt-chain: module revision found in cache: org.eclipse.jetty.orbit#javax.servlet;3.0.0.v201112011016
 [debug] 	local: revision in cache: org.eclipse.jetty.orbit#javax.servlet;3.0.0.v201112011016
 [debug] 	found org.eclipse.jetty.orbit#javax.servlet;3.0.0.v201112011016 in sbt-chain
@@ -313,7 +313,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.eclipse.jetty.orbit#javax.servlet;3.0.0.v201112011016 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.eclipse.jetty#jetty-continuation;8.1.14.v20131031 [compile->default(compile)]
 [info] Resolving org.eclipse.jetty#jetty-continuation;8.1.14.v20131031 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@479ef6e6
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@27dad2f7
 [debug] sbt-chain: module revision found in cache: org.eclipse.jetty#jetty-continuation;8.1.14.v20131031
 [debug] 	local: revision in cache: org.eclipse.jetty#jetty-continuation;8.1.14.v20131031
 [debug] 	found org.eclipse.jetty#jetty-continuation;8.1.14.v20131031 in sbt-chain
@@ -322,7 +322,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.eclipse.jetty#jetty-continuation;8.1.14.v20131031 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.eclipse.jetty#jetty-http;8.1.14.v20131031 [compile->default(compile)]
 [info] Resolving org.eclipse.jetty#jetty-http;8.1.14.v20131031 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@356909a1
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@dfdee14
 [debug] sbt-chain: module revision found in cache: org.eclipse.jetty#jetty-http;8.1.14.v20131031
 [debug] 	local: revision in cache: org.eclipse.jetty#jetty-http;8.1.14.v20131031
 [debug] 	found org.eclipse.jetty#jetty-http;8.1.14.v20131031 in sbt-chain
@@ -331,7 +331,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.eclipse.jetty#jetty-http;8.1.14.v20131031 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.eclipse.jetty#jetty-io;8.1.14.v20131031 [compile->default(compile)]
 [info] Resolving org.eclipse.jetty#jetty-io;8.1.14.v20131031 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@cb1f510
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@2f239469
 [debug] sbt-chain: module revision found in cache: org.eclipse.jetty#jetty-io;8.1.14.v20131031
 [debug] 	local: revision in cache: org.eclipse.jetty#jetty-io;8.1.14.v20131031
 [debug] 	found org.eclipse.jetty#jetty-io;8.1.14.v20131031 in sbt-chain
@@ -340,7 +340,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.eclipse.jetty#jetty-io;8.1.14.v20131031 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.eclipse.jetty#jetty-jndi;8.1.14.v20131031 [compile->default(compile)]
 [info] Resolving org.eclipse.jetty#jetty-jndi;8.1.14.v20131031 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@141206d0
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@5ddd693
 [debug] sbt-chain: module revision found in cache: org.eclipse.jetty#jetty-jndi;8.1.14.v20131031
 [debug] 	local: revision in cache: org.eclipse.jetty#jetty-jndi;8.1.14.v20131031
 [debug] 	found org.eclipse.jetty#jetty-jndi;8.1.14.v20131031 in sbt-chain
@@ -349,7 +349,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.eclipse.jetty#jetty-jndi;8.1.14.v20131031 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.eclipse.jetty.orbit#javax.mail.glassfish;1.4.1.v201005082020 [compile->default(compile)]
 [info] Resolving org.eclipse.jetty.orbit#javax.mail.glassfish;1.4.1.v201005082020 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@25954f4e
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@e4768a
 [debug] sbt-chain: module revision found in cache: org.eclipse.jetty.orbit#javax.mail.glassfish;1.4.1.v201005082020
 [debug] 	local: revision in cache: org.eclipse.jetty.orbit#javax.mail.glassfish;1.4.1.v201005082020
 [debug] 	found org.eclipse.jetty.orbit#javax.mail.glassfish;1.4.1.v201005082020 in sbt-chain
@@ -358,7 +358,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.eclipse.jetty.orbit#javax.mail.glassfish;1.4.1.v201005082020 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.eclipse.jetty.orbit#javax.activation;1.1.0.v201105071233 [compile->default(compile)]
 [info] Resolving org.eclipse.jetty.orbit#javax.activation;1.1.0.v201105071233 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@3592165f
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@50c2ae3
 [debug] sbt-chain: module revision found in cache: org.eclipse.jetty.orbit#javax.activation;1.1.0.v201105071233
 [debug] 	local: revision in cache: org.eclipse.jetty.orbit#javax.activation;1.1.0.v201105071233
 [debug] 	found org.eclipse.jetty.orbit#javax.activation;1.1.0.v201105071233 in sbt-chain
@@ -367,7 +367,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.eclipse.jetty.orbit#javax.activation;1.1.0.v201105071233 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.apache.commons#commons-lang3;3.3.2 [compile->default(compile)]
 [info] Resolving org.apache.commons#commons-lang3;3.3.2 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@627abc4c
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@2bb0ac24
 [debug] sbt-chain: module revision found in cache: org.apache.commons#commons-lang3;3.3.2
 [debug] 	local: revision in cache: org.apache.commons#commons-lang3;3.3.2
 [debug] 	found org.apache.commons#commons-lang3;3.3.2 in sbt-chain
@@ -376,7 +376,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.apache.commons#commons-lang3;3.3.2 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.slf4j#jul-to-slf4j;1.7.5 [compile->default(compile)]
 [info] Resolving org.slf4j#jul-to-slf4j;1.7.5 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@2d7d4200
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@c934164
 [debug] sbt-chain: module revision found in cache: org.slf4j#jul-to-slf4j;1.7.5
 [debug] 	local: revision in cache: org.slf4j#jul-to-slf4j;1.7.5
 [debug] 	found org.slf4j#jul-to-slf4j;1.7.5 in sbt-chain
@@ -385,7 +385,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.slf4j#jul-to-slf4j;1.7.5 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.slf4j#jcl-over-slf4j;1.7.5 [compile->default(compile)]
 [info] Resolving org.slf4j#jcl-over-slf4j;1.7.5 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@2b1b4b2c
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@74cfa413
 [debug] sbt-chain: module revision found in cache: org.slf4j#jcl-over-slf4j;1.7.5
 [debug] 	local: revision in cache: org.slf4j#jcl-over-slf4j;1.7.5
 [debug] 	found org.slf4j#jcl-over-slf4j;1.7.5 in sbt-chain
@@ -394,7 +394,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.slf4j#jcl-over-slf4j;1.7.5 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->com.ning#compress-lzf;1.0.0 [compile->default(compile)]
 [info] Resolving com.ning#compress-lzf;1.0.0 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@121f8eb9
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@74b736c0
 [debug] sbt-chain: module revision found in cache: com.ning#compress-lzf;1.0.0
 [debug] 	local: revision in cache: com.ning#compress-lzf;1.0.0
 [debug] 	found com.ning#compress-lzf;1.0.0 in sbt-chain
@@ -403,7 +403,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->com.ning#compress-lzf;1.0.0 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.xerial.snappy#snappy-java;1.0.5.3 [compile->default(compile)]
 [info] Resolving org.xerial.snappy#snappy-java;1.0.5.3 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@1c1a4c34
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@2ae5e79a
 [debug] sbt-chain: module revision found in cache: org.xerial.snappy#snappy-java;1.0.5.3
 [debug] 	local: revision in cache: org.xerial.snappy#snappy-java;1.0.5.3
 [debug] 	found org.xerial.snappy#snappy-java;1.0.5.3 in sbt-chain
@@ -412,7 +412,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.xerial.snappy#snappy-java;1.0.5.3 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->net.jpountz.lz4#lz4;1.2.0 [compile->default(compile)]
 [info] Resolving net.jpountz.lz4#lz4;1.2.0 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@6de7d180
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@d390d20
 [debug] sbt-chain: module revision found in cache: net.jpountz.lz4#lz4;1.2.0
 [debug] 	local: revision in cache: net.jpountz.lz4#lz4;1.2.0
 [debug] 	found net.jpountz.lz4#lz4;1.2.0 in sbt-chain
@@ -421,7 +421,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->net.jpountz.lz4#lz4;1.2.0 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->com.twitter#chill_2.10;0.3.6 [compile->default(compile)]
 [info] Resolving com.twitter#chill_2.10;0.3.6 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@3003e6f1
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@47ae4695
 [debug] sbt-chain: module revision found in cache: com.twitter#chill_2.10;0.3.6
 [debug] 	local: revision in cache: com.twitter#chill_2.10;0.3.6
 [debug] 	found com.twitter#chill_2.10;0.3.6 in sbt-chain
@@ -430,7 +430,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->com.twitter#chill_2.10;0.3.6 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->com.twitter#chill-java;0.3.6 [compile->default(compile)]
 [info] Resolving com.twitter#chill-java;0.3.6 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@25f6a256
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@5c749656
 [debug] sbt-chain: module revision found in cache: com.twitter#chill-java;0.3.6
 [debug] 	local: revision in cache: com.twitter#chill-java;0.3.6
 [debug] 	found com.twitter#chill-java;0.3.6 in sbt-chain
@@ -439,7 +439,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->com.twitter#chill-java;0.3.6 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->com.esotericsoftware.kryo#kryo;2.21 [compile->default(compile)]
 [info] Resolving com.esotericsoftware.kryo#kryo;2.21 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@57d3f821
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@78b920b5
 [debug] sbt-chain: module revision found in cache: com.esotericsoftware.kryo#kryo;2.21
 [debug] 	local: revision in cache: com.esotericsoftware.kryo#kryo;2.21
 [debug] 	found com.esotericsoftware.kryo#kryo;2.21 in sbt-chain
@@ -448,7 +448,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->com.esotericsoftware.kryo#kryo;2.21 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->com.esotericsoftware.reflectasm#reflectasm;1.07 [compile->default(compile)]
 [info] Resolving com.esotericsoftware.reflectasm#reflectasm;1.07 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@63f4c8a4
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@4023770b
 [debug] sbt-chain: module revision found in cache: com.esotericsoftware.reflectasm#reflectasm;1.07
 [debug] 	local: revision in cache: com.esotericsoftware.reflectasm#reflectasm;1.07
 [debug] 	found com.esotericsoftware.reflectasm#reflectasm;1.07 in sbt-chain
@@ -457,7 +457,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->com.esotericsoftware.reflectasm#reflectasm;1.07 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->com.esotericsoftware.minlog#minlog;1.2 [compile->default(compile)]
 [info] Resolving com.esotericsoftware.minlog#minlog;1.2 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@3176bb9c
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@6379ad41
 [debug] sbt-chain: module revision found in cache: com.esotericsoftware.minlog#minlog;1.2
 [debug] 	local: revision in cache: com.esotericsoftware.minlog#minlog;1.2
 [debug] 	found com.esotericsoftware.minlog#minlog;1.2 in sbt-chain
@@ -466,7 +466,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->com.esotericsoftware.minlog#minlog;1.2 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.objenesis#objenesis;1.2 [compile->default(compile)]
 [info] Resolving org.objenesis#objenesis;1.2 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@39f7d791
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@43fe6c74
 [debug] sbt-chain: module revision found in cache: org.objenesis#objenesis;1.2
 [debug] 	local: revision in cache: org.objenesis#objenesis;1.2
 [debug] 	found org.objenesis#objenesis;1.2 in sbt-chain
@@ -475,7 +475,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.objenesis#objenesis;1.2 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.spark-project.akka#akka-remote_2.10;2.2.3-shaded-protobuf [compile->default(compile)]
 [info] Resolving org.spark-project.akka#akka-remote_2.10;2.2.3-shaded-protobuf ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@761e251c
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@4b97d158
 [debug] sbt-chain: module revision found in cache: org.spark-project.akka#akka-remote_2.10;2.2.3-shaded-protobuf
 [debug] 	local: revision in cache: org.spark-project.akka#akka-remote_2.10;2.2.3-shaded-protobuf
 [debug] 	found org.spark-project.akka#akka-remote_2.10;2.2.3-shaded-protobuf in sbt-chain
@@ -484,7 +484,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.spark-project.akka#akka-remote_2.10;2.2.3-shaded-protobuf [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.spark-project.akka#akka-actor_2.10;2.2.3-shaded-protobuf [compile->default(compile)]
 [info] Resolving org.spark-project.akka#akka-actor_2.10;2.2.3-shaded-protobuf ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@18e20760
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@f050a35
 [debug] sbt-chain: module revision found in cache: org.spark-project.akka#akka-actor_2.10;2.2.3-shaded-protobuf
 [debug] 	local: revision in cache: org.spark-project.akka#akka-actor_2.10;2.2.3-shaded-protobuf
 [debug] 	found org.spark-project.akka#akka-actor_2.10;2.2.3-shaded-protobuf in sbt-chain
@@ -493,7 +493,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.spark-project.akka#akka-actor_2.10;2.2.3-shaded-protobuf [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->com.typesafe#config;1.0.2 [compile->default(compile)]
 [info] Resolving com.typesafe#config;1.0.2 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@291882c0
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@2649d3d7
 [debug] sbt-chain: module revision found in cache: com.typesafe#config;1.0.2
 [debug] 	local: revision in cache: com.typesafe#config;1.0.2
 [debug] 	found com.typesafe#config;1.0.2 in sbt-chain
@@ -502,7 +502,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->com.typesafe#config;1.0.2 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.spark-project.protobuf#protobuf-java;2.4.1-shaded [compile->default(compile)]
 [info] Resolving org.spark-project.protobuf#protobuf-java;2.4.1-shaded ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@71e5d808
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@18ca4b79
 [debug] sbt-chain: module revision found in cache: org.spark-project.protobuf#protobuf-java;2.4.1-shaded
 [debug] 	local: revision in cache: org.spark-project.protobuf#protobuf-java;2.4.1-shaded
 [debug] 	found org.spark-project.protobuf#protobuf-java;2.4.1-shaded in sbt-chain
@@ -511,7 +511,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.spark-project.protobuf#protobuf-java;2.4.1-shaded [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.uncommons.maths#uncommons-maths;1.2.2a [compile->default(compile)]
 [info] Resolving org.uncommons.maths#uncommons-maths;1.2.2a ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@722923f4
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@206dafc9
 [debug] sbt-chain: module revision found in cache: org.uncommons.maths#uncommons-maths;1.2.2a
 [debug] 	local: revision in cache: org.uncommons.maths#uncommons-maths;1.2.2a
 [debug] 	found org.uncommons.maths#uncommons-maths;1.2.2a in sbt-chain
@@ -520,7 +520,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.uncommons.maths#uncommons-maths;1.2.2a [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.spark-project.akka#akka-slf4j_2.10;2.2.3-shaded-protobuf [compile->default(compile)]
 [info] Resolving org.spark-project.akka#akka-slf4j_2.10;2.2.3-shaded-protobuf ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@59dc61a4
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@4ba9eb6c
 [debug] sbt-chain: module revision found in cache: org.spark-project.akka#akka-slf4j_2.10;2.2.3-shaded-protobuf
 [debug] 	local: revision in cache: org.spark-project.akka#akka-slf4j_2.10;2.2.3-shaded-protobuf
 [debug] 	found org.spark-project.akka#akka-slf4j_2.10;2.2.3-shaded-protobuf in sbt-chain
@@ -529,7 +529,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.spark-project.akka#akka-slf4j_2.10;2.2.3-shaded-protobuf [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.json4s#json4s-jackson_2.10;3.2.10 [compile->default(compile)]
 [info] Resolving org.json4s#json4s-jackson_2.10;3.2.10 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@33ac01b1
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@48ff7775
 [debug] sbt-chain: module revision found in cache: org.json4s#json4s-jackson_2.10;3.2.10
 [debug] 	local: revision in cache: org.json4s#json4s-jackson_2.10;3.2.10
 [debug] 	found org.json4s#json4s-jackson_2.10;3.2.10 in sbt-chain
@@ -538,7 +538,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.json4s#json4s-jackson_2.10;3.2.10 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.json4s#json4s-core_2.10;3.2.10 [compile->default(compile)]
 [info] Resolving org.json4s#json4s-core_2.10;3.2.10 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@4ff7b933
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@170b21ce
 [debug] sbt-chain: module revision found in cache: org.json4s#json4s-core_2.10;3.2.10
 [debug] 	local: revision in cache: org.json4s#json4s-core_2.10;3.2.10
 [debug] 	found org.json4s#json4s-core_2.10;3.2.10 in sbt-chain
@@ -547,7 +547,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.json4s#json4s-core_2.10;3.2.10 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.json4s#json4s-ast_2.10;3.2.10 [compile->default(compile)]
 [info] Resolving org.json4s#json4s-ast_2.10;3.2.10 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@255e2446
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@3b3436cd
 [debug] sbt-chain: module revision found in cache: org.json4s#json4s-ast_2.10;3.2.10
 [debug] 	local: revision in cache: org.json4s#json4s-ast_2.10;3.2.10
 [debug] 	found org.json4s#json4s-ast_2.10;3.2.10 in sbt-chain
@@ -556,7 +556,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.json4s#json4s-ast_2.10;3.2.10 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->com.thoughtworks.paranamer#paranamer;2.6 [compile->default(compile)]
 [info] Resolving com.thoughtworks.paranamer#paranamer;2.6 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@74e20493
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@1027653b
 [debug] sbt-chain: module revision found in cache: com.thoughtworks.paranamer#paranamer;2.6
 [debug] 	local: revision in cache: com.thoughtworks.paranamer#paranamer;2.6
 [debug] 	found com.thoughtworks.paranamer#paranamer;2.6 in sbt-chain
@@ -565,7 +565,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->com.thoughtworks.paranamer#paranamer;2.6 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.scala-lang#scalap;2.10.4 [compile->default(compile)]
 [info] Resolving org.scala-lang#scalap;2.10.4 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@7c22783e
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@1dc01a30
 [debug] sbt-chain: module revision found in cache: org.scala-lang#scalap;2.10.4
 [debug] 	local: revision in cache: org.scala-lang#scalap;2.10.4
 [debug] 	found org.scala-lang#scalap;2.10.4 in sbt-chain
@@ -574,7 +574,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.scala-lang#scalap;2.10.4 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.scala-lang#scala-compiler;2.10.4 [compile->default(compile)]
 [info] Resolving org.scala-lang#scala-compiler;2.10.4 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@4d966afc
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@6e84c02b
 [debug] sbt-chain: module revision found in cache: org.scala-lang#scala-compiler;2.10.4
 [debug] 	local: revision in cache: org.scala-lang#scala-compiler;2.10.4
 [debug] 	found org.scala-lang#scala-compiler;2.10.4 in sbt-chain
@@ -583,7 +583,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.scala-lang#scala-compiler;2.10.4 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.scala-lang#scala-reflect;2.10.4 [compile->default(compile)]
 [info] Resolving org.scala-lang#scala-reflect;2.10.4 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@1c998120
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@116cdd92
 [debug] sbt-chain: module revision found in cache: org.scala-lang#scala-reflect;2.10.4
 [debug] 	local: revision in cache: org.scala-lang#scala-reflect;2.10.4
 [debug] 	found org.scala-lang#scala-reflect;2.10.4 in sbt-chain
@@ -593,7 +593,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.scala-lang#scala-reflect;2.10.4 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->com.fasterxml.jackson.core#jackson-databind;2.3.1 [compile->default(compile)]
 [info] Resolving com.fasterxml.jackson.core#jackson-databind;2.3.1 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@2cad08df
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@2a73c8b9
 [debug] sbt-chain: module revision found in cache: com.fasterxml.jackson.core#jackson-databind;2.3.1
 [debug] 	local: revision in cache: com.fasterxml.jackson.core#jackson-databind;2.3.1
 [debug] 	found com.fasterxml.jackson.core#jackson-databind;2.3.1 in sbt-chain
@@ -602,7 +602,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->com.fasterxml.jackson.core#jackson-databind;2.3.1 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->com.fasterxml.jackson.core#jackson-annotations;2.3.0 [compile->default(compile)]
 [info] Resolving com.fasterxml.jackson.core#jackson-annotations;2.3.0 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@50537c32
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@5c0cc44
 [debug] sbt-chain: module revision found in cache: com.fasterxml.jackson.core#jackson-annotations;2.3.0
 [debug] 	local: revision in cache: com.fasterxml.jackson.core#jackson-annotations;2.3.0
 [debug] 	found com.fasterxml.jackson.core#jackson-annotations;2.3.0 in sbt-chain
@@ -611,7 +611,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->com.fasterxml.jackson.core#jackson-annotations;2.3.0 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->com.fasterxml.jackson.core#jackson-core;2.3.1 [compile->default(compile)]
 [info] Resolving com.fasterxml.jackson.core#jackson-core;2.3.1 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@976d77f
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@25ab84e8
 [debug] sbt-chain: module revision found in cache: com.fasterxml.jackson.core#jackson-core;2.3.1
 [debug] 	local: revision in cache: com.fasterxml.jackson.core#jackson-core;2.3.1
 [debug] 	found com.fasterxml.jackson.core#jackson-core;2.3.1 in sbt-chain
@@ -620,7 +620,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->com.fasterxml.jackson.core#jackson-core;2.3.1 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->concurrent#concurrent;1.3.4 [compile->default(compile)]
 [info] Resolving concurrent#concurrent;1.3.4 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@328deba7
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@7ea6413c
 [debug] sbt-chain: module revision found in cache: concurrent#concurrent;1.3.4
 [debug] 	local: revision in cache: concurrent#concurrent;1.3.4
 [debug] 	found concurrent#concurrent;1.3.4 in sbt-chain
@@ -629,7 +629,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->concurrent#concurrent;1.3.4 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.apache.mesos#mesos;0.18.1 [compile->default(compile)]
 [info] Resolving org.apache.mesos#mesos;0.18.1 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@13f3a9d8
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@72107711
 [debug] sbt-chain: module revision found in cache: org.apache.mesos#mesos;0.18.1
 [debug] 	local: revision in cache: org.apache.mesos#mesos;0.18.1
 [debug] 	found org.apache.mesos#mesos;0.18.1 in sbt-chain
@@ -638,7 +638,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.apache.mesos#mesos;0.18.1 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->io.netty#netty-all;4.0.23.Final [compile->default(compile)]
 [info] Resolving io.netty#netty-all;4.0.23.Final ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@8b18f53
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@70346376
 [debug] sbt-chain: module revision found in cache: io.netty#netty-all;4.0.23.Final
 [debug] 	local: revision in cache: io.netty#netty-all;4.0.23.Final
 [debug] 	found io.netty#netty-all;4.0.23.Final in sbt-chain
@@ -647,7 +647,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->io.netty#netty-all;4.0.23.Final [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->com.clearspring.analytics#stream;2.7.0 [compile->default(compile)]
 [info] Resolving com.clearspring.analytics#stream;2.7.0 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@537542f4
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@5b7ca969
 [debug] sbt-chain: module revision found in cache: com.clearspring.analytics#stream;2.7.0
 [debug] 	local: revision in cache: com.clearspring.analytics#stream;2.7.0
 [debug] 	found com.clearspring.analytics#stream;2.7.0 in sbt-chain
@@ -656,7 +656,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->com.clearspring.analytics#stream;2.7.0 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->com.codahale.metrics#metrics-jvm;3.0.0 [compile->default(compile)]
 [info] Resolving com.codahale.metrics#metrics-jvm;3.0.0 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@772b3d92
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@4866319d
 [debug] sbt-chain: module revision found in cache: com.codahale.metrics#metrics-jvm;3.0.0
 [debug] 	local: revision in cache: com.codahale.metrics#metrics-jvm;3.0.0
 [debug] 	found com.codahale.metrics#metrics-jvm;3.0.0 in sbt-chain
@@ -665,7 +665,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->com.codahale.metrics#metrics-jvm;3.0.0 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->com.codahale.metrics#metrics-json;3.0.0 [compile->default(compile)]
 [info] Resolving com.codahale.metrics#metrics-json;3.0.0 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@642ebad1
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@3daca549
 [debug] sbt-chain: module revision found in cache: com.codahale.metrics#metrics-json;3.0.0
 [debug] 	local: revision in cache: com.codahale.metrics#metrics-json;3.0.0
 [debug] 	found com.codahale.metrics#metrics-json;3.0.0 in sbt-chain
@@ -674,7 +674,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->com.codahale.metrics#metrics-json;3.0.0 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->com.codahale.metrics#metrics-graphite;3.0.0 [compile->default(compile)]
 [info] Resolving com.codahale.metrics#metrics-graphite;3.0.0 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@37dbc7dc
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@164ecbc2
 [debug] sbt-chain: module revision found in cache: com.codahale.metrics#metrics-graphite;3.0.0
 [debug] 	local: revision in cache: com.codahale.metrics#metrics-graphite;3.0.0
 [debug] 	found com.codahale.metrics#metrics-graphite;3.0.0 in sbt-chain
@@ -683,7 +683,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->com.codahale.metrics#metrics-graphite;3.0.0 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.tachyonproject#tachyon-client;0.5.0 [compile->default(compile)]
 [info] Resolving org.tachyonproject#tachyon-client;0.5.0 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@3ec4f68e
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@507c941b
 [debug] sbt-chain: module revision found in cache: org.tachyonproject#tachyon-client;0.5.0
 [debug] 	local: revision in cache: org.tachyonproject#tachyon-client;0.5.0
 [debug] 	found org.tachyonproject#tachyon-client;0.5.0 in sbt-chain
@@ -692,7 +692,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.tachyonproject#tachyon-client;0.5.0 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.tachyonproject#tachyon;0.5.0 [compile->default(compile)]
 [info] Resolving org.tachyonproject#tachyon;0.5.0 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@50bee53
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@19ecdb0c
 [debug] sbt-chain: module revision found in cache: org.tachyonproject#tachyon;0.5.0
 [debug] 	local: revision in cache: org.tachyonproject#tachyon;0.5.0
 [debug] 	found org.tachyonproject#tachyon;0.5.0 in sbt-chain
@@ -701,7 +701,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.tachyonproject#tachyon;0.5.0 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->commons-io#commons-io;2.4 [compile->default(compile)]
 [info] Resolving commons-io#commons-io;2.4 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@16f48269
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@1afd635f
 [debug] sbt-chain: module revision found in cache: commons-io#commons-io;2.4
 [debug] 	local: revision in cache: commons-io#commons-io;2.4
 [debug] 	found commons-io#commons-io;2.4 in sbt-chain
@@ -710,7 +710,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->commons-io#commons-io;2.4 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.spark-project#pyrolite;2.0.1 [compile->default(compile)]
 [info] Resolving org.spark-project#pyrolite;2.0.1 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@145bbccd
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@1711ba45
 [debug] sbt-chain: module revision found in cache: org.spark-project#pyrolite;2.0.1
 [debug] 	local: revision in cache: org.spark-project#pyrolite;2.0.1
 [debug] 	found org.spark-project#pyrolite;2.0.1 in sbt-chain
@@ -719,7 +719,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.spark-project#pyrolite;2.0.1 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->net.sf.py4j#py4j;0.8.2.1 [compile->default(compile)]
 [info] Resolving net.sf.py4j#py4j;0.8.2.1 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@47d44531
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@be3fd25
 [debug] sbt-chain: module revision found in cache: net.sf.py4j#py4j;0.8.2.1
 [debug] 	local: revision in cache: net.sf.py4j#py4j;0.8.2.1
 [debug] 	found net.sf.py4j#py4j;0.8.2.1 in sbt-chain
@@ -728,7 +728,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->net.sf.py4j#py4j;0.8.2.1 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->com.datastax.spark#spark-cassandra-connector_2.10;1.1.1 [compile->default(compile)]
 [info] Resolving com.datastax.spark#spark-cassandra-connector_2.10;1.1.1 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@133a6126
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@1cab0ee7
 [debug] sbt-chain: module revision found in cache: com.datastax.spark#spark-cassandra-connector_2.10;1.1.1
 [debug] 	local: revision in cache: com.datastax.spark#spark-cassandra-connector_2.10;1.1.1
 [debug] 	found com.datastax.spark#spark-cassandra-connector_2.10;1.1.1 in sbt-chain
@@ -737,7 +737,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->com.datastax.spark#spark-cassandra-connector_2.10;1.1.1 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->com.codahale.metrics#metrics-core;3.0.2 [compile->default(compile)]
 [info] Resolving com.codahale.metrics#metrics-core;3.0.2 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@85618d0
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@34c43388
 [debug] sbt-chain: module revision found in cache: com.codahale.metrics#metrics-core;3.0.2
 [debug] 	local: revision in cache: com.codahale.metrics#metrics-core;3.0.2
 [debug] 	found com.codahale.metrics#metrics-core;3.0.2 in sbt-chain
@@ -746,7 +746,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->com.codahale.metrics#metrics-core;3.0.2 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.apache.cassandra#cassandra-thrift;2.1.2 [compile->default(compile)]
 [info] Resolving org.apache.cassandra#cassandra-thrift;2.1.2 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@1db747d6
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@549f8675
 [debug] sbt-chain: module revision found in cache: org.apache.cassandra#cassandra-thrift;2.1.2
 [debug] 	local: revision in cache: org.apache.cassandra#cassandra-thrift;2.1.2
 [debug] 	found org.apache.cassandra#cassandra-thrift;2.1.2 in sbt-chain
@@ -755,7 +755,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.apache.cassandra#cassandra-thrift;2.1.2 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.apache.thrift#libthrift;0.9.1 [compile->default(compile)]
 [info] Resolving org.apache.thrift#libthrift;0.9.1 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@7db484dd
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@115ba7ae
 [debug] sbt-chain: module revision found in cache: org.apache.thrift#libthrift;0.9.1
 [debug] 	local: revision in cache: org.apache.thrift#libthrift;0.9.1
 [debug] 	found org.apache.thrift#libthrift;0.9.1 in sbt-chain
@@ -764,7 +764,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.apache.thrift#libthrift;0.9.1 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.apache.httpcomponents#httpclient;4.2.5 [compile->default(compile)]
 [info] Resolving org.apache.httpcomponents#httpclient;4.2.5 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@42816d81
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@70e5f6a
 [debug] sbt-chain: module revision found in cache: org.apache.httpcomponents#httpclient;4.2.5
 [debug] 	local: revision in cache: org.apache.httpcomponents#httpclient;4.2.5
 [debug] 	found org.apache.httpcomponents#httpclient;4.2.5 in sbt-chain
@@ -773,7 +773,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.apache.httpcomponents#httpclient;4.2.5 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.apache.httpcomponents#httpcore;4.2.4 [compile->default(compile)]
 [info] Resolving org.apache.httpcomponents#httpcore;4.2.4 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@ef1ac17
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@4eb9cc70
 [debug] sbt-chain: module revision found in cache: org.apache.httpcomponents#httpcore;4.2.4
 [debug] 	local: revision in cache: org.apache.httpcomponents#httpcore;4.2.4
 [debug] 	found org.apache.httpcomponents#httpcore;4.2.4 in sbt-chain
@@ -782,7 +782,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.apache.httpcomponents#httpcore;4.2.4 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.apache.cassandra#cassandra-clientutil;2.1.2 [compile->default(compile)]
 [info] Resolving org.apache.cassandra#cassandra-clientutil;2.1.2 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@18ed92ae
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@5dab9cd5
 [debug] sbt-chain: module revision found in cache: org.apache.cassandra#cassandra-clientutil;2.1.2
 [debug] 	local: revision in cache: org.apache.cassandra#cassandra-clientutil;2.1.2
 [debug] 	found org.apache.cassandra#cassandra-clientutil;2.1.2 in sbt-chain
@@ -791,7 +791,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.apache.cassandra#cassandra-clientutil;2.1.2 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->com.datastax.cassandra#cassandra-driver-core;2.1.3 [compile->default(compile)]
 [info] Resolving com.datastax.cassandra#cassandra-driver-core;2.1.3 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@12a642c3
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@33c4ecb4
 [debug] sbt-chain: module revision found in cache: com.datastax.cassandra#cassandra-driver-core;2.1.3
 [debug] 	local: revision in cache: com.datastax.cassandra#cassandra-driver-core;2.1.3
 [debug] 	found com.datastax.cassandra#cassandra-driver-core;2.1.3 in sbt-chain
@@ -800,7 +800,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->com.datastax.cassandra#cassandra-driver-core;2.1.3 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->io.netty#netty;3.9.0.Final [compile->default(compile)]
 [info] Resolving io.netty#netty;3.9.0.Final ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@623d1b67
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@25220ec5
 [debug] sbt-chain: module revision found in cache: io.netty#netty;3.9.0.Final
 [debug] 	local: revision in cache: io.netty#netty;3.9.0.Final
 [debug] 	found io.netty#netty;3.9.0.Final in sbt-chain
@@ -809,7 +809,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->io.netty#netty;3.9.0.Final [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.joda#joda-convert;1.2 [compile->default(compile)]
 [info] Resolving org.joda#joda-convert;1.2 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@76b48df7
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@57dc1399
 [debug] sbt-chain: module revision found in cache: org.joda#joda-convert;1.2
 [debug] 	local: revision in cache: org.joda#joda-convert;1.2
 [debug] 	found org.joda#joda-convert;1.2 in sbt-chain
@@ -818,7 +818,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.joda#joda-convert;1.2 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->joda-time#joda-time;2.3 [compile->default(compile)]
 [info] Resolving joda-time#joda-time;2.3 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@538b528
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@2b2aae1a
 [debug] sbt-chain: module revision found in cache: joda-time#joda-time;2.3
 [debug] 	local: revision in cache: joda-time#joda-time;2.3
 [debug] 	found joda-time#joda-time;2.3 in sbt-chain
@@ -827,7 +827,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->joda-time#joda-time;2.3 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->eu.inn#binders-cassandra_2.10;0.2.5 [compile->default(compile)]
 [info] Resolving eu.inn#binders-cassandra_2.10;0.2.5 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@65372150
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@64a0acf8
 [debug] sbt-chain: module revision found in cache: eu.inn#binders-cassandra_2.10;0.2.5
 [debug] 	local: revision in cache: eu.inn#binders-cassandra_2.10;0.2.5
 [debug] 	found eu.inn#binders-cassandra_2.10;0.2.5 in sbt-chain
@@ -836,7 +836,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->eu.inn#binders-cassandra_2.10;0.2.5 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->eu.inn#binders-core_2.10;0.2.3 [compile->default(compile)]
 [info] Resolving eu.inn#binders-core_2.10;0.2.3 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@396096f7
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@185dfdbe
 [debug] sbt-chain: module revision found in cache: eu.inn#binders-core_2.10;0.2.3
 [debug] 	local: revision in cache: eu.inn#binders-core_2.10;0.2.3
 [debug] 	found eu.inn#binders-core_2.10;0.2.3 in sbt-chain
@@ -845,7 +845,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->eu.inn#binders-core_2.10;0.2.3 [compile->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->com.google.guava#guava;16.0.1 [compile->default(compile)]
 [info] Resolving com.google.guava#guava;16.0.1 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@4af6d1ce
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@376caa57
 [debug] sbt-chain: module revision found in cache: com.google.guava#guava;16.0.1
 [debug] 	local: revision in cache: com.google.guava#guava;16.0.1
 [debug] 	found com.google.guava#guava;16.0.1 in sbt-chain
@@ -2741,7 +2741,7 @@
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->com.google.guava#guava;16.0.1 [test->master]
 [debug] == resolving dependencies kaltura#newliveanalytics$sources_javadoc_2.10;1.0->org.scalatest#scalatest_2.10;2.1.0 [test->default(compile)]
 [info] Resolving org.scalatest#scalatest_2.10;2.1.0 ...
-[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@2fd22551
+[debug] sbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@294fdffd
 [debug] sbt-chain: module revision found in cache: org.scalatest#scalatest_2.10;2.1.0
 [debug] 	local: revision in cache: org.scalatest#scalatest_2.10;2.1.0
 [debug] 	found org.scalatest#scalatest_2.10;2.1.0 in sbt-chain
@@ -6481,18 +6481,18 @@
 [debug] 	[NOT REQUIRED] org.scala-lang#jline;2.10.4!jline.jar(doc)
 [debug] 	[NOT REQUIRED] org.fusesource.jansi#jansi;1.4!jansi.jar(doc)
 [debug] 	[NOT REQUIRED] org.fusesource.jansi#jansi;1.4!jansi.jar(src)
-[debug] :: resolution report :: resolve 4125ms :: artifacts dl 125ms
-[debug] 	report for kaltura#newliveanalytics$sources_javadoc_2.10;1.0 compile produced in /home/didi/Workspace/Kaltura/Live/NewLiveAnalytics/target/resolution-cache/reports/kaltura-newliveanalytics$sources_javadoc_2.10-compile.xml
-[debug] 	report for kaltura#newliveanalytics$sources_javadoc_2.10;1.0 runtime produced in /home/didi/Workspace/Kaltura/Live/NewLiveAnalytics/target/resolution-cache/reports/kaltura-newliveanalytics$sources_javadoc_2.10-runtime.xml
-[debug] 	report for kaltura#newliveanalytics$sources_javadoc_2.10;1.0 test produced in /home/didi/Workspace/Kaltura/Live/NewLiveAnalytics/target/resolution-cache/reports/kaltura-newliveanalytics$sources_javadoc_2.10-test.xml
-[debug] 	report for kaltura#newliveanalytics$sources_javadoc_2.10;1.0 provided produced in /home/didi/Workspace/Kaltura/Live/NewLiveAnalytics/target/resolution-cache/reports/kaltura-newliveanalytics$sources_javadoc_2.10-provided.xml
-[debug] 	report for kaltura#newliveanalytics$sources_javadoc_2.10;1.0 optional produced in /home/didi/Workspace/Kaltura/Live/NewLiveAnalytics/target/resolution-cache/reports/kaltura-newliveanalytics$sources_javadoc_2.10-optional.xml
-[debug] 	report for kaltura#newliveanalytics$sources_javadoc_2.10;1.0 compile-internal produced in /home/didi/Workspace/Kaltura/Live/NewLiveAnalytics/target/resolution-cache/reports/kaltura-newliveanalytics$sources_javadoc_2.10-compile-internal.xml
-[debug] 	report for kaltura#newliveanalytics$sources_javadoc_2.10;1.0 runtime-internal produced in /home/didi/Workspace/Kaltura/Live/NewLiveAnalytics/target/resolution-cache/reports/kaltura-newliveanalytics$sources_javadoc_2.10-runtime-internal.xml
-[debug] 	report for kaltura#newliveanalytics$sources_javadoc_2.10;1.0 test-internal produced in /home/didi/Workspace/Kaltura/Live/NewLiveAnalytics/target/resolution-cache/reports/kaltura-newliveanalytics$sources_javadoc_2.10-test-internal.xml
-[debug] 	report for kaltura#newliveanalytics$sources_javadoc_2.10;1.0 plugin produced in /home/didi/Workspace/Kaltura/Live/NewLiveAnalytics/target/resolution-cache/reports/kaltura-newliveanalytics$sources_javadoc_2.10-plugin.xml
-[debug] 	report for kaltura#newliveanalytics$sources_javadoc_2.10;1.0 sources produced in /home/didi/Workspace/Kaltura/Live/NewLiveAnalytics/target/resolution-cache/reports/kaltura-newliveanalytics$sources_javadoc_2.10-sources.xml
-[debug] 	report for kaltura#newliveanalytics$sources_javadoc_2.10;1.0 docs produced in /home/didi/Workspace/Kaltura/Live/NewLiveAnalytics/target/resolution-cache/reports/kaltura-newliveanalytics$sources_javadoc_2.10-docs.xml
-[debug] 	report for kaltura#newliveanalytics$sources_javadoc_2.10;1.0 pom produced in /home/didi/Workspace/Kaltura/Live/NewLiveAnalytics/target/resolution-cache/reports/kaltura-newliveanalytics$sources_javadoc_2.10-pom.xml
-[debug] 	report for kaltura#newliveanalytics$sources_javadoc_2.10;1.0 scala-tool produced in /home/didi/Workspace/Kaltura/Live/NewLiveAnalytics/target/resolution-cache/reports/kaltura-newliveanalytics$sources_javadoc_2.10-scala-tool.xml
-[debug] 	resolve done (4125ms resolve - 125ms download)
+[debug] :: resolution report :: resolve 6959ms :: artifacts dl 347ms
+[debug] 	report for kaltura#newliveanalytics$sources_javadoc_2.10;1.0 compile produced in /home/didi/Workspace/Kaltura/Live/live_analytics/NewLiveAnalytics/target/resolution-cache/reports/kaltura-newliveanalytics$sources_javadoc_2.10-compile.xml
+[debug] 	report for kaltura#newliveanalytics$sources_javadoc_2.10;1.0 runtime produced in /home/didi/Workspace/Kaltura/Live/live_analytics/NewLiveAnalytics/target/resolution-cache/reports/kaltura-newliveanalytics$sources_javadoc_2.10-runtime.xml
+[debug] 	report for kaltura#newliveanalytics$sources_javadoc_2.10;1.0 test produced in /home/didi/Workspace/Kaltura/Live/live_analytics/NewLiveAnalytics/target/resolution-cache/reports/kaltura-newliveanalytics$sources_javadoc_2.10-test.xml
+[debug] 	report for kaltura#newliveanalytics$sources_javadoc_2.10;1.0 provided produced in /home/didi/Workspace/Kaltura/Live/live_analytics/NewLiveAnalytics/target/resolution-cache/reports/kaltura-newliveanalytics$sources_javadoc_2.10-provided.xml
+[debug] 	report for kaltura#newliveanalytics$sources_javadoc_2.10;1.0 optional produced in /home/didi/Workspace/Kaltura/Live/live_analytics/NewLiveAnalytics/target/resolution-cache/reports/kaltura-newliveanalytics$sources_javadoc_2.10-optional.xml
+[debug] 	report for kaltura#newliveanalytics$sources_javadoc_2.10;1.0 compile-internal produced in /home/didi/Workspace/Kaltura/Live/live_analytics/NewLiveAnalytics/target/resolution-cache/reports/kaltura-newliveanalytics$sources_javadoc_2.10-compile-internal.xml
+[debug] 	report for kaltura#newliveanalytics$sources_javadoc_2.10;1.0 runtime-internal produced in /home/didi/Workspace/Kaltura/Live/live_analytics/NewLiveAnalytics/target/resolution-cache/reports/kaltura-newliveanalytics$sources_javadoc_2.10-runtime-internal.xml
+[debug] 	report for kaltura#newliveanalytics$sources_javadoc_2.10;1.0 test-internal produced in /home/didi/Workspace/Kaltura/Live/live_analytics/NewLiveAnalytics/target/resolution-cache/reports/kaltura-newliveanalytics$sources_javadoc_2.10-test-internal.xml
+[debug] 	report for kaltura#newliveanalytics$sources_javadoc_2.10;1.0 plugin produced in /home/didi/Workspace/Kaltura/Live/live_analytics/NewLiveAnalytics/target/resolution-cache/reports/kaltura-newliveanalytics$sources_javadoc_2.10-plugin.xml
+[debug] 	report for kaltura#newliveanalytics$sources_javadoc_2.10;1.0 sources produced in /home/didi/Workspace/Kaltura/Live/live_analytics/NewLiveAnalytics/target/resolution-cache/reports/kaltura-newliveanalytics$sources_javadoc_2.10-sources.xml
+[debug] 	report for kaltura#newliveanalytics$sources_javadoc_2.10;1.0 docs produced in /home/didi/Workspace/Kaltura/Live/live_analytics/NewLiveAnalytics/target/resolution-cache/reports/kaltura-newliveanalytics$sources_javadoc_2.10-docs.xml
+[debug] 	report for kaltura#newliveanalytics$sources_javadoc_2.10;1.0 pom produced in /home/didi/Workspace/Kaltura/Live/live_analytics/NewLiveAnalytics/target/resolution-cache/reports/kaltura-newliveanalytics$sources_javadoc_2.10-pom.xml
+[debug] 	report for kaltura#newliveanalytics$sources_javadoc_2.10;1.0 scala-tool produced in /home/didi/Workspace/Kaltura/Live/live_analytics/NewLiveAnalytics/target/resolution-cache/reports/kaltura-newliveanalytics$sources_javadoc_2.10-scala-tool.xml
+[debug] 	resolve done (6959ms resolve - 347ms download)

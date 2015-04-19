@@ -2,15 +2,10 @@ package com.kaltura.Live
 
 import com.kaltura.Live.env.EnvParams
 import com.kaltura.Live.infra.EventsGenerator
-import com.kaltura.Live.model.aggregation.save.SaveEntryHourlyPeakAudience
-import com.kaltura.Live.model.dao.EntryHourlyPeakAudienceCF
+import com.kaltura.Live.model.LiveEvent
+import com.kaltura.Live.model.aggregation.processors.PeakAudienceProcessor
 import com.kaltura.Live.utils.DateUtils
-
-//import com.kaltura.Live.model.LiveEvent
-//import com.kaltura.live.model.aggregation.StatsEvent
-//import org.apache.spark.rdd.RDD
-
-//import org.apache.spark.{SparkContext, SparkConf}
+import org.apache.spark.rdd.RDD
 
 import com.datastax.spark.connector._
 import org.apache.spark.SparkContext._
@@ -29,6 +24,15 @@ import scala.util.control.Breaks._
 // TODO: data validation e.g. check bufferTime <= 0 if not override bitrate >=0 bitrate <= ~TBD etc...
 object MainDriver
 {
+     val jarDependencies: List[String] = List(
+          "newliveanalytics.jar",
+          "spark-cassandra-connector_2.10-1.1.1.jar",
+          "binders-cassandra_2.10-0.2.5.jar",
+          "binders-core_2.10-0.2.3.jar",
+          "cassandra-driver-core-2.1.3.jar",
+          "cassandra-thrift-2.1.2.jar",
+          "joda-time-2.3.jar")
+
      val keyspace = "kaltura_live"
 
      val baseFieldsList  = List(
@@ -84,21 +88,73 @@ object MainDriver
      // TODO: need to implement the following to get some signal from outside for stopping the driver
      def checkBreakRequest(): Boolean = false
 
+     def isEmpty[T](rdd : RDD[T]) = {
+          rdd.take(1).size == 0
+     }
+
+     def processEvents( sc : SparkContext, events: RDD[LiveEvent] ): Unit =
+     {
+          val reducedLiveEvents = events
+               .map(event => ( (event.entryId, event.eventTime), event) )
+               .reduceByKey(_ + _)
+
+          reducedLiveEvents.persist()
+
+          reducedLiveEvents.map(x => x._2.wrap)
+               .saveToCassandra(keyspace, entryTableName, entryTableColumnFields)
+
+          PeakAudienceProcessor.process(sc, reducedLiveEvents)
+
+          reducedLiveEvents.unpersist()
+
+          //val temp11 = reducedLiveEvents.foreach(print(_))
+
+          val temp2 = events.map(event => ( (event.entryId, DateUtils.roundTimeToHour(event.eventTime) ), event.roundTimeToHour ) )
+               .reduceByKey(_ + _)
+               .map(x => x._2.wrap)
+               .saveToCassandra(keyspace, entryHourlyTableName, entryHourlyTableFields)
+
+          val temp3 = events.map(event => ( (event.entryId, event.eventTime, event.country, event.city), event) )
+               .reduceByKey(_ + _)
+               .map(x => x._2.wrap)
+               .saveToCassandra(keyspace, locationEntryTableName, locationEntryTableFields)
+
+          val temp4 = events.map(event => ( (event.entryId, DateUtils.roundTimeToHour(event.eventTime), event.referrer), event.roundTimeToHour) )
+               .reduceByKey(_ + _)
+               .map(x => x._2.wrap)
+               .saveToCassandra(keyspace, referrerHourlyTableName, referrerHourlyTableFields)
+
+          val temp5 = events.map(event => ( (event.partnerId, DateUtils.roundTimeToHour(event.eventTime) ), event.roundTimeToHour) )
+               .reduceByKey(_ + _)
+               .map(x => x._2.wrap)
+               .saveToCassandra(keyspace, partnerHourlyTableName, partnerHourlyTableFields)
+
+          val temp7 = events.map(event => (event.entryId, event.roundTimeToHour) )
+               .reduceByKey(_ maxTime _)
+               .map(x => x._2.wrap)
+               .saveToCassandra(keyspace, livePartnerEntryTableName, livePartnerEntryTableFields)
+     }
+
      def main(args: Array[String])
      {
+          System.setProperty("spark.default.parallelism", EnvParams.sparkParallelism)
+          System.setProperty("spark.cores.max", EnvParams.sparkMaxCores)
+          System.setProperty("spark.executor.memory", EnvParams.sparkExecutorMem)
+
           // TODO: get properties from configuration file
           val conf = new SparkConf()
                //.setMaster("spark://il-bigdata-1.dev.kaltura.com:7077")
-               //.setMaster("spark://localhost:7077")
-               .setMaster("local[4]")
+//               .setMaster("spark://localhost:7077")
+//               .setMaster("local[4]")
+               .setMaster(EnvParams.sparkAddress)
                .setAppName("NewLiveAnalytics")
                .set("spark.executor.memory", "1g")
                .set("spark.cassandra.connection.host", "192.168.31.91")
 
           val sc = new SparkContext(conf)
 
-          // TODO: get properties from configuration file
-          sc.setCheckpointDir("/home/didi/temp1")
+          for ( jarDependency <- jarDependencies )
+               sc.addJar(EnvParams.repositoryHome + "/" + jarDependency)
 
           // events are returned with 10sec resolution!!!
           val eventsGenerator = new EventsGenerator(sc, EnvParams.maxProcessFilesPerCycle)
@@ -107,66 +163,23 @@ object MainDriver
           {
                while (true)
                {
-//                    if ( checkBreakRequest() )
-//                         break
+                    val events = eventsGenerator.get
 
-//                    val rdd = sc.cassandraTable("test", "kv")
-//                    println(rdd.count)
-//                    println(rdd.first)
-//                    println(rdd.map(_.getInt("value")).sum)
+                    val noEvents = isEmpty(events)
 
-                    val newEvents = eventsGenerator.get
-
-                    val temp1 = newEvents
-                         .map(event => ( (event.entryId, event.eventTime, event.partnerId), event) )
-                         .reduceByKey(_ + _)
-                         .map(x => x._2.wrap)
-                         .saveToCassandra(keyspace, entryTableName, entryTableColumnFields)
-
-                    //val temp11 = temp1.foreach(print(_))
-
-                    val temp2 = newEvents.map(event => ( (event.entryId, DateUtils.roundTimeToHour(event.eventTime), event.partnerId), event.roundTimeToHour ) )
-                         .reduceByKey(_ + _)
-                         .map(x => x._2.wrap)
-                         .saveToCassandra(keyspace, entryHourlyTableName, entryHourlyTableFields)
-
-                    val temp3 = newEvents.map(event => ( (event.entryId, event.eventTime, event.partnerId, event.country, event.city), event) )
-                         .reduceByKey(_ + _)
-                         .map(x => x._2.wrap)
-                         .saveToCassandra(keyspace, locationEntryTableName, locationEntryTableFields)
-
-                    val temp4 = newEvents.map(event => ( (event.entryId, DateUtils.roundTimeToHour(event.eventTime), event.partnerId, event.referrer), event.roundTimeToHour) )
-                         .reduceByKey(_ + _)
-                         .map(x => x._2.wrap)
-                         .saveToCassandra(keyspace, referrerHourlyTableName, referrerHourlyTableFields)
-
-                    val temp5 = newEvents.map(event => ( (event.partnerId, DateUtils.roundTimeToHour(event.eventTime) ), event.roundTimeToHour) )
-                         .reduceByKey(_ + _)
-                         .map(x => x._2.wrap)
-                         .saveToCassandra(keyspace, partnerHourlyTableName, partnerHourlyTableFields)
-
-                    val saveEntryHourlyPeakAudience = new SaveEntryHourlyPeakAudience
-
-                    val temp6 = newEvents.map(event => ( (event.entryId, DateUtils.roundTimeToHour(event.eventTime), event.partnerId), event.roundTimeToHour) )
-                         .reduceByKey(_ max _)
-                         //.map(x => x._2.wrap)
-                         .map(x => x._2)
-                         .map( saveEntryHourlyPeakAudience.update(_) )
-
-                    val temp7 = newEvents.map(event => ( (event.partnerId, event.entryId), event.roundTimeToHour) )
-                         .reduceByKey(_ maxTime _)
-                         .map(x => x._2.wrap)
-                         .saveToCassandra(keyspace, livePartnerEntryTableName, livePartnerEntryTableFields)
+                    if ( !noEvents )
+                         processEvents(sc, events)
 
                     eventsGenerator.commit
 
-                    Thread.sleep(100)
-                    // TODO: for the peak audience read data from Cassandra for the current hour (what if we are running after crash)
-                    // TODO: union with the new events and reduce by key when reduce is max function
-                    // TODO: write back to Cassandra
-
-
+                    if ( noEvents )
+                         Thread.sleep(1000)
                }
           }
+
+          eventsGenerator.close
      }
 }
+// TODO: for the peak audience read data from Cassandra for the current hour (what if we are running after crash)
+// TODO: union with the new events and reduce by key when reduce is max function
+// TODO: write back to Cassandra

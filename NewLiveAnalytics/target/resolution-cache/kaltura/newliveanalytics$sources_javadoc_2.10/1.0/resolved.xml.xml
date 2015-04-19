@@ -4,7 +4,7 @@
 		module="newliveanalytics$sources_javadoc_2.10"
 		revision="1.0"
 		status="integration"
-		publication="20150406184223"
+		publication="20150408164751"
 	/>
 	<configurations>
 		<conf name="compile" visibility="public" description=""/>

@@ -4,7 +4,7 @@
 		module="newliveanalytics$sbt_2.10"
 		revision="1.0"
 		status="integration"
-		publication="20150406184220"
+		publication="20150408164749"
 	/>
 	<configurations>
 		<conf name="default" visibility="public"/>

@@ -7,7 +7,7 @@
 		revision="1.0"
 		conf="runtime"
 		confs="compile, runtime, test, provided, optional, compile-internal, runtime-internal, test-internal, plugin, sources, docs, pom, scala-tool"
-		date="20150406183753"/>
+		date="20150408164735"/>
 	<dependencies>
 		<module organisation="eu.inn" name="binders-cassandra_2.10">
 			<revision name="0.2.5" status="release" pubdate="20140911040002" resolver="sbt-chain" artresolver="sbt-chain" homepage="https://github.com/InnovaCo/binders-cassandra" downloaded="false" searched="false" default="false" conf="default, compile, runtime, default(compile), master" position="98">

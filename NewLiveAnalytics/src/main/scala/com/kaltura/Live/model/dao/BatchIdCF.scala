@@ -13,7 +13,6 @@ class BatchIdCF( session: com.datastax.driver.core.Session )
 
      implicit val cache = new SessionQueryCache[PlainConverter](session)
 
-     // if no user is found will return None, otherwise Some(User)
      def getBatchIdIfFound() = cql"select * from current_batch WHERE batch_code=0".one[BatchId]
 
      def updateBatchId( batchId: Long) = cql"insert into current_batch (batch_code, batch_id) values (0, $batchId)".execute()
