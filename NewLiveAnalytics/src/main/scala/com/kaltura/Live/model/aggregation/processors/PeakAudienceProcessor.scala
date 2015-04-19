@@ -41,6 +41,10 @@ object PeakAudienceProcessor
 
      def process( sc : SparkContext, reducedEvents: RDD[( (String, Long), LiveEvent) ] ): Unit =
      {
+          // create all distinct (entry_id, event_time(hourly) ) tuple and then select using cassandraTable with case class all the needed old events
+          // this time without the need to use java.util.Date but Long
+          // cassandraTable has select Where...
+
           val newAudienceEvents = reducedEvents.map(x => ( (x._1._1, DateUtils.roundTimeToHour(x._1._2) ), x._2.roundTimeToHour ) )
                .reduceByKey(_ max _)
                .map(x => ( (x._1._1, x._1._2), (new EntryHourlyPeakAudience(x._2.entryId, new java.util.Date(x._2.eventTime), x._2.alive, x._2.dvrAlive) ) ) )
@@ -48,7 +52,7 @@ object PeakAudienceProcessor
           newAudienceEvents.persist()
 
           val hours = newAudienceEvents.map(x => x._1._2)
-               .map( DateUtils.roundTimeToHour(_) )
+               .map( DateUtils.roundTimeToHour(_) ) // is it needed again
                .distinct()
                .collect()
                .toList

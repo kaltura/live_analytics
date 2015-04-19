@@ -27,9 +27,14 @@ class EntryHourlyPeakAudienceCF( session: com.datastax.driver.core.Session ) ext
 
      def getAudienceByHours( hours: List[Long] ) : Future[Iterator[EntryHourlyPeakAudience]] =
      {
-          val hoursCommaSeparated = hours.mkString(", ")
+          val datesStrings : List[String] = hours.map(x => new java.util.Date(x).toString )
+          val hoursCommaSeparated = datesStrings.mkString(", ")
 
-          cql"SELECT * FROM live_entry_hourly_peak WHERE event_time IN ($hoursCommaSeparated)".all[EntryHourlyPeakAudience]
+          cql"SELECT * FROM live_entry_hourly_peak WHERE event_time IN ($hoursCommaSeparated) ALLOW FILTERING".all[EntryHourlyPeakAudience]
+
+          //val hoursCommaSeparated = hours.mkString(", ")
+
+          //cql"SELECT * FROM live_entry_hourly_peak WHERE event_time IN ($hoursCommaSeparated) ALLOW FILTERING".all[EntryHourlyPeakAudience]
      }
 
 }
