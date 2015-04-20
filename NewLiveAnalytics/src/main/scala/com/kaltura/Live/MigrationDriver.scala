@@ -4,9 +4,11 @@ import com.datastax.spark.connector.cql.CassandraConnector
 import com.datastax.spark.connector.rdd.ValidRDDType
 import com.datastax.spark.connector.rdd.reader.RowReaderFactory
 import com.datastax.spark.connector.{toRDDFunctions, toSparkContextFunctions}
+import com.kaltura.Live.infra.ConfigurationManager
 import com.kaltura.Live.migration.SchemaMigrationCQL
 import org.apache.spark.{SparkContext, SparkConf}
 import org.apache.log4j.Logger
+import scala.util.Try
 
 import scala.reflect.ClassTag
 
@@ -28,14 +30,13 @@ object MigrationDriver {
 
 
   def main(args: Array[String]) {
-    // TODO - use configuration
-    val conf = new SparkConf()
-      .setMaster("local[4]")
-      .setAppName("LiveAnalyticsSchemaMigration")
-      .set("spark.executor.memory", "1g")
-      .set("spark.cassandra.connection.host", "localhost")
 
-    val dryRun = true;
+    val conf = new SparkConf()
+      .setMaster(ConfigurationManager.get("spark.master"))
+      .setAppName("LiveAnalyticsSchemaMigration")
+      .set("spark.executor.memory", ConfigurationManager.get("spark.executor_memory", "1g"))
+      .set("spark.cassandra.connection.host", ConfigurationManager.get("cassandra.node_name"))
+    val dryRun = ConfigurationManager.get("migration.dry_run", "false").toBoolean
 
     val sc = new SparkContext(conf)
 
@@ -91,7 +92,6 @@ object MigrationDriver {
           copyRow[T](row, multiplyBufferTime)
         }
       )
-      //.foreach(x => println(x))
       .saveToCassandra(liveKeyspace, destTableName, entryTable.columnNames)
     log.info("Done copying data from " + sourceTableName + " to " + destTableName + "...")
   }
