@@ -14,7 +14,7 @@ object EnvParams
 
      val ip2locationFileName = "/opt/kaltura/data/geoip/IP-COUNTRY-CITY-ISP.BIN"
 
-     val maxProcessFilesPerCycle = 2
+     val maxProcessFilesPerCycle = 50
 
      val bufferTimeResolution = 100L
 

@@ -24,6 +24,13 @@ import scala.util.control.Breaks._
 // TODO: data validation e.g. check bufferTime <= 0 if not override bitrate >=0 bitrate <= ~TBD etc...
 object MainDriver
 {
+     def toSomeColumns( columnNames: List[String] ) : SomeColumns =
+     {
+          SomeColumns(columnNames.map(x => new ColumnName(x) ): _*)
+     }
+
+     val jarDependenciesLocal: List[String] = List.empty
+
      val jarDependencies: List[String] = List(
           "newliveanalytics.jar",
           "spark-cassandra-connector_2.10-1.1.1.jar",
@@ -64,25 +71,27 @@ object MainDriver
           "event_time")
 
      val entryTableName = "live_events"
-     val entryTableColumnFields = SomeColumns(entryFieldsList: _*)
+
+     //val entryTableColumnFields = SomeColumns( entryFieldsList.map(x => new ColumnName(x) ): _*)
+     val entryTableColumnFields = toSomeColumns(entryFieldsList)
 
      val entryHourlyTableName = "hourly_live_events"
      val entryHourlyTableFields = entryTableColumnFields
 
      val locationEntryTableName = "live_events_location"
-     val locationEntryTableFields = SomeColumns(entryLocationFieldsList: _*)
+     val locationEntryTableFields = toSomeColumns(entryLocationFieldsList)
 
      val referrerHourlyTableName = "hourly_live_events_referrer"
-     val referrerHourlyTableFields = SomeColumns(referrerFieldsList: _*)
+     val referrerHourlyTableFields = toSomeColumns(referrerFieldsList)
 
      val partnerHourlyTableName = "hourly_live_events_partner"
-     val partnerHourlyTableFields = SomeColumns(partnerFieldsList: _*)
+     val partnerHourlyTableFields = toSomeColumns(partnerFieldsList)
 
      val entryHourlyPeakTableName = "live_entry_hourly_peak"
-     val entryHourlyPeakTableFields = SomeColumns(entryPeakFieldsList: _*)
+     val entryHourlyPeakTableFields = toSomeColumns(entryPeakFieldsList)
 
      val livePartnerEntryTableName = "live_partner_entry"
-     val livePartnerEntryTableFields = SomeColumns(partnerEntryFieldsList: _*)
+     val livePartnerEntryTableFields = toSomeColumns(partnerEntryFieldsList)
 
 
      // TODO: need to implement the following to get some signal from outside for stopping the driver
@@ -103,36 +112,36 @@ object MainDriver
           reducedLiveEvents.map(x => x._2.wrap)
                .saveToCassandra(keyspace, entryTableName, entryTableColumnFields)
 
-          PeakAudienceProcessor.process(sc, reducedLiveEvents)
-
-          reducedLiveEvents.unpersist()
-
-          //val temp11 = reducedLiveEvents.foreach(print(_))
-
-          val temp2 = events.map(event => ( (event.entryId, DateUtils.roundTimeToHour(event.eventTime) ), event.roundTimeToHour ) )
-               .reduceByKey(_ + _)
-               .map(x => x._2.wrap)
-               .saveToCassandra(keyspace, entryHourlyTableName, entryHourlyTableFields)
-
-          val temp3 = events.map(event => ( (event.entryId, event.eventTime, event.country, event.city), event) )
-               .reduceByKey(_ + _)
-               .map(x => x._2.wrap)
-               .saveToCassandra(keyspace, locationEntryTableName, locationEntryTableFields)
-
-          val temp4 = events.map(event => ( (event.entryId, DateUtils.roundTimeToHour(event.eventTime), event.referrer), event.roundTimeToHour) )
-               .reduceByKey(_ + _)
-               .map(x => x._2.wrap)
-               .saveToCassandra(keyspace, referrerHourlyTableName, referrerHourlyTableFields)
-
-          val temp5 = events.map(event => ( (event.partnerId, DateUtils.roundTimeToHour(event.eventTime) ), event.roundTimeToHour) )
-               .reduceByKey(_ + _)
-               .map(x => x._2.wrap)
-               .saveToCassandra(keyspace, partnerHourlyTableName, partnerHourlyTableFields)
-
-          val temp7 = events.map(event => (event.entryId, event.roundTimeToHour) )
-               .reduceByKey(_ maxTime _)
-               .map(x => x._2.wrap)
-               .saveToCassandra(keyspace, livePartnerEntryTableName, livePartnerEntryTableFields)
+//          PeakAudienceProcessor.process(sc, reducedLiveEvents)
+//
+//          reducedLiveEvents.unpersist()
+//
+//          //val temp11 = reducedLiveEvents.foreach(print(_))
+//
+//          val temp2 = events.map(event => ( (event.entryId, DateUtils.roundTimeToHour(event.eventTime) ), event.roundTimeToHour ) )
+//               .reduceByKey(_ + _)
+//               .map(x => x._2.wrap)
+//               .saveToCassandra(keyspace, entryHourlyTableName, entryHourlyTableFields)
+//
+//          val temp3 = events.map(event => ( (event.entryId, event.eventTime, event.country, event.city), event) )
+//               .reduceByKey(_ + _)
+//               .map(x => x._2.wrap)
+//               .saveToCassandra(keyspace, locationEntryTableName, locationEntryTableFields)
+//
+//          val temp4 = events.map(event => ( (event.entryId, DateUtils.roundTimeToHour(event.eventTime), event.referrer), event.roundTimeToHour) )
+//               .reduceByKey(_ + _)
+//               .map(x => x._2.wrap)
+//               .saveToCassandra(keyspace, referrerHourlyTableName, referrerHourlyTableFields)
+//
+//          val temp5 = events.map(event => ( (event.partnerId, DateUtils.roundTimeToHour(event.eventTime) ), event.roundTimeToHour) )
+//               .reduceByKey(_ + _)
+//               .map(x => x._2.wrap)
+//               .saveToCassandra(keyspace, partnerHourlyTableName, partnerHourlyTableFields)
+//
+//          val temp7 = events.map(event => (event.entryId, event.roundTimeToHour) )
+//               .reduceByKey(_ maxTime _)
+//               .map(x => x._2.wrap)
+//               .saveToCassandra(keyspace, livePartnerEntryTableName, livePartnerEntryTableFields)
      }
 
      def main(args: Array[String])
@@ -145,16 +154,17 @@ object MainDriver
           val conf = new SparkConf()
                //.setMaster("spark://il-bigdata-1.dev.kaltura.com:7077")
 //               .setMaster("spark://localhost:7077")
-//               .setMaster("local[4]")
-               .setMaster(EnvParams.sparkAddress)
+               .setMaster("local[4]")
+//               .setMaster(EnvParams.sparkAddress)
                .setAppName("NewLiveAnalytics")
                .set("spark.executor.memory", "1g")
                .set("spark.cassandra.connection.host", "192.168.31.91")
 
           val sc = new SparkContext(conf)
 
-          for ( jarDependency <- jarDependencies )
+          for ( jarDependency <- jarDependenciesLocal )
                sc.addJar(EnvParams.repositoryHome + "/" + jarDependency)
+
 
           // events are returned with 10sec resolution!!!
           val eventsGenerator = new EventsGenerator(sc, EnvParams.maxProcessFilesPerCycle)

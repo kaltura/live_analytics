@@ -3,6 +3,7 @@ package com.kaltura.Live
 import com.datastax.spark.connector.cql.CassandraConnector
 import com.datastax.spark.connector.rdd.ValidRDDType
 import com.datastax.spark.connector.rdd.reader.RowReaderFactory
+import com.datastax.spark.connector.writer.RowWriterFactory
 import com.datastax.spark.connector.{toRDDFunctions, toSparkContextFunctions}
 import com.kaltura.Live.migration.SchemaMigrationCQL
 import org.apache.spark.{SparkContext, SparkConf}
@@ -82,7 +83,8 @@ object MigrationDriver {
   def copyTableContent[T](sc: SparkContext, sourceTableName: String, destTableName: String, multiplyBufferTime: Int = 1)
                     (implicit connector: CassandraConnector = CassandraConnector(sc.getConf),
                               ct: ClassTag[T], rrf: RowReaderFactory[T],
-                              ev: ValidRDDType[T]) = {
+                              ev: ValidRDDType[T],
+                              rwf: RowWriterFactory[T]) = {
     val entryTable = sc.cassandraTable[T](liveKeyspace, sourceTableName)
     log.info("Copying data from " + sourceTableName + " to " + destTableName + "...")
     entryTable
