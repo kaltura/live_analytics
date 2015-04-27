@@ -107,41 +107,41 @@ object MainDriver
                .map(event => ( (event.entryId, event.eventTime), event) )
                .reduceByKey(_ + _)
 
-          reducedLiveEvents.persist()
+          reducedLiveEvents.cache()
 
           reducedLiveEvents.map(x => x._2.wrap)
                .saveToCassandra(keyspace, entryTableName, entryTableColumnFields)
 
-//          PeakAudienceProcessor.process(sc, reducedLiveEvents)
-//
-//          reducedLiveEvents.unpersist()
-//
-//          //val temp11 = reducedLiveEvents.foreach(print(_))
-//
-//          val temp2 = events.map(event => ( (event.entryId, DateUtils.roundTimeToHour(event.eventTime) ), event.roundTimeToHour ) )
-//               .reduceByKey(_ + _)
-//               .map(x => x._2.wrap)
-//               .saveToCassandra(keyspace, entryHourlyTableName, entryHourlyTableFields)
-//
-//          val temp3 = events.map(event => ( (event.entryId, event.eventTime, event.country, event.city), event) )
-//               .reduceByKey(_ + _)
-//               .map(x => x._2.wrap)
-//               .saveToCassandra(keyspace, locationEntryTableName, locationEntryTableFields)
-//
-//          val temp4 = events.map(event => ( (event.entryId, DateUtils.roundTimeToHour(event.eventTime), event.referrer), event.roundTimeToHour) )
-//               .reduceByKey(_ + _)
-//               .map(x => x._2.wrap)
-//               .saveToCassandra(keyspace, referrerHourlyTableName, referrerHourlyTableFields)
-//
-//          val temp5 = events.map(event => ( (event.partnerId, DateUtils.roundTimeToHour(event.eventTime) ), event.roundTimeToHour) )
-//               .reduceByKey(_ + _)
-//               .map(x => x._2.wrap)
-//               .saveToCassandra(keyspace, partnerHourlyTableName, partnerHourlyTableFields)
-//
-//          val temp7 = events.map(event => (event.entryId, event.roundTimeToHour) )
-//               .reduceByKey(_ maxTime _)
-//               .map(x => x._2.wrap)
-//               .saveToCassandra(keyspace, livePartnerEntryTableName, livePartnerEntryTableFields)
+          PeakAudienceProcessor.process(sc, reducedLiveEvents)
+
+          reducedLiveEvents.unpersist()
+
+          //val temp11 = reducedLiveEvents.foreach(print(_))
+
+          val temp2 = events.map(event => ( (event.entryId, DateUtils.roundTimeToHour(event.eventTime) ), event.roundTimeToHour ) )
+               .reduceByKey(_ + _)
+               .map(x => x._2.wrap)
+               .saveToCassandra(keyspace, entryHourlyTableName, entryHourlyTableFields)
+
+          val temp3 = events.map(event => ( (event.entryId, event.eventTime, event.country, event.city), event) )
+               .reduceByKey(_ + _)
+               .map(x => x._2.wrap)
+               .saveToCassandra(keyspace, locationEntryTableName, locationEntryTableFields)
+
+          val temp4 = events.map(event => ( (event.entryId, DateUtils.roundTimeToHour(event.eventTime), event.referrer), event.roundTimeToHour) )
+               .reduceByKey(_ + _)
+               .map(x => x._2.wrap)
+               .saveToCassandra(keyspace, referrerHourlyTableName, referrerHourlyTableFields)
+
+          val temp5 = events.map(event => ( (event.partnerId, DateUtils.roundTimeToHour(event.eventTime) ), event.roundTimeToHour) )
+               .reduceByKey(_ + _)
+               .map(x => x._2.wrap)
+               .saveToCassandra(keyspace, partnerHourlyTableName, partnerHourlyTableFields)
+
+          val temp7 = events.map(event => (event.entryId, event.roundTimeToHour) )
+               .reduceByKey(_ maxTime _)
+               .map(x => x._2.wrap)
+               .saveToCassandra(keyspace, livePartnerEntryTableName, livePartnerEntryTableFields)
      }
 
      def main(args: Array[String])
