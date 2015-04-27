@@ -62,7 +62,7 @@ object LiveEventParser extends Serializable with MetaLog[BaseLog]
                {
                     case e: Exception =>
                     {
-                         logger.error("Failed to parse IP", e)
+                         logger.warn("Failed to parse IP")
                          event.country = "N/A"
                          event.city = "N/A"
                     }
