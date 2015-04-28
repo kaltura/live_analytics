@@ -49,13 +49,14 @@ public class RegisterFile {
     public void insertIntoTable(String key, byte[] data) {
     	try {
 	    	//Date insertTime = getFileDateTime(key);
+			Long nullBatchId = -1L;
 			Date insertTime = new java.util.Date(System.currentTimeMillis() );
 	    	PreparedStatement statement = cassandraSession.getSession().prepare("INSERT INTO kaltura_live.log_data (file_id,data) VALUES (?, ?) USING TTL ?");
 	    	BoundStatement boundStatement = new BoundStatement(statement);
 	        cassandraSession.execute(boundStatement.bind(key,ByteBuffer.wrap(data), LOGS_TTL), RETRIES);
 	    	statement = cassandraSession.getSession().prepare("INSERT INTO kaltura_live.log_files (file_id,insert_time,batch_id) VALUES (?, ?, ?) USING TTL ?");
 	        boundStatement = new BoundStatement(statement);
-	        cassandraSession.execute(boundStatement.bind(key, insertTime, -1, LOGS_TTL), RETRIES);
+	        cassandraSession.execute(boundStatement.bind(key, insertTime, nullBatchId, LOGS_TTL), RETRIES);
     	} catch (Exception ex) {
     		LOG.error("Failed to insert log file: " + key, ex);
     	}
