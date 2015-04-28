@@ -8,6 +8,7 @@ import com.kaltura.Live.utils.DateUtils
 import org.apache.spark.rdd.RDD
 
 import com.datastax.spark.connector._
+import com.datastax.spark.connector.writer.{TTLOption, WriteConf}
 import org.apache.spark.SparkContext._
 import org.apache.spark.{SparkConf, SparkContext}
 
@@ -38,7 +39,13 @@ object MainDriver
           "binders-core_2.10-0.2.3.jar",
           "cassandra-driver-core-2.1.3.jar",
           "cassandra-thrift-2.1.2.jar",
-          "joda-time-2.3.jar")
+          "joda-time-2.3.jar",
+
+     // for spark 1.2.0
+          "netty-3.9.0.Final.jar",
+          "guava-16.0.1.jar",
+          "metrics-core-3.0.2.jar",
+          "slf4j-api-1.7.5.jar")
 
      val keyspace = "kaltura_live"
 
@@ -93,6 +100,7 @@ object MainDriver
      val livePartnerEntryTableName = "live_partner_entry"
      val livePartnerEntryTableFields = toSomeColumns(partnerEntryFieldsList)
 
+     val highResolutionWriteConf = WriteConf(ttl = TTLOption.constant(604800) )
 
      // TODO: need to implement the following to get some signal from outside for stopping the driver
      def checkBreakRequest(): Boolean = false
@@ -110,7 +118,7 @@ object MainDriver
           reducedLiveEvents.cache()
 
           reducedLiveEvents.map(x => x._2.wrap)
-               .saveToCassandra(keyspace, entryTableName, entryTableColumnFields)
+               .saveToCassandra(keyspace, entryTableName, entryTableColumnFields, highResolutionWriteConf)
 
           PeakAudienceProcessor.process(sc, reducedLiveEvents)
 
@@ -126,7 +134,7 @@ object MainDriver
           val temp3 = events.map(event => ( (event.entryId, event.eventTime, event.country, event.city), event) )
                .reduceByKey(_ + _)
                .map(x => x._2.wrap)
-               .saveToCassandra(keyspace, locationEntryTableName, locationEntryTableFields)
+               .saveToCassandra(keyspace, locationEntryTableName, locationEntryTableFields, highResolutionWriteConf)
 
           val temp4 = events.map(event => ( (event.entryId, DateUtils.roundTimeToHour(event.eventTime), event.referrer), event.roundTimeToHour) )
                .reduceByKey(_ + _)
@@ -152,17 +160,16 @@ object MainDriver
 
           // TODO: get properties from configuration file
           val conf = new SparkConf()
-               //.setMaster("spark://il-bigdata-1.dev.kaltura.com:7077")
-//               .setMaster("spark://localhost:7077")
-               .setMaster("local[4]")
-//               .setMaster(EnvParams.sparkAddress)
+
+//               .setMaster("local[4]")
+               .setMaster(EnvParams.sparkAddress)
                .setAppName("NewLiveAnalytics")
                .set("spark.executor.memory", "1g")
                .set("spark.cassandra.connection.host", "192.168.31.91")
 
           val sc = new SparkContext(conf)
 
-          for ( jarDependency <- jarDependenciesLocal )
+          for ( jarDependency <- jarDependencies )
                sc.addJar(EnvParams.repositoryHome + "/" + jarDependency)
 
 
