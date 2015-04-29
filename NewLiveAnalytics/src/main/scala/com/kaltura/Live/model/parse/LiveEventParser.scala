@@ -6,8 +6,9 @@ import java.net.URLDecoder
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 import com.kaltura.Live.env.EnvParams
+import com.kaltura.Live.infra.ConfigurationManager
 import com.kaltura.Live.infra.utils.{RestRequestParser}
-import com.kaltura.Live.model.LiveEvent
+import com.kaltura.Live.model.{Consts, LiveEvent}
 import com.kaltura.Live.utils.{BaseLog, MetaLog, DateUtils}
 import com.kaltura.ip2location.{Ip2LocationRecord, SerializableIP2LocationReader}
 
@@ -15,7 +16,7 @@ object LiveEventParser extends Serializable with MetaLog[BaseLog]
 {
      val apacheLogRegex: Pattern = Pattern.compile("^([\\d.]+) \\[([\\w\\d:/]+\\s[+\\-]\\d{4})\\] \"(.+?)\" (\\d{3}) \"([^\"]+)\".*")
 
-     val reader = new SerializableIP2LocationReader(EnvParams.ip2locationFileName)
+     val reader = new SerializableIP2LocationReader(ConfigurationManager.get("aggr.ip2location_path"))
 
      def parse( line: String ) : LiveEvent =
      {
@@ -89,7 +90,7 @@ object LiveEventParser extends Serializable with MetaLog[BaseLog]
                               event.partnerId = paramsMap("event:partnerId").toInt
 
                          if (paramsMap.contains("event:bufferTime"))
-                              event.bufferTime = (paramsMap("event:bufferTime").toDouble * EnvParams.bufferTimeResolution).toLong
+                              event.bufferTime = (paramsMap("event:bufferTime").toDouble * Consts.BufferTimeResolution).toLong
 
                          if (paramsMap.contains("event:bitrate"))
                               event.bitrate = paramsMap("event:bitrate").toLong
