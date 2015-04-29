@@ -1,7 +1,7 @@
 package com.kaltura.Live
 
 import com.kaltura.Live.env.EnvParams
-import com.kaltura.Live.infra.EventsGenerator
+import com.kaltura.Live.infra.{ConfigurationManager, EventsGenerator}
 import com.kaltura.Live.model.LiveEvent
 import com.kaltura.Live.model.aggregation.processors.PeakAudienceProcessor
 import com.kaltura.Live.utils.DateUtils
@@ -11,6 +11,7 @@ import com.datastax.spark.connector._
 import com.datastax.spark.connector.writer.{TTLOption, WriteConf}
 import org.apache.spark.SparkContext._
 import org.apache.spark.{SparkConf, SparkContext}
+
 
 import scala.util.control.Breaks._
 
@@ -154,27 +155,25 @@ object MainDriver
 
      def main(args: Array[String])
      {
+          // TODO - @Didi, why isn't this configured on the nodes themselves?
           System.setProperty("spark.default.parallelism", EnvParams.sparkParallelism)
           System.setProperty("spark.cores.max", EnvParams.sparkMaxCores)
-          System.setProperty("spark.executor.memory", EnvParams.sparkExecutorMem)
+          System.setProperty("spark.executor.memory", EnvParams.sparkExecutorMem) // Note! Duplicate with line #158
 
-          // TODO: get properties from configuration file
           val conf = new SparkConf()
-
-               .setMaster("local[4]")
-//               .setMaster(EnvParams.sparkAddress)
-               .setAppName("NewLiveAnalytics")
-               .set("spark.executor.memory", "1g")
-               .set("spark.cassandra.connection.host", "192.168.31.91")
+            .setMaster(ConfigurationManager.get("spark.master"))
+            .setAppName("NewLiveAnalytics")
+            .set("spark.executor.memory", ConfigurationManager.get("spark.executor_memory", "8g"))
+            .set("spark.cassandra.connection.host", ConfigurationManager.get("cassandra.node_name"))
 
           val sc = new SparkContext(conf)
 
           for ( jarDependency <- jarDependenciesLocal )
-               sc.addJar(EnvParams.repositoryHome + "/" + jarDependency)
+               sc.addJar(ConfigurationManager.get("repository_home") + "/" + jarDependency)
 
 
           // events are returned with 10sec resolution!!!
-          val eventsGenerator = new EventsGenerator(sc, EnvParams.maxProcessFilesPerCycle)
+          val eventsGenerator = new EventsGenerator(sc, ConfigurationManager.get("aggr.max_files_per_cycle", "50").toInt)
 
           breakable
           {
