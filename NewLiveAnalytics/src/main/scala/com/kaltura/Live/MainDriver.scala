@@ -34,11 +34,11 @@ object MainDriver
 
      val jarDependencies: List[String] = List(
           "newliveanalytics.jar",
-          "spark-cassandra-connector_2.10-1.1.1.jar",
+          "spark-cassandra-connector_2.10-1.2.0-rc3.jar",
           "binders-cassandra_2.10-0.2.5.jar",
           "binders-core_2.10-0.2.3.jar",
-          "cassandra-driver-core-2.1.3.jar",
-          "cassandra-thrift-2.1.2.jar",
+          "cassandra-driver-core-2.1.5.jar",
+          "cassandra-thrift-2.1.3.jar",
           "joda-time-2.3.jar",
 
      // for spark 1.2.0
@@ -100,7 +100,7 @@ object MainDriver
      val livePartnerEntryTableName = "live_partner_entry"
      val livePartnerEntryTableFields = toSomeColumns(partnerEntryFieldsList)
 
-     val highResolutionWriteConf = WriteConf(ttl = TTLOption.constant(604800) )
+     //val highResolutionWriteConf = WriteConf(ttl = TTLOption.constant(604800) )
 
      // TODO: need to implement the following to get some signal from outside for stopping the driver
      def checkBreakRequest(): Boolean = false
@@ -118,7 +118,7 @@ object MainDriver
           reducedLiveEvents.cache()
 
           reducedLiveEvents.map(x => x._2.wrap)
-               .saveToCassandra(keyspace, entryTableName, entryTableColumnFields, highResolutionWriteConf)
+               .saveToCassandra(keyspace, entryTableName, entryTableColumnFields)
 
           PeakAudienceProcessor.process(sc, reducedLiveEvents)
 
@@ -134,7 +134,7 @@ object MainDriver
           val temp3 = events.map(event => ( (event.entryId, event.eventTime, event.country, event.city), event) )
                .reduceByKey(_ + _)
                .map(x => x._2.wrap)
-               .saveToCassandra(keyspace, locationEntryTableName, locationEntryTableFields, highResolutionWriteConf)
+               .saveToCassandra(keyspace, locationEntryTableName, locationEntryTableFields)
 
           val temp4 = events.map(event => ( (event.entryId, DateUtils.roundTimeToHour(event.eventTime), event.referrer), event.roundTimeToHour) )
                .reduceByKey(_ + _)
@@ -161,15 +161,15 @@ object MainDriver
           // TODO: get properties from configuration file
           val conf = new SparkConf()
 
-//               .setMaster("local[4]")
-               .setMaster(EnvParams.sparkAddress)
+               .setMaster("local[4]")
+//               .setMaster(EnvParams.sparkAddress)
                .setAppName("NewLiveAnalytics")
                .set("spark.executor.memory", "1g")
                .set("spark.cassandra.connection.host", "192.168.31.91")
 
           val sc = new SparkContext(conf)
 
-          for ( jarDependency <- jarDependencies )
+          for ( jarDependency <- jarDependenciesLocal )
                sc.addJar(EnvParams.repositoryHome + "/" + jarDependency)
 
 
