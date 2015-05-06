@@ -12,7 +12,6 @@ import com.datastax.spark.connector.writer.{TTLOption, WriteConf}
 import org.apache.spark.SparkContext._
 import org.apache.spark.{SparkConf, SparkContext}
 
-
 import scala.util.control.Breaks._
 
 /**
@@ -35,7 +34,7 @@ object MainDriver
 
      val jarDependencies: List[String] = List(
           "newliveanalytics.jar",
-          "spark-cassandra-connector_2.10-1.2.0-rc3.jar",
+          "spark-cassandra-connector_2.10-1.2.0.jar",
           "binders-cassandra_2.10-0.2.5.jar",
           "binders-core_2.10-0.2.3.jar",
           "cassandra-driver-core-2.1.5.jar",
@@ -170,7 +169,6 @@ object MainDriver
 
           for ( jarDependency <- jarDependenciesLocal )
                sc.addJar(ConfigurationManager.get("repository_home") + "/" + jarDependency)
-
 
           // events are returned with 10sec resolution!!!
           val eventsGenerator = new EventsGenerator(sc, ConfigurationManager.get("aggr.max_files_per_cycle", "50").toInt)

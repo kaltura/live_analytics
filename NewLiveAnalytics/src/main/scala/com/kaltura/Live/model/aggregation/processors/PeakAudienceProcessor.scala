@@ -75,7 +75,7 @@ object PeakAudienceProcessor
 
           val coGroupedAudience = oldAudienceKeyEvents.cogroup(newAudienceKeyEvents)
 
-          coGroupedAudience.count()
+          //coGroupedAudience.count()
 
           coGroupedAudience.filter(x => saveIfNewOrGreater(x._2._1, x._2._2) )
                .map(x => x._2._2.head)
@@ -98,6 +98,7 @@ object PeakAudienceProcessor
      {
           //val entryHourlyPeakAudienceCF = new EntryHourlyPeakAudienceCF(SerializedSession.session)
 
+          // TODO: consider removing the wait ...
           val values = keys.flatMap(x => Await.result(EntryHourlyPeakAudienceCF.getByKey(x._1 ,new java.util.Date(x._2) ), scala.concurrent.duration.Duration.Inf) )
 
           values

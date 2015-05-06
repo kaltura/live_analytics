@@ -14,7 +14,7 @@ libraryDependencies += "org.apache.spark" %% "spark-core" % "1.2.2"
 
 //libraryDependencies += "com.datastax.spark" %% "spark-cassandra-connector" % "1.1.1"
 
-libraryDependencies += "com.datastax.spark" %% "spark-cassandra-connector" % "1.2.0-rc3"
+libraryDependencies += "com.datastax.spark" %% "spark-cassandra-connector" % "1.2.0"
 
 libraryDependencies += "org.apache.spark" % "spark-streaming_2.10" % "1.2.2"
 

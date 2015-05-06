@@ -5,18 +5,57 @@ import java.io.Serializable
 import java.net.URLDecoder
 import java.util.regex.Matcher
 import java.util.regex.Pattern
-import com.kaltura.Live.env.EnvParams
 import com.kaltura.Live.infra.ConfigurationManager
 import com.kaltura.Live.infra.utils.{RestRequestParser}
 import com.kaltura.Live.model.{Consts, LiveEvent}
 import com.kaltura.Live.utils.{BaseLog, MetaLog, DateUtils}
 import com.kaltura.ip2location.{Ip2LocationRecord, SerializableIP2LocationReader}
 
+object CountryCity extends Serializable with MetaLog[BaseLog]
+{
+     val reader = new SerializableIP2LocationReader(ConfigurationManager.get("aggr.ip2location_path"))
+
+     def parse( ipCode : String ) : CountryCity =
+     {
+          try
+          {
+               val ipRecord: Ip2LocationRecord = reader.getAll(ipCode)
+
+               new CountryCity(ipRecord.getCountryLong, ipRecord.getCity).repair()
+          }
+          catch
+          {
+               case e: Exception =>
+               {
+                    logger.warn("Failed to parse IP") // maybe add exception description
+               }
+
+               new CountryCity()
+          }
+     }
+}
+
+class CountryCity( var country : String = "N/A", var city : String = "N/A")
+{
+     def repair(): CountryCity =
+     {
+          if ( country == "-" )
+               country = "N/A"
+          if ( city == "-" )
+               city = "N/A"
+
+          this
+     }
+
+     def output(): Unit =
+     {
+          println(country + ", " + city)
+     }
+}
+
 object LiveEventParser extends Serializable with MetaLog[BaseLog]
 {
      val apacheLogRegex: Pattern = Pattern.compile("^([\\d.]+) \\[([\\w\\d:/]+\\s[+\\-]\\d{4})\\] \"(.+?)\" (\\d{3}) \"([^\"]+)\".*")
-
-     val reader = new SerializableIP2LocationReader(ConfigurationManager.get("aggr.ip2location_path"))
 
      def parse( line: String ) : LiveEvent =
      {
@@ -53,30 +92,11 @@ object LiveEventParser extends Serializable with MetaLog[BaseLog]
           if (query.toLowerCase.indexOf("service=livestats") > -1 && query.toLowerCase.indexOf("action=collect") > -1)
           {
                event.ipAddress = m.group(1)
-               try
-               {
-                    val ipRecord: Ip2LocationRecord = reader.getAll(event.ipAddress)
-                    event.country = ipRecord.getCountryLong
-                    event.city = ipRecord.getCity
-               }
-               catch
-               {
-                    case e: Exception =>
-                    {
-                         logger.warn("Failed to parse IP")
-                         event.country = "N/A"
-                         event.city = "N/A"
-                    }
-               }
 
-//               if (event.country == null)
-//               {
-//                    event.country = "N/A"
-//               }
-//               if (event.city == null)
-//               {
-//                    event.city = "N/A"
-//               }
+               val countryCity = CountryCity.parse(event.ipAddress)
+
+               event.country = countryCity.country
+               event.city = countryCity.city
 
                val paramsMap = RestRequestParser.splitQuery(query)
                if (paramsMap != null && paramsMap.size > 0)
