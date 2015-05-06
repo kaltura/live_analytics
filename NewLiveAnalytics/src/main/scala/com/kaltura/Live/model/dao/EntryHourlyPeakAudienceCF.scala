@@ -7,7 +7,39 @@ import eu.inn.binders.cassandra._
 import eu.inn.binders.naming.PlainConverter
 import scala.concurrent.{Future, ExecutionContext}
 
+object EntryHourlyPeakAudience
+{
+     def maxCollectionsHeadsIfExists( oldEvents: Iterable[EntryHourlyPeakAudience], newEvents: Iterable[EntryHourlyPeakAudience] ): EntryHourlyPeakAudience =
+     {
+          if ( oldEvents.isEmpty )
+               return newEvents.head
+
+          if ( newEvents.isEmpty )
+               return oldEvents.head
+
+          return newEvents.head.max(oldEvents.head)
+     }
+
+     def isNewOrGreater( oldEvents: Iterable[EntryHourlyPeakAudience], newEvents: Iterable[EntryHourlyPeakAudience] ): Boolean =
+     {
+          ( ( oldEvents.isEmpty ) || ( !newEvents.isEmpty && isNewPeakFound(oldEvents.head, newEvents.head) )  )
+     }
+
+     def isNewPeakFound( oldEvent: EntryHourlyPeakAudience, newEvent: EntryHourlyPeakAudience ): Boolean =
+     {
+          assert(oldEvent != null)
+          assert(newEvent != null)
+
+          return ( newEvent.audience > oldEvent.audience || newEvent.dvr_audience > oldEvent.dvr_audience )
+     }
+}
+
 case class EntryHourlyPeakAudience( entry_id: String, event_time: java.util.Date, audience: Long, dvr_audience: Long ) extends Serializable
+{
+     def max( that: EntryHourlyPeakAudience ): EntryHourlyPeakAudience =
+          new EntryHourlyPeakAudience(this.entry_id, this.event_time, math.max(this.audience, that.audience),
+               math.max(this.dvr_audience, that.dvr_audience) )
+}
 
 object EntryHourlyPeakAudienceCF//( session: com.datastax.driver.core.Session ) extends Serializable
 {
@@ -42,5 +74,7 @@ object EntryHourlyPeakAudienceCF//( session: com.datastax.driver.core.Session ) 
 
           //cql"SELECT * FROM live_entry_hourly_peak WHERE event_time IN ($hoursCommaSeparated) ALLOW FILTERING".all[EntryHourlyPeakAudience]
      }
+
+
 
 }
