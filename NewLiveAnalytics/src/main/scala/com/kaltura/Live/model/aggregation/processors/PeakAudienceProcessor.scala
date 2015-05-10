@@ -77,8 +77,8 @@ object PeakAudienceProcessor
 
           //coGroupedAudience.count()
 
-          coGroupedAudience.filter(x => saveIfNewOrGreater(x._2._1, x._2._2) )
-               .map(x => x._2._2.head)
+          coGroupedAudience.filter(x => EntryHourlyPeakAudience.isNewOrGreater(x._2._1, x._2._2) )
+               .map(x => EntryHourlyPeakAudience.maxCollectionsHeadsIfExists(x._2._1, x._2._2) )
                .saveToCassandra(keyspace, tableName)
      }
 
@@ -98,26 +98,15 @@ object PeakAudienceProcessor
      {
           //val entryHourlyPeakAudienceCF = new EntryHourlyPeakAudienceCF(SerializedSession.session)
 
-          // TODO: consider removing the wait ...
           val values = keys.flatMap(x => Await.result(EntryHourlyPeakAudienceCF.getByKey(x._1 ,new java.util.Date(x._2) ), scala.concurrent.duration.Duration.Inf) )
 
           values
      }
 
 
-     def saveIfNewOrGreater( oldEvents: Iterable[EntryHourlyPeakAudience],
-                             newEvents: Iterable[EntryHourlyPeakAudience] ): Boolean =
-     {
-          ( ( oldEvents.isEmpty ) || ( !newEvents.isEmpty && isNewPeakFound(oldEvents.head, newEvents.head) )  )
-     }
 
-     def isNewPeakFound( oldEvent: EntryHourlyPeakAudience, newEvent: EntryHourlyPeakAudience ): Boolean =
-     {
-          assert(oldEvent != null)
-          assert(newEvent != null)
-          
-          return ( newEvent.audience > oldEvent.audience || newEvent.dvr_audience > oldEvent.dvr_audience )
-     }
+
+
 
 //     def save( event: LiveEvent ): (Future[Unit], Future[Unit], Future[Unit]) =
 //     {

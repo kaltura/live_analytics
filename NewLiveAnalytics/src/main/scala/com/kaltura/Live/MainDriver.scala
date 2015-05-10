@@ -48,7 +48,8 @@ object MainDriver
           "netty-3.9.0.Final.jar",
           "guava-16.0.1.jar",
           "metrics-core-3.0.2.jar",
-          "slf4j-api-1.7.5.jar")
+          "slf4j-api-1.7.5.jar",
+          "jsr166e-1.1.0.jar")
 
      val keyspace = "kaltura_live"
 
@@ -170,7 +171,7 @@ object MainDriver
 
           val sc = new SparkContext(conf)
 
-          for ( jarDependency <- jarDependenciesLocal )
+          for ( jarDependency <- jarDependencies )
                sc.addJar(ConfigurationManager.get("repository_home") + "/" + jarDependency)
 
           // events are returned with 10sec resolution!!!
