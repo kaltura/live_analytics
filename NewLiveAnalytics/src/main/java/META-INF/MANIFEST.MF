@@ -1,0 +1,55 @@
+Manifest-Version: 1.0
+Class-Path: commons-configuration-1.6.jar spark-streaming_2.10-1.2.2.j
+ ar netty-3.9.0.Final.jar hadoop-auth-2.2.0.jar curator-client-2.4.0.j
+ ar jackson-databind-2.3.1.jar metrics-json-3.0.0.jar jersey-guice-1.9
+ .jar spark-cassandra-connector_2.10-1.2.0.jar jline-0.9.94.jar common
+ s-beanutils-core-1.8.0.jar slf4j-log4j12-1.7.5.jar metrics-core-3.0.2
+ .jar jackson-mapper-asl-1.8.8.jar avro-1.7.4.jar chill-java-0.5.0.jar
+  jersey-json-1.9.jar jetty-plus-8.1.14.v20131031.jar joda-time-2.3.ja
+ r json4s-jackson_2.10-3.2.10.jar akka-actor_2.10-2.3.4-spark.jar bind
+ ers-cassandra_2.10-0.2.5.jar objenesis-1.2.jar kryo-2.21.jar akka-rem
+ ote_2.10-2.3.4-spark.jar akka-slf4j_2.10-2.3.4-spark.jar pyrolite-2.0
+ .1.jar hadoop-client-2.2.0.jar xz-1.0.jar javax.transaction-1.1.1.v20
+ 1105210645.jar reflectasm-1.07-shaded.jar hadoop-mapreduce-client-com
+ mon-2.2.0.jar tachyon-0.5.0.jar hadoop-common-2.2.0.jar jettison-1.1.
+ jar commons-httpclient-3.1.jar commons-compress-1.4.1.jar lz4-1.2.0.j
+ ar jetty-webapp-8.1.14.v20131031.jar RoaringBitmap-0.4.5.jar xmlenc-0
+ .52.jar jets3t-0.7.1.jar jaxb-impl-2.2.3-1.jar commons-io-2.4.jar had
+ oop-mapreduce-client-core-2.2.0.jar commons-math3-3.1.1.jar jetty-sec
+ urity-8.1.14.v20131031.jar compress-lzf-1.0.0.jar hadoop-hdfs-2.2.0.j
+ ar hadoop-mapreduce-client-shuffle-2.2.0.jar stax-api-1.0.1.jar scala
+ p-2.10.0.jar zookeeper-3.4.5.jar jetty-jndi-8.1.14.v20131031.jar hado
+ op-yarn-api-2.2.0.jar aopalliance-1.0.jar jetty-io-8.1.14.v20131031.j
+ ar cassandra-clientutil-2.1.3.jar jackson-xc-1.8.8.jar asm-3.2.jar je
+ rsey-test-framework-grizzly2-1.9.jar netty-all-4.0.23.Final.jar unuse
+ d-1.0.0.jar minlog-1.2.jar javax.activation-1.1.0.v201105071233.jar j
+ ersey-server-1.9.jar jcl-over-slf4j-1.7.5.jar slf4j-api-1.7.5.jar act
+ ivation-1.1.jar commons-collections-3.2.1.jar commons-lang-2.5.jar ha
+ doop-mapreduce-client-jobclient-2.2.0.jar commons-logging-1.1.1.jar c
+ urator-recipes-2.4.0.jar spark-network-shuffle_2.10-1.2.2.jar hadoop-
+ yarn-client-2.2.0.jar snappy-java-1.1.1.6.jar guava-16.0.1.jar jul-to
+ -slf4j-1.7.5.jar scala-compiler-2.10.0.jar scala-library-2.10.5.jar t
+ achyon-client-0.5.0.jar jetty-continuation-8.1.14.v20131031.jar commo
+ ns-digester-1.8.jar jetty-server-8.1.14.v20131031.jar jaxb-api-2.2.2.
+ jar jackson-jaxrs-1.8.8.jar httpcore-4.2.4.jar py4j-0.8.2.1.jar javax
+ .mail.glassfish-1.4.1.v201005082020.jar paranamer-2.6.jar javax.servl
+ et-3.0.0.v201112011016.jar curator-framework-2.4.0.jar log4j-1.2.17.j
+ ar json4s-core_2.10-3.2.10.jar scala-reflect-2.10.5.jar jetty-util-6.
+ 1.26.jar commons-beanutils-1.7.0.jar hadoop-yarn-server-common-2.2.0.
+ jar cassandra-thrift-2.1.3.jar scala-reflect-2.10.4.jar scala-library
+ -2.10.4.jar cassandra-driver-core-2.1.5.jar stream-2.7.0.jar commons-
+ math-2.1.jar chill_2.10-0.5.0.jar jackson-core-2.3.1.jar protobuf-jav
+ a-2.5.0.jar jackson-core-asl-1.8.8.jar jetty-xml-8.1.14.v20131031.jar
+  jsr166e-1.1.0.jar cglib-2.2.1-v20090111.jar spark-core_2.10-1.2.2.ja
+ r commons-net-2.2.jar metrics-graphite-3.0.0.jar json4s-ast_2.10-3.2.
+ 10.jar hadoop-mapreduce-client-app-2.2.0.jar spark-network-common_2.1
+ 0-1.2.2.jar mesos-0.18.1-shaded-protobuf.jar metrics-jvm-3.0.0.jar ht
+ tpclient-4.2.5.jar uncommons-maths-1.2.2a.jar hadoop-annotations-2.2.
+ 0.jar jetty-http-8.1.14.v20131031.jar commons-cli-1.2.jar commons-cod
+ ec-1.4.jar jetty-servlet-8.1.14.v20131031.jar hadoop-yarn-common-2.2.
+ 0.jar binders-core_2.10-0.2.3.jar jsr305-1.3.9.jar guice-3.0.jar jett
+ y-util-8.1.14.v20131031.jar joda-convert-1.2.jar libthrift-0.9.2.jar 
+ javax.inject-1.jar jackson-annotations-2.3.0.jar protobuf-java-2.5.0-
+ spark.jar commons-lang3-3.3.2.jar config-1.2.1.jar
+Main-Class: com.kaltura.Live.MainDriver
+
