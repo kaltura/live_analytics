@@ -6,14 +6,11 @@ import com.kaltura.Live.model.LiveEvent
 import com.kaltura.Live.model.aggregation.processors.PeakAudienceProcessor
 import com.kaltura.Live.model.purge.DataCleaner
 import com.kaltura.Live.utils.DateUtils
-import com.kaltura.Live.model.purge
 import org.apache.spark.rdd.RDD
 
 import com.datastax.spark.connector._
-import com.datastax.spark.connector.writer.{TTLOption, WriteConf}
 import org.apache.spark.SparkContext._
 import org.apache.spark.{SparkConf, SparkContext}
-import org.apache.zookeeper.server.DatadirCleanupManager
 
 import scala.util.control.Breaks._
 
