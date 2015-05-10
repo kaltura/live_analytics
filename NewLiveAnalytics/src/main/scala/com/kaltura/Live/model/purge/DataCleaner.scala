@@ -21,13 +21,13 @@ class DataCleaner(sc: SparkContext) extends Serializable with MetaLog[BaseLog] {
     currentIteration += 1
     logger.info(s"Current data cleaner iteration is $currentIteration")
     if (currentIteration == runOnIteration) {
-      logger.info(s"Cleaning data!")
+      logger.warn(s"Cleaning data (this is good)!")
       removeProcessedLogFiles()
       removeLiveEvents()
       removeLiveEventsLocation()
       removeLivePartnerEntry()
       currentIteration = 0
-      logger.info(s"Done cleaning data!")
+      logger.warn(s"Done cleaning data!")
     }
   }
 
