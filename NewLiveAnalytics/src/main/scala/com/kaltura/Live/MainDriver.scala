@@ -182,10 +182,10 @@ object MainDriver
 
                     val noEvents = isEmpty(events)
 
+                    eventsGenerator.commit
+                    
                     if ( !noEvents )
                          processEvents(sc, events)
-
-                    eventsGenerator.commit
 
                     dataCleaner.tryRun()
 
