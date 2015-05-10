@@ -26,8 +26,8 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 		            <groupId>org.apache.maven.plugins</groupId>
 		            <artifactId>maven-compiler-plugin</artifactId>
 		            <configuration>
-                		<source>1.8</source>
-		                <target>1.8</target>
+                		<source>1.7</source>
+		                <target>1.7</target>
 		                <showDeprecation>true</showDeprecation>
 		                <showWarnings>true</showWarnings>
                 		<executable>${env.JAVA_HOME}/bin/javac</executable>

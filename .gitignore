@@ -7,8 +7,6 @@ KalturaLiveModel/bin/
 IP2Location/.settings/org.eclipse.wst.common.component
 IP2Location/.settings/org.eclipse.wst.common.project.facet.core.xml
 KalturaLiveAnalytics/target/
-NewLiveAnalytics/target/
-NewLiveAnalytics/project/
 .idea/
 *.iml
 out/
