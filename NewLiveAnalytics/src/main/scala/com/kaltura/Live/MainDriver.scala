@@ -182,11 +182,11 @@ object MainDriver
 
                     val noEvents = isEmpty(events)
 
-                    if ( !noEvents )
-                         processEvents(sc, events)
-
                     eventsGenerator.commit
 
+                    if ( !noEvents )
+                         processEvents(sc, events)
+                    
                     if ( noEvents )
                          Thread.sleep(1000)
                }
