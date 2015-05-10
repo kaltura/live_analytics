@@ -48,10 +48,7 @@ public abstract class LiveEventDAO extends LiveDAO {
 		this.alive = row.getLong("alive");
 		this.bitrate = row.getLong("bitrate");
 		this.bitrateCount = row.getLong("bitrate_count");
-        /* Important! We are keeping buffer_time as a Cassandra counter which is limited to Long (thus we are
-         * multiplying by 100 on set and divide by 100 on get)
-         ***/
-		this.bufferTime = row.getLong("buffer_time") / 100.0;
+		this.bufferTime = row.getDouble("buffer_time");
 		this.plays = row.getLong("plays");
         this.dvrAlive = row.getLong("dvr_alive");
 	}
