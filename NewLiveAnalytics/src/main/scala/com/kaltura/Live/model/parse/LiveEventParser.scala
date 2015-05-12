@@ -11,15 +11,21 @@ import com.kaltura.Live.model.{Consts, LiveEvent}
 import com.kaltura.Live.utils.{BaseLog, MetaLog, DateUtils}
 import com.kaltura.ip2location.{Ip2LocationRecord, SerializableIP2LocationReader}
 
+//object CountryCity extends Serializable with MetaLog[BaseLog]
 object CountryCity extends Serializable with MetaLog[BaseLog]
 {
-     val reader = new SerializableIP2LocationReader(ConfigurationManager.get("aggr.ip2location_path"))
+     //val reader = new SerializableIP2LocationReader(ConfigurationManager.get("aggr.ip2location_path"))
 
      def parse( ipCode : String ) : CountryCity =
      {
+          val reader = new SerializableIP2LocationReader(ConfigurationManager.get("aggr.ip2location_path"))
+
           try
           {
                val ipRecord: Ip2LocationRecord = reader.getAll(ipCode)
+
+               if ( ipRecord.getCountryLong.length > 30 || ipRecord.getCity.length > 30 )
+                    logger.warn("ip: '" + ipCode + "' with Long Country: " + ipRecord.getCountryLong + " Long City: " + ipRecord.getCity)
 
                new CountryCity(ipRecord.getCountryLong, ipRecord.getCity).repair()
           }
@@ -27,7 +33,8 @@ object CountryCity extends Serializable with MetaLog[BaseLog]
           {
                case e: Exception =>
                {
-                    logger.warn("Failed to parse IP") // maybe add exception description
+                    //println("Failed to parse IP " + ipCode) // maybe add exception description
+                    logger.warn("Failed to parse IP '" + ipCode + "' exp: " + e.printStackTrace()) // maybe add exception description
                }
 
                new CountryCity()
