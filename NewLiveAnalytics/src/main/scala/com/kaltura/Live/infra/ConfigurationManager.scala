@@ -18,7 +18,7 @@ object ConfigurationManager {
   loadConfiguration(configFilePath);
 
   protected def configFilePath: String = {
-    var confPath: String = "/opt/kaltura"
+    var confPath: String = "/opt/kaltura/lib"
     if (System.getenv.containsKey("KALTURA_CONF_PATH")) {
       confPath = System.getenv("KALTURA_CONF_PATH")
     }
