@@ -11,10 +11,9 @@ import com.kaltura.Live.model.{Consts, LiveEvent}
 import com.kaltura.Live.utils.{BaseLog, MetaLog, DateUtils}
 import com.kaltura.ip2location.{Ip2LocationRecord, SerializableIP2LocationReader}
 
-//object CountryCity extends Serializable with MetaLog[BaseLog]
+// TODO - make SerializableIP2LocationReader class thread-safe (currently an instance is created on every call)
 object CountryCity extends Serializable with MetaLog[BaseLog]
 {
-     //val reader = new SerializableIP2LocationReader(ConfigurationManager.get("aggr.ip2location_path"))
 
      def parse( ipCode : String ) : CountryCity =
      {
@@ -38,6 +37,10 @@ object CountryCity extends Serializable with MetaLog[BaseLog]
                }
 
                new CountryCity()
+          }
+          finally
+          {
+               reader.close();
           }
      }
 }
