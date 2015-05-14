@@ -2,15 +2,11 @@ package com.kaltura.Live.infra
 
 
 
-import com.datastax.driver.core.Cluster
-import com.kaltura.Live.env.EnvParams
 import com.kaltura.Live.model.dao.{LoggedFile, BatchIdCF, LoggedDataCF, LoggedFilesCF}
 import com.kaltura.Live.model.parse.LiveEventParser
 import com.kaltura.Live.utils.{BaseLog, MetaLog}
 import org.apache.spark.SparkContext
 import org.apache.spark.rdd.RDD
-
-import scala.collection.mutable.ListBuffer
 
 
 //import org.apache.spark.sql.SchemaRDD
@@ -30,8 +26,6 @@ object EventsGenerator extends MetaLog[BaseLog]
 
 class EventsGenerator( val sc : SparkContext, val maxProcessFilesPerCycle : Int ) extends Serializable with MetaLog[BaseLog]
 {
-
-
      //final def logger = MustBeLightweight.logger
      //val cc = new CassandraSQLContext(sc)
 
@@ -120,6 +114,8 @@ class EventsGenerator( val sc : SparkContext, val maxProcessFilesPerCycle : Int 
 
           if ( loggedFilesList.isEmpty )
                return
+
+          loggedFilesList.foreach(x => logger.warn(s"processed file: $x"))
 
           needCommit_ = true
 
