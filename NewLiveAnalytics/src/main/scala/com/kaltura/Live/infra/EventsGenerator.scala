@@ -1,16 +1,11 @@
 package com.kaltura.Live.infra
 
 
-
-import com.datastax.driver.core.Cluster
-import com.kaltura.Live.env.EnvParams
 import com.kaltura.Live.model.dao.{LoggedFile, BatchIdCF, LoggedDataCF, LoggedFilesCF}
 import com.kaltura.Live.model.parse.LiveEventParser
 import com.kaltura.Live.utils.{BaseLog, MetaLog}
 import org.apache.spark.SparkContext
 import org.apache.spark.rdd.RDD
-
-import scala.collection.mutable.ListBuffer
 
 
 //import org.apache.spark.sql.SchemaRDD
@@ -104,7 +99,7 @@ class EventsGenerator( val sc : SparkContext, val maxProcessFilesPerCycle : Int 
 
           val events = sc.parallelize(nextBatchFileIds)
                .flatMap(fileId => EventsFileExtractor.fileIdToLines(fileId) )
-               .map(line => LiveEventParser.parse(line) )
+               .mapPartitions( new LiveEventParser().parseBatch)
                .filter( !_.isNull )
 
           val nEvents = events.count()

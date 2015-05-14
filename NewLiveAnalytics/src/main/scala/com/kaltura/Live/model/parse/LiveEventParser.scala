@@ -9,17 +9,20 @@ import com.kaltura.Live.infra.ConfigurationManager
 import com.kaltura.Live.infra.utils.{RestRequestParser}
 import com.kaltura.Live.model.{Consts, LiveEvent}
 import com.kaltura.Live.utils.{BaseLog, MetaLog, DateUtils}
-import com.kaltura.ip2location.{Ip2LocationRecord, SerializableIP2LocationReader}
+import com.kaltura.ip2location.{SerializableIP2LocationReader, Ip2LocationRecord}
 
 object CountryCity extends Serializable with MetaLog[BaseLog]
 {
-     val reader = new SerializableIP2LocationReader(ConfigurationManager.get("aggr.ip2location_path"))
-
-     def parse( ipCode : String ) : CountryCity =
+     def parse( ipCode : String, reader: SerializableIP2LocationReader ) : CountryCity =
      {
+          //val reader = new SerializableIP2LocationReader(ConfigurationManager.get("aggr.ip2location_path"))
+
           try
           {
                val ipRecord: Ip2LocationRecord = reader.getAll(ipCode)
+
+               if ( ipRecord.getCountryLong.length > 35 || ipRecord.getCity.length > 35 )
+                    logger.warn("ip: '" + ipCode + "' with Long Country: " + ipRecord.getCountryLong + " Long City: " + ipRecord.getCity)
 
                new CountryCity(ipRecord.getCountryLong, ipRecord.getCity).repair()
           }
@@ -32,6 +35,10 @@ object CountryCity extends Serializable with MetaLog[BaseLog]
 
                new CountryCity()
           }
+//          finally
+//          {
+//               reader.close()
+//          }
      }
 }
 
@@ -53,11 +60,25 @@ class CountryCity( var country : String = "N/A", var city : String = "N/A")
      }
 }
 
+class LiveEventParser extends Serializable
+{
+     def parseBatch( lines : Iterator[String] ) =
+     {
+          val reader = new SerializableIP2LocationReader(ConfigurationManager.get("aggr.ip2location_path"))
+
+          val result = lines.map(line => LiveEventParser.parse(line, reader) )
+
+          reader.close()
+
+          result
+     }
+}
+
 object LiveEventParser extends Serializable with MetaLog[BaseLog]
 {
      val apacheLogRegex: Pattern = Pattern.compile("^([\\d.]+) \\[([\\w\\d:/]+\\s[+\\-]\\d{4})\\] \"(.+?)\" (\\d{3}) \"([^\"]+)\".*")
 
-     def parse( line: String ) : LiveEvent =
+     def parse( line: String, reader: SerializableIP2LocationReader ) : LiveEvent =
      {
           val event = new LiveEvent
 
@@ -93,7 +114,7 @@ object LiveEventParser extends Serializable with MetaLog[BaseLog]
           {
                event.ipAddress = m.group(1)
 
-               val countryCity = CountryCity.parse(event.ipAddress)
+               val countryCity = CountryCity.parse(event.ipAddress, reader)
 
                event.country = countryCity.country
                event.city = countryCity.city
