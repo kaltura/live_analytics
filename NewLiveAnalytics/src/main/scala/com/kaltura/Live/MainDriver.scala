@@ -1,5 +1,6 @@
 package com.kaltura.Live
 
+import com.datastax.spark.connector.writer.{TTLOption, WriteConf}
 import com.kaltura.Live.env.EnvParams
 import com.kaltura.Live.infra.{ConfigurationManager, EventsGenerator}
 import com.kaltura.Live.model.LiveEvent
@@ -101,8 +102,6 @@ object MainDriver
      val livePartnerEntryTableName = "live_partner_entry"
      val livePartnerEntryTableFields = toSomeColumns(partnerEntryFieldsList)
 
-     //val highResolutionWriteConf = WriteConf(ttl = TTLOption.constant(604800) )
-
      // TODO: need to implement the following to get some signal from outside for stopping the driver
      def checkBreakRequest(): Boolean = false
 
@@ -150,7 +149,7 @@ object MainDriver
           val temp7 = events.map(event => (event.entryId, event.roundTimeToHour) )
                .reduceByKey(_ maxTime _)
                .map(x => x._2.wrap)
-               .saveToCassandra(keyspace, livePartnerEntryTableName, livePartnerEntryTableFields)
+               .saveToCassandra(keyspace, livePartnerEntryTableName, livePartnerEntryTableFields, writeConf = WriteConf(ttl = TTLOption.constant(36 * 60 * 60)))
      }
 
      def main(args: Array[String])

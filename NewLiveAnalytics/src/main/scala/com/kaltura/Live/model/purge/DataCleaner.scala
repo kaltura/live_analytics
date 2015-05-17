@@ -25,7 +25,6 @@ class DataCleaner(sc: SparkContext) extends Serializable with MetaLog[BaseLog] {
       removeProcessedLogFiles()
       removeLiveEvents()
       removeLiveEventsLocation()
-      removeLivePartnerEntry()
       currentIteration = 0
       logger.warn(s"Done cleaning data!")
     }
@@ -60,7 +59,7 @@ class DataCleaner(sc: SparkContext) extends Serializable with MetaLog[BaseLog] {
 
   def removeLiveEvents() {
 
-    val dateBefore2Days = new Date(new Date().getTime() - 2 * 24 * 3600 * 1000L );
+    val dateBefore2Days = new Date(new Date().getTime() - 36 * 3600 * 1000L );
     val liveEventRows = sc.cassandraTable(Consts.KalturaKeySpace, "live_events")
       .where("event_time < ?", dateBefore2Days)
       .select("entry_id","event_time")
@@ -82,7 +81,7 @@ class DataCleaner(sc: SparkContext) extends Serializable with MetaLog[BaseLog] {
 
   def removeLiveEventsLocation() {
 
-    val dateBefore2Days = new Date(new Date().getTime() - 2 * 24 * 3600 * 1000L );
+    val dateBefore2Days = new Date(new Date().getTime() - 36 * 3600 * 1000L );
     val liveEventLocationRows = sc.cassandraTable(Consts.KalturaKeySpace, "live_events_location")
       .select("entry_id","event_time")
       .as((_: String, _: Long))
@@ -101,29 +100,6 @@ class DataCleaner(sc: SparkContext) extends Serializable with MetaLog[BaseLog] {
       }
     })
     logger.info(s"Deleted $liveEventsCount live_events_location rows")
-  }
-
-  def removeLivePartnerEntry() {
-
-    val dateBefore2Days = new Date(new Date().getTime() - 2 * 24 * 3600 * 1000L );
-    val livePartnerEntryRows = sc.cassandraTable(Consts.KalturaKeySpace, "live_partner_entry")
-      .select("partner_id","entry_id","event_time")
-      .as((_: Int, _: String, _: Long))
-      .filter(row => row._3 < dateBefore2Days.getTime)
-
-    val liveEventsCount = livePartnerEntryRows.count()
-    logger.info(s"Trying to delete $liveEventsCount live_partner_entry rows")
-    val connector = CassandraConnector(sc.getConf)
-    livePartnerEntryRows.foreachPartition(partition => {
-      connector.withSessionDo {
-        session => {
-          partition.foreach { row =>
-            session.execute(s"DELETE FROM ${Consts.KalturaKeySpace}.live_partner_entry where partner_id=${row._1} and entry_id='${row._2}';")
-          }
-        }
-      }
-    })
-    logger.info(s"Deleted $liveEventsCount live_partner_entry rows")
   }
 
 }
