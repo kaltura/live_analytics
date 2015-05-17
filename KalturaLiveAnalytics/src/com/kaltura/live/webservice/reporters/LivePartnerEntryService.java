@@ -1,6 +1,7 @@
 package com.kaltura.live.webservice.reporters;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -28,12 +29,14 @@ public class LivePartnerEntryService {
 		String query = "select * from kaltura_live.live_partner_entry where partner_id = " + partnerId + ";";
 		logger.debug(query);
 		ResultSet results = session.getSession().execute(query);
-		
+        Date dateBefore36Hours = new Date(new Date().getTime() - 36 * 3600 * 1000L);
 		List<String> result = new ArrayList<>();
 		Iterator<Row> itr = results.iterator();
 		while (itr.hasNext()) {
 			LivePartnerEntryDAO dao = new LivePartnerEntryDAO(itr.next());
-			result.add(dao.getEntryId());
+            if (dao.getEventTime().after(dateBefore36Hours)){
+                result.add(dao.getEntryId());
+            }
 		}
 		
 		return new LiveEntriesListResponse(result);
