@@ -1,6 +1,8 @@
 package com.kaltura.Live
 
 import com.datastax.spark.connector.writer.{TTLOption, WriteConf}
+import com.google.common.base.Charsets
+import com.google.common.io.Resources
 import com.kaltura.Live.env.EnvParams
 import com.kaltura.Live.infra.{ConfigurationManager, EventsGenerator}
 import com.kaltura.Live.model.LiveEvent
@@ -13,6 +15,7 @@ import com.datastax.spark.connector._
 import org.apache.spark.SparkContext._
 import org.apache.spark.{SparkConf, SparkContext}
 
+import scala.io.Source
 import scala.util.control.Breaks._
 
 /**
@@ -109,6 +112,8 @@ object MainDriver
           rdd.take(1).size == 0
      }
 
+     def appVersion = Resources.toString(getClass.getResource("/VERSION"), Charsets.UTF_8)
+
      def processEvents( sc : SparkContext, events: RDD[LiveEvent] ): Unit =
      {
           val reducedLiveEvents = events
@@ -170,6 +175,11 @@ object MainDriver
           for ( jarDependency <- jarDependencies )
                sc.addJar(ConfigurationManager.get("repository_home") + "/" + jarDependency)
 
+          println( "******************************************************")
+          println(s"*************** Live Analytics v${appVersion} ****************")
+          println( "******************************************************")
+
+
           // events are returned with 10sec resolution!!!
           val eventsGenerator = new EventsGenerator(sc, ConfigurationManager.get("aggr.max_files_per_cycle", "50").toInt)
           val dataCleaner = new DataCleaner(sc)
@@ -182,7 +192,7 @@ object MainDriver
                     val noEvents = isEmpty(events)
 
                     eventsGenerator.commit
-                    
+
                     if ( !noEvents )
                          processEvents(sc, events)
 
