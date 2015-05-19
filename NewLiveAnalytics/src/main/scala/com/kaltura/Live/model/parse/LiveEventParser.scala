@@ -23,7 +23,7 @@ object CountryCity extends Serializable with MetaLog[BaseLog]
           {
                val ipRecord: Ip2LocationRecord = reader.getAll(ipCode)
 
-               if ( ipRecord.getCountryLong.length > 30 || ipRecord.getCity.length > 30 )
+               if ( ipRecord.getCountryLong.length > 35 || ipRecord.getCity.length > 35 )
                     logger.warn("ip: '" + ipCode + "' with Long Country: " + ipRecord.getCountryLong + " Long City: " + ipRecord.getCity)
 
                new CountryCity(ipRecord.getCountryLong, ipRecord.getCity).repair()
