@@ -105,8 +105,8 @@ object MainDriver
      val livePartnerEntryTableName = "live_partner_entry"
      val livePartnerEntryTableFields = toSomeColumns(partnerEntryFieldsList)
 
-     // TODO: need to implement the following to get some signal from outside for stopping the driver
-     def checkBreakRequest(): Boolean = false
+     var shouldBreak = false
+     var gracefullyDone = false
 
      def isEmpty[T](rdd : RDD[T]) = {
           rdd.take(1).size == 0
@@ -157,7 +157,18 @@ object MainDriver
                .saveToCassandra(keyspace, livePartnerEntryTableName, livePartnerEntryTableFields, writeConf = WriteConf(ttl = TTLOption.constant(36 * 60 * 60)))
      }
 
-     def main(args: Array[String])
+  def setShutdownHook = {
+    sys.ShutdownHookThread {
+      shouldBreak = true
+      while(!gracefullyDone) {
+        println("Waiting for current aggregation iteration to complete gracefully...")
+        Thread.sleep(3000)
+      }
+      println("Live Analytics exited gracefully!")
+    }
+  }
+
+  def main(args: Array[String])
      {
           // TODO - @Didi, why isn't this configured on the nodes themselves?
           System.setProperty("spark.default.parallelism", EnvParams.sparkParallelism)
@@ -172,6 +183,8 @@ object MainDriver
 
           val sc = new SparkContext(conf)
 
+          setShutdownHook
+
           for ( jarDependency <- jarDependencies )
                sc.addJar(ConfigurationManager.get("repository_home") + "/" + jarDependency)
 
@@ -183,27 +196,21 @@ object MainDriver
           // events are returned with 10sec resolution!!!
           val eventsGenerator = new EventsGenerator(sc, ConfigurationManager.get("aggr.max_files_per_cycle", "50").toInt)
           val dataCleaner = new DataCleaner(sc)
-          breakable
-          {
-               while (true)
-               {
-                    val events = eventsGenerator.get
-
-                    val noEvents = isEmpty(events)
-
-                    eventsGenerator.commit
-
-                    if ( !noEvents )
-                         processEvents(sc, events)
-
-                    dataCleaner.tryRun()
-
-                    if ( noEvents )
-                         Thread.sleep(1000)
-               }
+          while (!shouldBreak) {
+            val events = eventsGenerator.get
+            val noEvents = isEmpty(events)
+            eventsGenerator.commit
+            if (!noEvents) {
+              processEvents(sc, events)
+            }
+            dataCleaner.tryRun()
+            if (noEvents) {
+              Thread.sleep(1000)
+            }
           }
 
           eventsGenerator.close
+          gracefullyDone = true
      }
 }
 // TODO: for the peak audience read data from Cassandra for the current hour (what if we are running after crash)
