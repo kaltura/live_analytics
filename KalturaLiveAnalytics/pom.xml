@@ -1,20 +1,25 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<properties>
+		<buildNumber>0</buildNumber>
+		<projectVersion>1.0</projectVersion>
+	</properties>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>kaltura</groupId>
 	<artifactId>live-analytics</artifactId>
-	<version>1.0.0</version>
+	<version>${projectVersion}.${buildNumber}</version>
+	<name>KalturaLiveAnalytics</name>
 	<packaging>war</packaging>
 	<dependencies>
 		<dependency>
 			<groupId>kaltura</groupId>
 			<artifactId>live-infra</artifactId>
-			<version>1.0.0</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>kaltura</groupId>
 			<artifactId>live-model</artifactId>
-			<version>1.0.0</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -25,18 +30,6 @@
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
 			<version>1.7.5</version>
-		</dependency>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.8.2</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.cassandraunit</groupId>
-			<artifactId>cassandra-unit-spring</artifactId>
-			<version>2.0.2.1</version>
-			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.sun.xml.ws</groupId>
@@ -61,7 +54,18 @@
 				<version>2.3</version>
 				<configuration>
 					<warSourceDirectory>WebContent</warSourceDirectory>
+					<warName>${project.name}##${project.version}</warName>
 					<failOnMissingWebXml>false</failOnMissingWebXml>
+					<manifest>
+	                    <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+	                </manifest>
+	                <archive>
+	                    <manifestEntries>
+	                        <Specification-Title>${project.name}</Specification-Title>
+	                        <Specification-Version>${projectVersion}</Specification-Version>
+	                        <Implementation-Version>${project.version}</Implementation-Version>
+	                    </manifestEntries>
+	                </archive>
 				</configuration>
 			</plugin>
 		</plugins>

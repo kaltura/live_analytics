@@ -1,11 +1,15 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <properties>
+		<buildNumber>0</buildNumber>
+		<projectVersion>1.0</projectVersion>
+	</properties>
   <groupId>kaltura</groupId>
   <artifactId>ip-2-location</artifactId>
   <modelVersion>4.0.0</modelVersion>
   <name>IP2Location</name>
   <packaging>jar</packaging>
-  <version>1.0.0</version>
+  <version>${projectVersion}.${buildNumber}</version>
   <repositories>
     <repository>
       <id>Akka repository</id>
