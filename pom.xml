@@ -11,5 +11,6 @@
         <module>KalturaLiveInfra</module>
         <module>KalturaLiveModel</module>
         <module>KalturaLiveAnalytics</module>
+	<module>RegisterFile</module>
     </modules>
 </project>
