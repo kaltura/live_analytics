@@ -1,12 +1,25 @@
+import sbt.Package.ManifestAttributes
+
 name := "live-analytics-driver"
 
-version :=  sys.props.getOrElse("projectVersion", default = "1.0") + "." + sys.props.getOrElse("buildVersion", default = "0")
+val projectVersion = sys.props.getOrElse("projectVersion", default = "1.0")
+val buildVersion = sys.props.getOrElse("buildVersion", default = "0")
+
+version := projectVersion + "." + buildVersion
 
 organization := "kaltura"
 
-scalaVersion := "2.10.4"
+scalaVersion := "2.10.5"
 
 retrieveManaged := true
+
+artifactName := { (sv: ScalaVersion, module: ModuleID, artifact: Artifact) =>
+  artifact.name + "." + artifact.extension
+}
+
+packageOptions := Seq(ManifestAttributes(
+  ("Implementation-Version", projectVersion + "." + buildVersion),
+  ("Specification-Version", projectVersion)))
 
 libraryDependencies ++= Seq(
   "org.scalatest" % "scalatest_2.10" % "2.1.0" % "test",
