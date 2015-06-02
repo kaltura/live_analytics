@@ -6,8 +6,6 @@ organization := "kaltura"
 
 scalaVersion := "2.10.4"
 
-mainClass in assembly := Some("com.kaltura.live.MainDriver")
-
 retrieveManaged := true
 
 libraryDependencies ++= Seq(
