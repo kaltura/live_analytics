@@ -37,7 +37,7 @@ object MainDriver
      val jarDependenciesLocal: List[String] = List.empty
 
      val jarDependencies: List[String] = List(
-          "newliveanalytics.jar",
+          "live-analytics-driver.jar",
           "spark-cassandra-connector_2.10-1.2.0.jar",
           "binders-cassandra_2.10-0.2.5.jar",
           "binders-core_2.10-0.2.3.jar",
@@ -49,7 +49,7 @@ object MainDriver
           "netty-3.9.0.Final.jar",
           "guava-16.0.1.jar",
           "metrics-core-3.0.2.jar",
-          "slf4j-api-1.7.5.jar",
+          "slf4j-api-1.6.4.jar",
           "jsr166e-1.1.0.jar")
 
      val keyspace = "kaltura_live"
