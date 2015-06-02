@@ -54,7 +54,7 @@
 				<version>2.3</version>
 				<configuration>
 					<warSourceDirectory>WebContent</warSourceDirectory>
-					<warName>${project.name}##${project.version}</warName>
+					<warName>${project.name}</warName>
 					<failOnMissingWebXml>false</failOnMissingWebXml>
 					<manifest>
 	                    <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
