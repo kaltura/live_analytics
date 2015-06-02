@@ -1,36 +1,30 @@
-name := "NewLiveAnalytics"
+import sbt.Package.ManifestAttributes
 
-version := "1.0"
+name := "live-analytics-driver"
+
+val projectVersion = sys.props.getOrElse("projectVersion", default = "1.0")
+val buildVersion = sys.props.getOrElse("buildVersion", default = "0")
+
+version := projectVersion + "." + buildVersion
 
 organization := "kaltura"
 
-scalaVersion := "2.10.4"
+scalaVersion := "2.10.5"
 
-libraryDependencies += "org.scalatest" % "scalatest_2.10" % "2.1.0" % "test"
+retrieveManaged := true
 
-libraryDependencies += "org.apache.spark" %% "spark-core" % "1.2.2"
+artifactName := { (sv: ScalaVersion, module: ModuleID, artifact: Artifact) =>
+  artifact.name + "." + artifact.extension
+}
 
-//libraryDependencies += "org.apache.spark" % "spark-core_2.10" % "1.3.0"
+packageOptions := Seq(ManifestAttributes(
+  ("Implementation-Version", projectVersion + "." + buildVersion),
+  ("Specification-Version", projectVersion)))
 
-//libraryDependencies += "com.datastax.spark" %% "spark-cassandra-connector" % "1.1.1"
-
-libraryDependencies += "com.datastax.spark" %% "spark-cassandra-connector" % "1.2.0"
-
-libraryDependencies += "org.apache.spark" % "spark-streaming_2.10" % "1.2.2"
-
-//libraryDependencies += "com.datastax.spark" % "spark-cassandra-connector_2.10" % "1.2.0-rc3" // for writerBuilder TTL but SomeColumns fail!!!
-
-libraryDependencies += "eu.inn" %% "binders-cassandra" % "0.2.5"
-
-
-//libraryDependencies += "kaltura" %% "ip-2-location" % "1.0.0"
-
-
-
-
-
-
-
-
-
-
+libraryDependencies ++= Seq(
+  "org.scalatest" % "scalatest_2.10" % "2.1.0" % "test",
+  "org.apache.spark" %% "spark-core" % "1.2.2",
+  "com.datastax.spark" %% "spark-cassandra-connector" % "1.2.0",
+  "org.apache.spark" % "spark-streaming_2.10" % "1.2.2",
+  "eu.inn" %% "binders-cassandra" % "0.2.5"
+)

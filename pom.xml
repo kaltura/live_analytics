@@ -1,0 +1,16 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>kaltura</groupId>
+    <artifactId>live-analytics-api</artifactId>
+    <version>1.0.0</version>
+    <packaging>pom</packaging>
+    <name>live-analytics-api</name>
+    <modules>
+        <module>IP2Location</module>
+        <module>KalturaLiveInfra</module>
+        <module>KalturaLiveModel</module>
+        <module>KalturaLiveAnalytics</module>
+	<module>RegisterFile</module>
+    </modules>
+</project>
