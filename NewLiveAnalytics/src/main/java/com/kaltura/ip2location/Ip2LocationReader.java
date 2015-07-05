@@ -17,7 +17,6 @@ public class Ip2LocationReader {
 	private static Logger LOG = LoggerFactory.getLogger(SerializableIP2LocationReader.class);
 
 	public void init(String fileName) throws IOException {
-		LOG.info("init file");
 		file = new RandomAccessFile(fileName, "r");
 		this.dbAttr = new DbAttribtues(file);
 		lock();
