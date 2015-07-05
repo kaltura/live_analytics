@@ -161,7 +161,7 @@ object LiveEventParser extends Serializable with MetaLog[BaseLog]
                               val clientEventTime: String = paramsMap("event:startTime")
                               if (clientEventTime.length > 10)
                               {
-                                   if (clientEventTime.lastIndexOf(':') >= 0)
+                                   if (clientEventTime.lastIndexOf(':') >= 0 && clientEventTime.lastIndexOf(' ') > clientEventTime.lastIndexOf(':'))
                                    {
                                         val secondsString: String = clientEventTime.substring(clientEventTime.lastIndexOf(':') + 1, clientEventTime.lastIndexOf(' '))
                                         seconds = secondsString.toInt
@@ -174,7 +174,7 @@ object LiveEventParser extends Serializable with MetaLog[BaseLog]
                     }
                     catch
                     {
-                         case ex: NumberFormatException =>
+                         case ex: Throwable =>
                          {
                               logger.error("Failed to parse line " + line)
                          }
