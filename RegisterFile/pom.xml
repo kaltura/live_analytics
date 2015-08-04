@@ -21,29 +21,51 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 		<groupId>kaltura</groupId>
 		<artifactId>live-infra</artifactId>
 		<version>${project.version}</version>
+
 	</dependency>
 	<dependency>
 		<groupId>commons-io</groupId>
 		<artifactId>commons-io</artifactId>
 		<version>2.4</version>
-	</dependency>
+    </dependency>
 </dependencies>
 <build>
     <finalName>${artifactId}</finalName>
 	<pluginManagement>
 		<plugins>
 			<plugin>
-		            <groupId>org.apache.maven.plugins</groupId>
-		            <artifactId>maven-compiler-plugin</artifactId>
-		            <configuration>
-                		<source>1.8</source>
-		                <target>1.8</target>
-		                <showDeprecation>true</showDeprecation>
-		                <showWarnings>true</showWarnings>
-                		<executable>${env.JAVA_HOME}/bin/javac</executable>
-		                <fork>true</fork>
-		            </configuration>
-		        </plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                    <showDeprecation>true</showDeprecation>
+                    <showWarnings>true</showWarnings>
+                    <executable>${env.JAVA_HOME}/bin/javac</executable>
+                    <fork>true</fork>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>com.kaltura.live.RegisterFile</mainClass>
+                        </manifest>
+                    </archive>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
 		</plugins>
       </pluginManagement>
 </build>
