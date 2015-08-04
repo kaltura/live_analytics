@@ -22,9 +22,7 @@ public class RegisterFile {
 	private SerializableSession cassandraSession;
 	
 	private static final int RETRIES = 3;
-	
-	private static final int LOGS_TTL = 60 * 60 * 3; 
-    
+
 	private static Logger LOG = LoggerFactory.getLogger(RegisterFile.class);
 	
     public RegisterFile(String node) {
@@ -51,12 +49,12 @@ public class RegisterFile {
 	    	//Date insertTime = getFileDateTime(key);
 			Long nullBatchId = -1L;
 			Date insertTime = new java.util.Date(System.currentTimeMillis() );
-	    	PreparedStatement statement = cassandraSession.getSession().prepare("INSERT INTO kaltura_live.log_data (file_id,data) VALUES (?, ?) USING TTL ?");
+	    	PreparedStatement statement = cassandraSession.getSession().prepare("INSERT INTO kaltura_live.log_data (file_id,data) VALUES (?, ?)");
 	    	BoundStatement boundStatement = new BoundStatement(statement);
-	        cassandraSession.execute(boundStatement.bind(key,ByteBuffer.wrap(data), LOGS_TTL), RETRIES);
-	    	statement = cassandraSession.getSession().prepare("INSERT INTO kaltura_live.log_files (file_id,insert_time,batch_id) VALUES (?, ?, ?) USING TTL ?");
+	        cassandraSession.execute(boundStatement.bind(key,ByteBuffer.wrap(data)), RETRIES);
+	    	statement = cassandraSession.getSession().prepare("INSERT INTO kaltura_live.log_files (file_id,insert_time,batch_id) VALUES (?, ?, ?)");
 	        boundStatement = new BoundStatement(statement);
-	        cassandraSession.execute(boundStatement.bind(key, insertTime, nullBatchId, LOGS_TTL), RETRIES);
+	        cassandraSession.execute(boundStatement.bind(key, insertTime, nullBatchId), RETRIES);
     	} catch (Exception ex) {
     		LOG.error("Failed to insert log file: " + key, ex);
     	}
