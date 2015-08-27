@@ -67,7 +67,7 @@ object LiveEventParser extends Serializable with MetaLog[BaseLog]
 {
      val apacheLogRegex: Pattern = Pattern.compile("^([\\d.]+) \\[([\\w\\d:/]+\\s[+\\-]\\d{4})\\] \"(.+?)\" (\\d{3}) \"([^\"]+)\".*")
 
-     def parse( line: String ) : LiveEvent =
+     def parse( line: String ) : Option[LiveEvent] =
      {
           val event = new LiveEvent
 
@@ -76,7 +76,7 @@ object LiveEventParser extends Serializable with MetaLog[BaseLog]
           if ( !m.find )
           {
                logger.warn(s"Failed to match pattern event: $line")
-               return  event
+               return None
           }
 
           val date: String = m.group(2)
@@ -171,6 +171,7 @@ object LiveEventParser extends Serializable with MetaLog[BaseLog]
                          val secondsLastDigit: Int = seconds % 10
                          val offset: Int = 5 - secondsLastDigit
                          event.eventTime = DateUtils.roundDate(date, offset).getTime
+                         return Some(event)
                     }
                     catch
                     {
@@ -181,8 +182,8 @@ object LiveEventParser extends Serializable with MetaLog[BaseLog]
                     }
                }
           }
+          None
 
-          event
      }
 
 }
