@@ -98,8 +98,7 @@ class EventsGenerator( val sc : SparkContext, val maxProcessFilesPerCycle : Int 
 
           val events = sc.parallelize(nextBatchFileIds)
                .flatMap(fileId => EventsFileExtractor.fileIdToLines(fileId) )
-               .map(line => LiveEventParser.parse(line) )
-               .filter( !_.isNull )
+               .flatMap(line => LiveEventParser.parse(line) )
 
           val nEvents = events.count()
 
