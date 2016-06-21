@@ -103,7 +103,6 @@ class EventsGenerator( val sc : SparkContext, val maxProcessFilesPerCycle : Int 
 
           logger.info(s"number of processed events: $nEvents")
 
-          events.cache()
           events
      }
 
