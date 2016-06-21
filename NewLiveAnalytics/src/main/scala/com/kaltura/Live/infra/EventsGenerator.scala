@@ -2,7 +2,7 @@ package com.kaltura.Live.infra
 
 
 
-import com.kaltura.Live.model.dao.{LoggedFile, BatchIdCF, LoggedDataCF, LoggedFilesCF}
+import com.kaltura.Live.model.dao.{BatchIdCF, LoggedFile, LoggedFilesCF}
 import com.kaltura.Live.model.parse.LiveEventParser
 import com.kaltura.Live.utils.{BaseLog, MetaLog}
 import org.apache.spark.SparkContext
@@ -13,10 +13,9 @@ import org.apache.spark.rdd.RDD
 
 //import org.apache.spark.sql.cassandra.CassandraSQLContext
 
-import scala.collection.immutable.List
-
 import com.kaltura.Live.model.LiveEvent
 
+import scala.collection.immutable.List
 import scala.concurrent.Await
 
 object EventsGenerator extends MetaLog[BaseLog]
@@ -104,7 +103,7 @@ class EventsGenerator( val sc : SparkContext, val maxProcessFilesPerCycle : Int 
 
           logger.info(s"number of processed events: $nEvents")
 
-          events
+          events.cache()
      }
 
      def preCommit( loggedFilesList: List[LoggedFile] )

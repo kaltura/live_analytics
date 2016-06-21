@@ -1,5 +1,6 @@
 package com.kaltura.Live
 
+import com.datastax.spark.connector._
 import com.datastax.spark.connector.writer.{TTLOption, WriteConf}
 import com.google.common.base.Charsets
 import com.google.common.io.Resources
@@ -9,14 +10,9 @@ import com.kaltura.Live.model.LiveEvent
 import com.kaltura.Live.model.aggregation.processors.PeakAudienceProcessor
 import com.kaltura.Live.model.purge.DataCleaner
 import com.kaltura.Live.utils.DateUtils
-import org.apache.spark.rdd.RDD
-
-import com.datastax.spark.connector._
 import org.apache.spark.SparkContext._
+import org.apache.spark.rdd.RDD
 import org.apache.spark.{SparkConf, SparkContext}
-
-import scala.io.Source
-import scala.util.control.Breaks._
 
 /**
  * Created by didi on 2/23/15.
@@ -155,6 +151,8 @@ object MainDriver
                .reduceByKey(_ maxTime _)
                .map(x => x._2.wrap)
                .saveToCassandra(keyspace, livePartnerEntryTableName, livePartnerEntryTableFields, writeConf = WriteConf(ttl = TTLOption.constant(36 * 60 * 60)))
+
+          events.unpersist()
      }
 
   def setShutdownHook = {
