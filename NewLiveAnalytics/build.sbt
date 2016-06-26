@@ -9,7 +9,7 @@ version := projectVersion + "." + buildVersion
 
 organization := "kaltura"
 
-scalaVersion := "2.10.5"
+scalaVersion := "2.11.7"
 
 retrieveManaged := true
 
