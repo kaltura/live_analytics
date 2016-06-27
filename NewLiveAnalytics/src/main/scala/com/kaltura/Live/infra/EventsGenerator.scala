@@ -5,11 +5,8 @@ package com.kaltura.Live.infra
 import com.kaltura.Live.model.dao.{BatchIdCF, LoggedFile, LoggedFilesCF}
 import com.kaltura.Live.model.parse.LiveEventParser
 import com.kaltura.Live.utils.{BaseLog, MetaLog}
-import com.kaltura.core.streaming.StreamManager
-import com.kaltura.core.utils.ConfigurationManager
 import org.apache.spark.SparkContext
 import org.apache.spark.rdd.RDD
-import org.apache.spark.streaming.Seconds
 
 
 //import org.apache.spark.sql.SchemaRDD

@@ -11,6 +11,8 @@ import com.kaltura.Live.model.purge.DataCleaner
 import com.kaltura.Live.utils.DateUtils
 import org.apache.spark.rdd.RDD
 import org.apache.spark.{SparkConf, SparkContext}
+import org.apache.spark.SparkContext._
+
 
 /**
  * Created by didi on 2/23/15.
