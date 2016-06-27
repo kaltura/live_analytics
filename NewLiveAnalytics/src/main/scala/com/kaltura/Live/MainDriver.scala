@@ -9,7 +9,6 @@ import com.kaltura.Live.model.LiveEvent
 import com.kaltura.Live.model.aggregation.processors.PeakAudienceProcessor
 import com.kaltura.Live.model.purge.DataCleaner
 import com.kaltura.Live.utils.DateUtils
-import org.apache.spark.SparkContext._
 import org.apache.spark.rdd.RDD
 import org.apache.spark.{SparkConf, SparkContext}
 
@@ -172,6 +171,9 @@ object MainDriver
             .set("spark.executor.memory", ConfigurationManager.get("spark.executor_memory", "8g"))
             .set("spark.cassandra.connection.host", ConfigurationManager.get("cassandra.node_name"))
 
+          val sparkSerializer = ConfigurationManager.get("spark.serializer", "default")
+          if (!sparkSerializer.equals("default"))
+            conf.set("spark.serializer", sparkSerializer)
           val sc = new SparkContext(conf)
 
           setShutdownHook

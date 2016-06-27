@@ -5,8 +5,11 @@ package com.kaltura.Live.infra
 import com.kaltura.Live.model.dao.{BatchIdCF, LoggedFile, LoggedFilesCF}
 import com.kaltura.Live.model.parse.LiveEventParser
 import com.kaltura.Live.utils.{BaseLog, MetaLog}
+import com.kaltura.core.streaming.StreamManager
+import com.kaltura.core.utils.ConfigurationManager
 import org.apache.spark.SparkContext
 import org.apache.spark.rdd.RDD
+import org.apache.spark.streaming.Seconds
 
 
 //import org.apache.spark.sql.SchemaRDD
@@ -95,12 +98,21 @@ class EventsGenerator( val sc : SparkContext, val maxProcessFilesPerCycle : Int 
 
           //val dummyFilesIds = Array("pa-live-stats1-20150330133932")
 
-          val events = sc.parallelize(nextBatchFileIds)
-               .flatMap(fileId => EventsFileExtractor.fileIdToLines(fileId) )
-               .flatMap(line => LiveEventParser.parse(line) )
+          val partitions = ConfigurationManager.get("spark.partitions_num", "-1")
+          val events  = {
+               if (partitions.equals("-1")) {
+                    sc.parallelize(nextBatchFileIds)
+                      .flatMap(fileId => EventsFileExtractor.fileIdToLines(fileId))
+                      .flatMap(line => LiveEventParser.parse(line))
+               } else {
+                    sc.parallelize(nextBatchFileIds)
+                      .flatMap(fileId => EventsFileExtractor.fileIdToLines(fileId))
+                      .repartition(partitions.toInt)
+                      .flatMap(line => LiveEventParser.parse(line))
+               }
+          }
 
           val nEvents = events.count()
-
           logger.info(s"number of processed events: $nEvents")
 
           events
