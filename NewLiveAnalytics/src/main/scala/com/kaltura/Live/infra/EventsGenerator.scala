@@ -95,12 +95,21 @@ class EventsGenerator( val sc : SparkContext, val maxProcessFilesPerCycle : Int 
 
           //val dummyFilesIds = Array("pa-live-stats1-20150330133932")
 
-          val events = sc.parallelize(nextBatchFileIds)
-               .flatMap(fileId => EventsFileExtractor.fileIdToLines(fileId) )
-               .flatMap(line => LiveEventParser.parse(line) )
+          val partitions = ConfigurationManager.get("spark.partitions_num", "-1")
+          val events  = {
+               if (partitions.equals("-1")) {
+                    sc.parallelize(nextBatchFileIds)
+                      .flatMap(fileId => EventsFileExtractor.fileIdToLines(fileId))
+                      .flatMap(line => LiveEventParser.parse(line))
+               } else {
+                    sc.parallelize(nextBatchFileIds)
+                      .flatMap(fileId => EventsFileExtractor.fileIdToLines(fileId))
+                      .repartition(partitions.toInt)
+                      .flatMap(line => LiveEventParser.parse(line))
+               }
+          }
 
           val nEvents = events.count()
-
           logger.info(s"number of processed events: $nEvents")
 
           events
