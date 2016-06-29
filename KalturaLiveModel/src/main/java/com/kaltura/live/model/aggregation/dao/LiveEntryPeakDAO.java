@@ -32,7 +32,7 @@ public class LiveEntryPeakDAO extends LiveEventDAO {
 	
 	public LiveEntryPeakDAO(Row row) {
 		this.entryId = row.getString("entry_id");
-		this.eventTime = row.getDate("event_time");
+		this.eventTime = new Date(row.getDate("event_time").getMillisSinceEpoch());
 		this.audience = row.getLong("audience");
         this.dvrAudience = row.getLong("dvr_audience");
 		

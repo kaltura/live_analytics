@@ -44,7 +44,7 @@ public abstract class LiveEventDAO extends LiveDAO {
 	 */
 	public LiveEventDAO(Row row) {
 		super();
-		this.eventTime = row.getDate("event_time");
+		this.eventTime = new Date(row.getDate("event_time").getMillisSinceEpoch());
 		this.alive = row.getLong("alive");
 		this.bitrate = row.getLong("bitrate");
 		this.bitrateCount = row.getLong("bitrate_count");

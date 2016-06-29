@@ -34,7 +34,7 @@ public class LivePartnerEntryDAO extends LiveDAO {
 		super(row);
 		this.partnerId = row.getInt("partner_id");
 		this.entryId = row.getString("entry_id");
-		this.eventTime = row.getDate("event_time");
+		this.eventTime = new Date(row.getDate("event_time").getMillisSinceEpoch());
 		
 	}
 
