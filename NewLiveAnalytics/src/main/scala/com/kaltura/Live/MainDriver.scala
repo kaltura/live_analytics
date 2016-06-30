@@ -8,7 +8,6 @@ import com.kaltura.Live.infra.{ConfigurationManager, EventsGenerator}
 import com.kaltura.Live.model.LiveEvent
 import com.kaltura.Live.model.aggregation.processors.PeakAudienceProcessor
 import com.kaltura.Live.model.purge.DataCleaner
-import com.kaltura.Live.utils.DateUtils
 import org.apache.spark.SparkContext._
 import org.apache.spark.rdd.RDD
 import org.apache.spark.{SparkConf, SparkContext}
@@ -117,7 +116,7 @@ object MainDriver
 
           reducedLiveEvents.cache()
 
-          reducedLiveEvents.map(x => x._2.wrap)
+          reducedLiveEvents.map(x => x._2.wrap())
                .saveToCassandra(keyspace, entryTableName, entryTableColumnFields)
 
           PeakAudienceProcessor.process(sc, reducedLiveEvents)
@@ -126,30 +125,32 @@ object MainDriver
 
           //val temp11 = reducedLiveEvents.foreach(print(_))
 
-          val temp2 = events.map(event => ( (event.entryId, DateUtils.roundTimeToHour(event.eventTime) ), event.roundTimeToHour ) )
+          val temp2 = events.map(event => ( (event.entryId, event.eventRoundTime ), event) )
                .reduceByKey(_ + _)
-               .map(x => x._2.wrap)
+               .map(x => x._2.wrap(true))
                .saveToCassandra(keyspace, entryHourlyTableName, entryHourlyTableFields)
 
           val temp3 = events.map(event => ( (event.entryId, event.eventTime, event.country, event.city), event) )
                .reduceByKey(_ + _)
-               .map(x => x._2.wrap)
+               .map(x => x._2.wrap())
                .saveToCassandra(keyspace, locationEntryTableName, locationEntryTableFields)
 
-          val temp4 = events.map(event => ( (event.entryId, DateUtils.roundTimeToHour(event.eventTime), event.referrer), event.roundTimeToHour) )
+          val temp4 = events.map(event => ( (event.entryId, event.eventRoundTime, event.referrer), event) )
                .reduceByKey(_ + _)
-               .map(x => x._2.wrap)
+               .map(x => x._2.wrap(true))
                .saveToCassandra(keyspace, referrerHourlyTableName, referrerHourlyTableFields)
 
-          val temp5 = events.map(event => ( (event.partnerId, DateUtils.roundTimeToHour(event.eventTime) ), event.roundTimeToHour) )
+          val temp5 = events.map(event => ( (event.partnerId, event.eventRoundTime ), event) )
                .reduceByKey(_ + _)
-               .map(x => x._2.wrap)
+               .map(x => x._2.wrap(true))
                .saveToCassandra(keyspace, partnerHourlyTableName, partnerHourlyTableFields)
 
-          val temp7 = events.map(event => (event.entryId, event.roundTimeToHour) )
+          val temp7 = events.map(event => (event.entryId, event) )
                .reduceByKey(_ maxTime _)
-               .map(x => x._2.wrap)
+               .map(x => x._2.wrap(true))
                .saveToCassandra(keyspace, livePartnerEntryTableName, livePartnerEntryTableFields, writeConf = WriteConf(ttl = TTLOption.constant(36 * 60 * 60)))
+
+          events.unpersist()
      }
 
   def setShutdownHook = {

@@ -82,6 +82,7 @@ object LiveEventParser extends Serializable with MetaLog[BaseLog]
           val date: String = m.group(2)
 
           event.eventTime = DateUtils.roundDate(date).getTime
+          event.eventRoundTime = DateUtils.roundTimeToHour(event.eventTime)
 
           var query: String = m.group(3)
 
@@ -121,6 +122,8 @@ object LiveEventParser extends Serializable with MetaLog[BaseLog]
 
                          if (paramsMap.contains("event:bufferTime"))
                               event.bufferTime = (paramsMap("event:bufferTime").toDouble * Consts.BufferTimeResolution).toLong
+                         if (event.bufferTime < 0)
+                              event.bufferTime = 0
 
                          if (paramsMap.contains("event:bitrate"))
                               event.bitrate = paramsMap("event:bitrate").toLong
