@@ -169,17 +169,8 @@ object MainDriver
             .set("spark.executor.memory", ConfigurationManager.get("spark.executor_memory", "8g"))
             .set("spark.cassandra.connection.host", ConfigurationManager.get("cassandra.node_name"))
 
-          // appType can be ALL or AGGR or PEAK
-          var appType = ConfigurationManager.get("app_type", "ALL")
-          if (appType != "PEAK" && appType != "AGGR") appType = "ALL"
-
-          var aggrPrefix = "ALL"
-          if (appType == "AGGR")
-            aggrPrefix = ConfigurationManager.get("aggr.prefix", "ALL")
-
-          var appName = "NewLiveAnalytics"
-          if (appType == "PEAK") appName = appName + "-PEAK"
-          else if (appType == "AGGR") appName = appName + "-" + aggrPrefix
+          var aggrPrefix = ConfigurationManager.get("aggr.prefix", "ALL")
+          var appName = "NewLiveAnalytics-" + aggrPrefix
 
           conf.setAppName(appName)
           val sc = new SparkContext(conf)
@@ -202,9 +193,9 @@ object MainDriver
             val noEvents = isEmpty(events)
             eventsGenerator.commit
             if (!noEvents) {
-              processEvents(sc, events, appType)
+              processEvents(sc, events, aggrPrefix)
             }
-            if (appType == "ALL" || appType == "PEAK")
+            if (aggrPrefix == "ALL" || aggrPrefix == "PEAK")
               dataCleaner.tryRun()
             if (noEvents) {
               Thread.sleep(1000)
