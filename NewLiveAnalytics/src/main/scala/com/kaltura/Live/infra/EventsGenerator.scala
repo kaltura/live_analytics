@@ -67,12 +67,14 @@ class EventsGenerator( val sc : SparkContext, val maxProcessFilesPerCycle : Int 
           nextLoggedFilesList
      }
 
-     def get() : RDD[LiveEvent] =
+     def get(aggrPrefix: String) : RDD[LiveEvent] =
      {
           //val rdd: SchemaRDD = cc.sql( "SELECT file_id from kaltura_live.log_files WHERE batch_id=-1 ORDER BY insert_time LIMIT " + maxProcessFilesPerCycle.toString )
           //rdd.flatMap(row => fileIdToLines(row.getString(0) ) ).map(line => LiveEvent.parse(line) )
 
-          val nonProcessedLoggedFilesList = getNonProcessedLoggedFiles()
+          var nonProcessedLoggedFilesList = getNonProcessedLoggedFiles()
+          if (aggrPrefix != "ALL")
+               nonProcessedLoggedFilesList = nonProcessedLoggedFilesList.filter(_.file_id.startsWith(aggrPrefix))
 
           val nextBatchLoggedFiles = sc.parallelize(nonProcessedLoggedFilesList)
                //.map(loggedFile => (loggedFile.insert_time.getTime, loggedFile.file_id) )

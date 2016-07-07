@@ -12,10 +12,6 @@ import org.apache.spark.SparkContext._
 import org.apache.spark.rdd.RDD
 import org.apache.spark.{SparkConf, SparkContext}
 
-/**
- * Created by didi on 2/23/15.
- */
-
 // TODO: peak audience design how should it work without a counter!!!!
 // TODO: For the bufferTime which is double could not be a counter so multiply by 100 and make it long
 // TODO: write data to Kafka
@@ -103,54 +99,55 @@ object MainDriver
      var gracefullyDone = false
 
      def isEmpty[T](rdd : RDD[T]) = {
-          rdd.take(1).size == 0
+          rdd.take(1).length == 0
      }
 
      def appVersion = Resources.toString(getClass.getResource("/VERSION"), Charsets.UTF_8)
 
-     def processEvents( sc : SparkContext, events: RDD[LiveEvent] ): Unit =
-     {
-          val reducedLiveEvents = events
-               .map(event => ( (event.entryId, event.eventTime), event) )
-               .reduceByKey(_ + _)
+     def processEvents( sc : SparkContext, events: RDD[LiveEvent], appType: String ): Unit = {
 
-          reducedLiveEvents.cache()
+       if (appType == "ALL" || appType == "PEAK") {
+         val reducedLiveEvents = events
+           .map(event => ((event.entryId, event.eventTime), event))
+           .reduceByKey(_ + _)
 
-          reducedLiveEvents.map(x => x._2.wrap())
-               .saveToCassandra(keyspace, entryTableName, entryTableColumnFields)
+         reducedLiveEvents.cache()
 
-          PeakAudienceProcessor.process(sc, reducedLiveEvents)
+         reducedLiveEvents.map(x => x._2.wrap())
+           .saveToCassandra(keyspace, entryTableName, entryTableColumnFields)
 
-          reducedLiveEvents.unpersist()
+         PeakAudienceProcessor.process(sc, reducedLiveEvents)
 
-          //val temp11 = reducedLiveEvents.foreach(print(_))
+         reducedLiveEvents.unpersist()
+       }
 
-          val temp2 = events.map(event => ( (event.entryId, event.eventRoundTime ), event) )
-               .reduceByKey(_ + _)
-               .map(x => x._2.wrap(true))
-               .saveToCassandra(keyspace, entryHourlyTableName, entryHourlyTableFields)
+       if (appType == "ALL" || appType != "PEAK") {
+         events.map(event => ((event.entryId, event.eventRoundTime), event))
+           .reduceByKey(_ + _)
+           .map(x => x._2.wrap(true))
+           .saveToCassandra(keyspace, entryHourlyTableName, entryHourlyTableFields)
 
-          val temp3 = events.map(event => ( (event.entryId, event.eventTime, event.country, event.city), event) )
-               .reduceByKey(_ + _)
-               .map(x => x._2.wrap())
-               .saveToCassandra(keyspace, locationEntryTableName, locationEntryTableFields)
+         events.map(event => ((event.entryId, event.eventTime, event.country, event.city), event))
+           .reduceByKey(_ + _)
+           .map(x => x._2.wrap())
+           .saveToCassandra(keyspace, locationEntryTableName, locationEntryTableFields)
 
-          val temp4 = events.map(event => ( (event.entryId, event.eventRoundTime, event.referrer), event) )
-               .reduceByKey(_ + _)
-               .map(x => x._2.wrap(true))
-               .saveToCassandra(keyspace, referrerHourlyTableName, referrerHourlyTableFields)
+         events.map(event => ((event.entryId, event.eventRoundTime, event.referrer), event))
+           .reduceByKey(_ + _)
+           .map(x => x._2.wrap(true))
+           .saveToCassandra(keyspace, referrerHourlyTableName, referrerHourlyTableFields)
 
-          val temp5 = events.map(event => ( (event.partnerId, event.eventRoundTime ), event) )
-               .reduceByKey(_ + _)
-               .map(x => x._2.wrap(true))
-               .saveToCassandra(keyspace, partnerHourlyTableName, partnerHourlyTableFields)
+         events.map(event => ((event.partnerId, event.eventRoundTime), event))
+           .reduceByKey(_ + _)
+           .map(x => x._2.wrap(true))
+           .saveToCassandra(keyspace, partnerHourlyTableName, partnerHourlyTableFields)
 
-          val temp7 = events.map(event => (event.entryId, event) )
-               .reduceByKey(_ maxTime _)
-               .map(x => x._2.wrap(true))
-               .saveToCassandra(keyspace, livePartnerEntryTableName, livePartnerEntryTableFields, writeConf = WriteConf(ttl = TTLOption.constant(36 * 60 * 60)))
-
-          events.unpersist()
+         events.map(event => (event.entryId, event))
+           .reduceByKey(_ maxTime _)
+           .map(x => x._2.wrap(true))
+           .saveToCassandra(keyspace, livePartnerEntryTableName, livePartnerEntryTableFields, writeConf = WriteConf(ttl = TTLOption.constant(36 * 60 * 60)))
+       }
+       events.unpersist()
      }
 
   def setShutdownHook = {
@@ -169,10 +166,22 @@ object MainDriver
           
           val conf = new SparkConf()
             .setMaster(ConfigurationManager.get("spark.master"))
-            .setAppName("NewLiveAnalytics")
             .set("spark.executor.memory", ConfigurationManager.get("spark.executor_memory", "8g"))
             .set("spark.cassandra.connection.host", ConfigurationManager.get("cassandra.node_name"))
 
+          // appType can be ALL or AGGR or PEAK
+          var appType = ConfigurationManager.get("app_type", "ALL")
+          if (appType != "PEAK" && appType != "AGGR") appType = "ALL"
+
+          var aggrPrefix = "ALL"
+          if (appType == "AGGR")
+            aggrPrefix = ConfigurationManager.get("aggr.prefix", "ALL")
+
+          var appName = "NewLiveAnalytics"
+          if (appType == "PEAK") appName = appName + "-PEAK"
+          else if (appType == "AGGR") appName = appName + "-" + aggrPrefix
+
+          conf.setAppName(appName)
           val sc = new SparkContext(conf)
 
           setShutdownHook
@@ -189,13 +198,14 @@ object MainDriver
           val eventsGenerator = new EventsGenerator(sc, ConfigurationManager.get("aggr.max_files_per_cycle", "50").toInt)
           val dataCleaner = new DataCleaner(sc)
           while (!shouldBreak) {
-            val events = eventsGenerator.get
+            val events = eventsGenerator.get(aggrPrefix)
             val noEvents = isEmpty(events)
             eventsGenerator.commit
             if (!noEvents) {
-              processEvents(sc, events)
+              processEvents(sc, events, appType)
             }
-            dataCleaner.tryRun()
+            if (appType == "ALL" || appType == "PEAK")
+              dataCleaner.tryRun()
             if (noEvents) {
               Thread.sleep(1000)
             }
