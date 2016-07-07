@@ -169,7 +169,7 @@ object MainDriver
             .set("spark.executor.memory", ConfigurationManager.get("spark.executor_memory", "8g"))
             .set("spark.cassandra.connection.host", ConfigurationManager.get("cassandra.node_name"))
 
-          var aggrPrefix = ConfigurationManager.get("aggr.prefix", "ALL")
+          val aggrPrefix = if (args.isEmpty) "ALL" else args(0)
           var appName = "NewLiveAnalytics-" + aggrPrefix
 
           conf.setAppName(appName)
