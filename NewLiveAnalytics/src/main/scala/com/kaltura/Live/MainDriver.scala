@@ -8,6 +8,7 @@ import com.kaltura.Live.infra.{ConfigurationManager, EventsGenerator}
 import com.kaltura.Live.model.LiveEvent
 import com.kaltura.Live.model.aggregation.processors.PeakAudienceProcessor
 import com.kaltura.Live.model.purge.DataCleaner
+import com.kaltura.Live.utils.{MetaLog, BaseLog}
 import org.apache.spark.SparkContext._
 import org.apache.spark.rdd.RDD
 import org.apache.spark.{SparkConf, SparkContext}
@@ -17,7 +18,7 @@ import org.apache.spark.{SparkConf, SparkContext}
 // TODO: write data to Kafka
 // TODO: TTL management, check that hash for the key tuples and equal is not needed
 // TODO: data validation e.g. check bufferTime <= 0 if not override bitrate >=0 bitrate <= ~TBD etc...
-object MainDriver
+object MainDriver extends MetaLog[BaseLog]
 {
      def toSomeColumns( columnNames: List[String] ) : SomeColumns =
      {
@@ -107,6 +108,10 @@ object MainDriver
      def processEvents( sc : SparkContext, events: RDD[LiveEvent], appType: String ): Unit = {
 
        if (appType == "ALL" || appType == "PEAK") {
+
+         val peakAudienceStart = System.currentTimeMillis
+         logger.info("Starting peakAudience aggregation")
+
          val reducedLiveEvents = events
            .map(event => ((event.entryId, event.eventTime), event))
            .reduceByKey(_ + _)
@@ -119,9 +124,16 @@ object MainDriver
          PeakAudienceProcessor.process(sc, reducedLiveEvents)
 
          reducedLiveEvents.unpersist()
+         System.currentTimeMillis
+         logger.info("Done peakAudience aggregation. Took " + (System.currentTimeMillis - peakAudienceStart) + " milisec.")
+
        }
 
        if (appType == "ALL" || appType != "PEAK") {
+
+         val aggrStart = System.currentTimeMillis
+         logger.info(s"Start aggregating for prefix $appType")
+
          events.map(event => ((event.entryId, event.eventRoundTime), event))
            .reduceByKey(_ + _)
            .map(x => x._2.wrap(true))
@@ -146,8 +158,13 @@ object MainDriver
            .reduceByKey(_ maxTime _)
            .map(x => x._2.wrap(true))
            .saveToCassandra(keyspace, livePartnerEntryTableName, livePartnerEntryTableFields, writeConf = WriteConf(ttl = TTLOption.constant(36 * 60 * 60)))
+
+         logger.info(s"Done aggregating for prefix $appType. Took " + (System.currentTimeMillis - aggrStart) + " milisec.")
+
        }
        events.unpersist()
+
+
      }
 
   def setShutdownHook = {
@@ -195,8 +212,10 @@ object MainDriver
             if (!noEvents) {
               processEvents(sc, events, aggrPrefix)
             }
-            if (aggrPrefix == "ALL" || aggrPrefix == "PEAK")
+            if (aggrPrefix == "ALL" || aggrPrefix == "PEAK") {
+              logger.info("calling dataCleaner.tryRun()")
               dataCleaner.tryRun()
+            }
             if (noEvents) {
               Thread.sleep(1000)
             }
