@@ -99,9 +99,8 @@ class EventsGenerator( val sc : SparkContext, val maxProcessFilesPerCycle : Int 
                .flatMap(fileId => EventsFileExtractor.fileIdToLines(fileId) )
                .flatMap(line => LiveEventParser.parse(line) )
 
-          val nEvents = events.count()
 
-          logger.info(s"number of processed events: $nEvents")
+          events.persist()
 
           events
      }
@@ -146,7 +145,7 @@ class EventsGenerator( val sc : SparkContext, val maxProcessFilesPerCycle : Int 
      {
           val timestamp: Long = System.currentTimeMillis
 
-          sc.parallelize(List(new LiveEvent(timestamp, 1, "ent1", "ISR", "TLV", "ref1", 1, 1, 0, 1, 0, 1,"1.1.1.1") ) )
+          sc.parallelize(List(new LiveEvent(timestamp, timestamp, 1, "ent1", "ISR", "TLV", "ref1", 1, 1, 0, 1, 0, 1,"1.1.1.1") ) )
      }
 
      def commitSIM()
