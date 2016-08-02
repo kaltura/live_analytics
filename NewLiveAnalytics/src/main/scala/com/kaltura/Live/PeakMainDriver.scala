@@ -94,13 +94,13 @@ object PeakMainDriver {
 
     val sc = new SparkContext(conf)
 
-    setShutdownHook
+    //setShutdownHook
 
-    //for ( jarDependency <- jarDependencies )
-    //  sc.addJar(ConfigurationManager.get("repository_home") + "/" + jarDependency)
+    for ( jarDependency <- jarDependencies )
+      sc.addJar(ConfigurationManager.get("repository_home") + "/" + jarDependency)
 
     println( "******************************************************")
-    println(s"*************** Live Analytics v${appVersion} ****************")
+    println(s"*************** Live Analytics Peak v${appVersion} ****************")
     println( "******************************************************")
 
 
