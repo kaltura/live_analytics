@@ -6,12 +6,13 @@ import com.google.common.base.Charsets
 import com.google.common.io.Resources
 import com.kaltura.Live.infra.{ConfigurationManager, EventsGenerator}
 import com.kaltura.Live.model.LiveEvent
-import com.kaltura.Live.model.aggregation.processors.PeakAudienceProcessor
+import com.kaltura.Live.model.aggregation.processors.PeakAudienceNewProcessor
 import com.kaltura.Live.model.purge.DataCleaner
-import com.kaltura.Live.utils.{MetaLog, BaseLog}
+import com.kaltura.Live.utils.{BaseLog, MetaLog}
 import org.apache.spark.SparkContext._
 import org.apache.spark.rdd.RDD
 import org.apache.spark.{SparkConf, SparkContext}
+import org.joda.time.DateTime
 
 // TODO: peak audience design how should it work without a counter!!!!
 // TODO: For the bufferTime which is double could not be a counter so multiply by 100 and make it long
@@ -107,32 +108,15 @@ object MainDriver extends MetaLog[BaseLog]
 
      def processEvents( sc : SparkContext, events: RDD[LiveEvent], appType: String ): Unit = {
 
-       if (appType == "ALL" || appType == "PEAK") {
-
-         val peakAudienceStart = System.currentTimeMillis
-         logger.info("Starting peakAudience aggregation")
-
-         val reducedLiveEvents = events
-           .map(event => ((event.entryId, event.eventTime), event))
-           .reduceByKey(_ + _)
-
-         reducedLiveEvents.cache()
-
-         reducedLiveEvents.map(x => x._2.wrap())
-           .saveToCassandra(keyspace, entryTableName, entryTableColumnFields)
-
-         PeakAudienceProcessor.process(sc, reducedLiveEvents)
-
-         reducedLiveEvents.unpersist()
-         System.currentTimeMillis
-         logger.info("Done peakAudience aggregation. Took " + (System.currentTimeMillis - peakAudienceStart) + " milisec.")
-
-       }
-
        if (appType == "ALL" || appType != "PEAK") {
 
          val aggrStart = System.currentTimeMillis
          logger.info(s"Start aggregating for prefix $appType")
+
+         events.map(event => ((event.entryId, event.eventTime), event))
+           .reduceByKey(_ + _)
+           .map(x => x._2.wrap())
+           .saveToCassandra(keyspace, entryTableName, entryTableColumnFields)
 
          events.map(event => ((event.entryId, event.eventRoundTime), event))
            .reduceByKey(_ + _)
@@ -162,6 +146,20 @@ object MainDriver extends MetaLog[BaseLog]
          logger.info(s"Done aggregating for prefix $appType. Took " + (System.currentTimeMillis - aggrStart) + " milisec.")
 
        }
+
+       if (appType == "ALL" || appType == "PEAK") {
+
+         val peakAudienceStart = System.currentTimeMillis
+         logger.info("Starting peakAudience aggregation")
+
+         val now: DateTime = new DateTime()
+         PeakAudienceNewProcessor.process(sc, now.getMillis)
+
+         System.currentTimeMillis
+         logger.info("Done peakAudience aggregation. Took " + (System.currentTimeMillis - peakAudienceStart) + " milisec.")
+
+       }
+
        events.unpersist()
 
 
