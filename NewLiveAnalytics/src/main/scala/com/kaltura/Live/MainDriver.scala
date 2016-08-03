@@ -108,62 +108,60 @@ object MainDriver extends MetaLog[BaseLog]
 
      def processEvents( sc : SparkContext, events: RDD[LiveEvent], appType: String ): Unit = {
 
-       if (appType == "ALL" || appType != "PEAK") {
+       val aggrStart = System.currentTimeMillis
+       logger.info(s"Start aggregating for prefix $appType")
 
-         val aggrStart = System.currentTimeMillis
-         logger.info(s"Start aggregating for prefix $appType")
+       events.map(event => ((event.entryId, event.eventTime), event))
+         .reduceByKey(_ + _)
+         .map(x => x._2.wrap())
+         .saveToCassandra(keyspace, entryTableName, entryTableColumnFields)
 
-         events.map(event => ((event.entryId, event.eventTime), event))
-           .reduceByKey(_ + _)
-           .map(x => x._2.wrap())
-           .saveToCassandra(keyspace, entryTableName, entryTableColumnFields)
+       events.map(event => ((event.entryId, event.eventRoundTime), event))
+         .reduceByKey(_ + _)
+         .map(x => x._2.wrap(true))
+         .saveToCassandra(keyspace, entryHourlyTableName, entryHourlyTableFields)
 
-         events.map(event => ((event.entryId, event.eventRoundTime), event))
-           .reduceByKey(_ + _)
-           .map(x => x._2.wrap(true))
-           .saveToCassandra(keyspace, entryHourlyTableName, entryHourlyTableFields)
+       events.map(event => ((event.entryId, event.eventTime, event.country, event.city), event))
+         .reduceByKey(_ + _)
+         .map(x => x._2.wrap())
+         .saveToCassandra(keyspace, locationEntryTableName, locationEntryTableFields)
 
-         events.map(event => ((event.entryId, event.eventTime, event.country, event.city), event))
-           .reduceByKey(_ + _)
-           .map(x => x._2.wrap())
-           .saveToCassandra(keyspace, locationEntryTableName, locationEntryTableFields)
+       events.map(event => ((event.entryId, event.eventRoundTime, event.referrer), event))
+         .reduceByKey(_ + _)
+         .map(x => x._2.wrap(true))
+         .saveToCassandra(keyspace, referrerHourlyTableName, referrerHourlyTableFields)
 
-         events.map(event => ((event.entryId, event.eventRoundTime, event.referrer), event))
-           .reduceByKey(_ + _)
-           .map(x => x._2.wrap(true))
-           .saveToCassandra(keyspace, referrerHourlyTableName, referrerHourlyTableFields)
+       events.map(event => ((event.partnerId, event.eventRoundTime), event))
+         .reduceByKey(_ + _)
+         .map(x => x._2.wrap(true))
+         .saveToCassandra(keyspace, partnerHourlyTableName, partnerHourlyTableFields)
 
-         events.map(event => ((event.partnerId, event.eventRoundTime), event))
-           .reduceByKey(_ + _)
-           .map(x => x._2.wrap(true))
-           .saveToCassandra(keyspace, partnerHourlyTableName, partnerHourlyTableFields)
+       events.map(event => (event.entryId, event))
+         .reduceByKey(_ maxTime _)
+         .map(x => x._2.wrap(true))
+         .saveToCassandra(keyspace, livePartnerEntryTableName, livePartnerEntryTableFields, writeConf = WriteConf(ttl = TTLOption.constant(36 * 60 * 60)))
 
-         events.map(event => (event.entryId, event))
-           .reduceByKey(_ maxTime _)
-           .map(x => x._2.wrap(true))
-           .saveToCassandra(keyspace, livePartnerEntryTableName, livePartnerEntryTableFields, writeConf = WriteConf(ttl = TTLOption.constant(36 * 60 * 60)))
+       logger.info(s"Done aggregating for prefix $appType. Took " + (System.currentTimeMillis - aggrStart) + " milisec.")
 
-         logger.info(s"Done aggregating for prefix $appType. Took " + (System.currentTimeMillis - aggrStart) + " milisec.")
-
-       }
-
-       if (appType == "ALL" || appType == "PEAK") {
-
-         val peakAudienceStart = System.currentTimeMillis
-         logger.info("Starting peakAudience aggregation")
-
-         val now: DateTime = new DateTime()
-         PeakAudienceNewProcessor.process(sc, now.getMillis)
-
-         System.currentTimeMillis
-         logger.info("Done peakAudience aggregation. Took " + (System.currentTimeMillis - peakAudienceStart) + " milisec.")
-
+       if (appType == "ALL") {
+         processPeak(sc)
        }
 
        events.unpersist()
 
-
      }
+
+  def processPeak(sc : SparkContext) : Unit = {
+    val peakAudienceStart = System.currentTimeMillis
+    logger.info("Starting peakAudience aggregation")
+
+    val now: DateTime = new DateTime()
+    PeakAudienceNewProcessor.process(sc, now.getMillis)
+
+    System.currentTimeMillis
+    logger.info("Done peakAudience aggregation. Took " + (System.currentTimeMillis - peakAudienceStart) + " milisec.")
+
+  }
 
   def setShutdownHook = {
     sys.ShutdownHookThread {
@@ -204,18 +202,21 @@ object MainDriver extends MetaLog[BaseLog]
           val eventsGenerator = new EventsGenerator(sc, ConfigurationManager.get("aggr.max_files_per_cycle", "50").toInt)
           val dataCleaner = new DataCleaner(sc)
           while (!shouldBreak) {
-            val events = eventsGenerator.get(aggrPrefix)
-            val noEvents = isEmpty(events)
-            eventsGenerator.commit
-            if (!noEvents) {
-              processEvents(sc, events, aggrPrefix)
+            if (aggrPrefix != "PEAK") {
+              val events = eventsGenerator.get(aggrPrefix)
+              val noEvents = isEmpty(events)
+              eventsGenerator.commit
+              if (!noEvents) {
+                processEvents(sc, events, aggrPrefix)
+              } else {
+                Thread.sleep(1000)
+              }
+            } else {
+              processPeak(sc)
             }
             if (aggrPrefix == "ALL" || aggrPrefix == "PEAK") {
               logger.info("calling dataCleaner.tryRun()")
               dataCleaner.tryRun()
-            }
-            if (noEvents) {
-              Thread.sleep(1000)
             }
           }
 

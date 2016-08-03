@@ -73,7 +73,7 @@ class EventsGenerator( val sc : SparkContext, val maxProcessFilesPerCycle : Int 
           //rdd.flatMap(row => fileIdToLines(row.getString(0) ) ).map(line => LiveEvent.parse(line) )
 
           var nonProcessedLoggedFilesList = getNonProcessedLoggedFiles()
-          if (aggrPrefix != "ALL") {
+          if (aggrPrefix != "ALL" && aggrPrefix != "PEAK") {
                logger.info(s"filtering files with prefix: $aggrPrefix")
                nonProcessedLoggedFilesList = nonProcessedLoggedFilesList.filter(_.file_id.startsWith(aggrPrefix))
           } else {
