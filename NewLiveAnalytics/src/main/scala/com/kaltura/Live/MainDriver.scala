@@ -6,22 +6,20 @@ import com.google.common.base.Charsets
 import com.google.common.io.Resources
 import com.kaltura.Live.infra.{ConfigurationManager, EventsGenerator}
 import com.kaltura.Live.model.LiveEvent
-import com.kaltura.Live.model.aggregation.processors.PeakAudienceProcessor
+import com.kaltura.Live.model.aggregation.processors.PeakAudienceNewProcessor
 import com.kaltura.Live.model.purge.DataCleaner
+import com.kaltura.Live.utils.{BaseLog, MetaLog}
 import org.apache.spark.SparkContext._
 import org.apache.spark.rdd.RDD
 import org.apache.spark.{SparkConf, SparkContext}
-
-/**
- * Created by didi on 2/23/15.
- */
+import org.joda.time.DateTime
 
 // TODO: peak audience design how should it work without a counter!!!!
 // TODO: For the bufferTime which is double could not be a counter so multiply by 100 and make it long
 // TODO: write data to Kafka
 // TODO: TTL management, check that hash for the key tuples and equal is not needed
 // TODO: data validation e.g. check bufferTime <= 0 if not override bitrate >=0 bitrate <= ~TBD etc...
-object MainDriver
+object MainDriver extends MetaLog[BaseLog]
 {
      def toSomeColumns( columnNames: List[String] ) : SomeColumns =
      {
@@ -103,55 +101,67 @@ object MainDriver
      var gracefullyDone = false
 
      def isEmpty[T](rdd : RDD[T]) = {
-          rdd.take(1).size == 0
+          rdd.take(1).length == 0
      }
 
      def appVersion = Resources.toString(getClass.getResource("/VERSION"), Charsets.UTF_8)
 
-     def processEvents( sc : SparkContext, events: RDD[LiveEvent] ): Unit =
-     {
-          val reducedLiveEvents = events
-               .map(event => ( (event.entryId, event.eventTime), event) )
-               .reduceByKey(_ + _)
+     def processEvents( sc : SparkContext, events: RDD[LiveEvent], appType: String ): Unit = {
 
-          reducedLiveEvents.cache()
+       val aggrStart = System.currentTimeMillis
+       logger.info(s"Start aggregating for prefix $appType")
 
-          reducedLiveEvents.map(x => x._2.wrap())
-               .saveToCassandra(keyspace, entryTableName, entryTableColumnFields)
+       events.map(event => ((event.entryId, event.eventTime), event))
+         .reduceByKey(_ + _)
+         .map(x => x._2.wrap())
+         .saveToCassandra(keyspace, entryTableName, entryTableColumnFields)
 
-          PeakAudienceProcessor.process(sc, reducedLiveEvents)
+       events.map(event => ((event.entryId, event.eventRoundTime), event))
+         .reduceByKey(_ + _)
+         .map(x => x._2.wrap(true))
+         .saveToCassandra(keyspace, entryHourlyTableName, entryHourlyTableFields)
 
-          reducedLiveEvents.unpersist()
+       events.map(event => ((event.entryId, event.eventTime, event.country, event.city), event))
+         .reduceByKey(_ + _)
+         .map(x => x._2.wrap())
+         .saveToCassandra(keyspace, locationEntryTableName, locationEntryTableFields)
 
-          //val temp11 = reducedLiveEvents.foreach(print(_))
+       events.map(event => ((event.entryId, event.eventRoundTime, event.referrer), event))
+         .reduceByKey(_ + _)
+         .map(x => x._2.wrap(true))
+         .saveToCassandra(keyspace, referrerHourlyTableName, referrerHourlyTableFields)
 
-          val temp2 = events.map(event => ( (event.entryId, event.eventRoundTime ), event) )
-               .reduceByKey(_ + _)
-               .map(x => x._2.wrap(true))
-               .saveToCassandra(keyspace, entryHourlyTableName, entryHourlyTableFields)
+       events.map(event => ((event.partnerId, event.eventRoundTime), event))
+         .reduceByKey(_ + _)
+         .map(x => x._2.wrap(true))
+         .saveToCassandra(keyspace, partnerHourlyTableName, partnerHourlyTableFields)
 
-          val temp3 = events.map(event => ( (event.entryId, event.eventTime, event.country, event.city), event) )
-               .reduceByKey(_ + _)
-               .map(x => x._2.wrap())
-               .saveToCassandra(keyspace, locationEntryTableName, locationEntryTableFields)
+       events.map(event => (event.entryId, event))
+         .reduceByKey(_ maxTime _)
+         .map(x => x._2.wrap(true))
+         .saveToCassandra(keyspace, livePartnerEntryTableName, livePartnerEntryTableFields, writeConf = WriteConf(ttl = TTLOption.constant(36 * 60 * 60)))
 
-          val temp4 = events.map(event => ( (event.entryId, event.eventRoundTime, event.referrer), event) )
-               .reduceByKey(_ + _)
-               .map(x => x._2.wrap(true))
-               .saveToCassandra(keyspace, referrerHourlyTableName, referrerHourlyTableFields)
+       logger.info(s"Done aggregating for prefix $appType. Took " + (System.currentTimeMillis - aggrStart) + " milisec.")
 
-          val temp5 = events.map(event => ( (event.partnerId, event.eventRoundTime ), event) )
-               .reduceByKey(_ + _)
-               .map(x => x._2.wrap(true))
-               .saveToCassandra(keyspace, partnerHourlyTableName, partnerHourlyTableFields)
+       if (appType == "ALL") {
+         processPeak(sc)
+       }
 
-          val temp7 = events.map(event => (event.entryId, event) )
-               .reduceByKey(_ maxTime _)
-               .map(x => x._2.wrap(true))
-               .saveToCassandra(keyspace, livePartnerEntryTableName, livePartnerEntryTableFields, writeConf = WriteConf(ttl = TTLOption.constant(36 * 60 * 60)))
+       events.unpersist()
 
-          events.unpersist()
      }
+
+  def processPeak(sc : SparkContext) : Unit = {
+    val peakAudienceStart = System.currentTimeMillis
+    logger.info("Starting peakAudience aggregation")
+
+    val now: DateTime = new DateTime()
+    PeakAudienceNewProcessor.process(sc, now.getMillis)
+
+    System.currentTimeMillis
+    logger.info("Done peakAudience aggregation. Took " + (System.currentTimeMillis - peakAudienceStart) + " milisec.")
+
+  }
 
   def setShutdownHook = {
     sys.ShutdownHookThread {
@@ -169,10 +179,13 @@ object MainDriver
           
           val conf = new SparkConf()
             .setMaster(ConfigurationManager.get("spark.master"))
-            .setAppName("NewLiveAnalytics")
             .set("spark.executor.memory", ConfigurationManager.get("spark.executor_memory", "8g"))
             .set("spark.cassandra.connection.host", ConfigurationManager.get("cassandra.node_name"))
 
+          val aggrPrefix = if (args.isEmpty) "ALL" else args(0)
+          var appName = "NewLiveAnalytics-" + aggrPrefix
+
+          conf.setAppName(appName)
           val sc = new SparkContext(conf)
 
           setShutdownHook
@@ -189,15 +202,21 @@ object MainDriver
           val eventsGenerator = new EventsGenerator(sc, ConfigurationManager.get("aggr.max_files_per_cycle", "50").toInt)
           val dataCleaner = new DataCleaner(sc)
           while (!shouldBreak) {
-            val events = eventsGenerator.get
-            val noEvents = isEmpty(events)
-            eventsGenerator.commit
-            if (!noEvents) {
-              processEvents(sc, events)
+            if (aggrPrefix != "PEAK") {
+              val events = eventsGenerator.get(aggrPrefix)
+              val noEvents = isEmpty(events)
+              eventsGenerator.commit
+              if (!noEvents) {
+                processEvents(sc, events, aggrPrefix)
+              } else {
+                Thread.sleep(1000)
+              }
+            } else {
+              processPeak(sc)
             }
-            dataCleaner.tryRun()
-            if (noEvents) {
-              Thread.sleep(1000)
+            if (aggrPrefix == "ALL" || aggrPrefix == "PEAK") {
+              logger.info("calling dataCleaner.tryRun()")
+              dataCleaner.tryRun()
             }
           }
 
