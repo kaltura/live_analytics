@@ -32,7 +32,7 @@ object PeakAudienceNewProcessor {
     val liveNow = sc.cassandraTable("kaltura_live", "hourly_live_events").select("entry_id").where("event_time = ?", startHour)
     val hourlyPeak = sc.cassandraTable("kaltura_live", "live_entry_hourly_peak").select("entry_id", "event_time", "update_time", "audience", "dvr_audience").where("event_time = ?", startHour)
 
-    val allEntries = liveNow.map(row => (row.getString("entry_id"), row.getString("entry_id"))).cogroup(hourlyPeak.map(row => (row.getString("entry_id"), PeakAudience(row.getString("entry_id"), row.getDate("event_time"), row.getDate("update_time"), row.getLong("audience"), row.getLong("dvr_audience")))))
+    val allEntries = liveNow.map(row => (row.getString("entry_id"), row.getString("entry_id"))).cogroup(hourlyPeak.map(row => (row.getString("entry_id"), PeakAudience(row.getString("entry_id"), row.getDate("event_time"), row.getDateOption("update_time").getOrElse(startHour), row.getLong("audience"), row.getLong("dvr_audience")))))
     allEntries.map(x => {
       if (x._2._2.isEmpty) {
         PeakAudience(x._1, startHour, new Date(date), 0, 0)
