@@ -1,4 +1,4 @@
-CREATE KEYSPACE IF NOT EXISTS kaltura_live WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' : 2 };
+CREATE KEYSPACE IF NOT EXISTS kaltura_live WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' : 1 };
 
 use kaltura_live;
 
@@ -98,6 +98,7 @@ CREATE TABLE IF NOT EXISTS kaltura_live.live_entry_hourly_peak (
 	event_time timestamp,
 	audience bigint,
 	dvr_audience bigint,
+	update_time,
 	PRIMARY KEY (entry_id, event_time)
 )
 WITH CLUSTERING ORDER BY (event_time DESC);
