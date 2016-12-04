@@ -1,6 +1,6 @@
 package com.kaltura.Live.infra
 
-import com.datastax.driver.core.{ConsistencyLevel, QueryOptions, Cluster}
+import com.datastax.driver.core.{SocketOptions, ConsistencyLevel, QueryOptions, Cluster}
 import com.kaltura.Live.model.Consts
 
 /**
@@ -8,6 +8,8 @@ import com.kaltura.Live.model.Consts
  */
 object SerializedSession extends Serializable
 {
-     val cluster = Cluster.builder().addContactPoint(ConfigurationManager.get("cassandra.node_name")).withQueryOptions(new QueryOptions().setConsistencyLevel(ConsistencyLevel.QUORUM)).build()
+     val socketOptions = new SocketOptions().setReadTimeoutMillis(100000);
+     val cluster = Cluster.builder().addContactPoint(ConfigurationManager.get("cassandra.node_name")).withQueryOptions(new QueryOptions().setConsistencyLevel(ConsistencyLevel.QUORUM)).withSocketOptions(socketOptions).build()
      val session = cluster.connect(Consts.KalturaKeySpace)
 }
+
