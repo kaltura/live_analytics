@@ -9,7 +9,7 @@ import com.kaltura.Live.model.Consts
 object SerializedSession extends Serializable
 {
      val socketOptions = new SocketOptions().setReadTimeoutMillis(100000);
-     val cluster = Cluster.builder().addContactPoint(ConfigurationManager.get("cassandra.node_name")).withQueryOptions(new QueryOptions().setConsistencyLevel(ConsistencyLevel.QUORUM)).withSocketOptions(socketOptions).build()
-     val session = cluster.connect(Consts.KalturaKeySpace)
+     lazy val cluster = Cluster.builder().addContactPoint(ConfigurationManager.get("cassandra.node_name")).withQueryOptions(new QueryOptions().setConsistencyLevel(ConsistencyLevel.QUORUM)).withSocketOptions(socketOptions).build()
+     lazy val session = cluster.connect(Consts.KalturaKeySpace)
 }
 

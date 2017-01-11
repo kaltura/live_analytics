@@ -1,10 +1,11 @@
 package com.kaltura.Live
 
+import com.datastax.driver.core.exceptions.NoHostAvailableException
 import com.datastax.spark.connector._
 import com.datastax.spark.connector.writer.{TTLOption, WriteConf}
 import com.google.common.base.Charsets
 import com.google.common.io.Resources
-import com.kaltura.Live.infra.{ConfigurationManager, EventsGenerator}
+import com.kaltura.Live.infra.{SerializedSession, ConfigurationManager, EventsGenerator}
 import com.kaltura.Live.model.LiveEvent
 import com.kaltura.Live.model.aggregation.processors.PeakAudienceNewProcessor
 import com.kaltura.Live.model.purge.DataCleaner
@@ -197,31 +198,39 @@ object MainDriver extends MetaLog[BaseLog]
           println(s"*************** Live Analytics v${appVersion} ****************")
           println( "******************************************************")
 
-
-          // events are returned with 10sec resolution!!!
-          val eventsGenerator = new EventsGenerator(sc, ConfigurationManager.get("aggr.max_files_per_cycle", "50").toInt)
-          val dataCleaner = new DataCleaner(sc)
-          while (!shouldBreak) {
-            if (aggrPrefix != "PEAK") {
-              val events = eventsGenerator.get(aggrPrefix)
-              val noEvents = isEmpty(events)
-              eventsGenerator.commit
-              if (!noEvents) {
-                processEvents(sc, events, aggrPrefix)
+          try {
+            // events are returned with 10sec resolution!!!
+            val eventsGenerator = new EventsGenerator(sc, ConfigurationManager.get("aggr.max_files_per_cycle", "50").toInt)
+            val dataCleaner = new DataCleaner(sc)
+            while (!shouldBreak) {
+              if (aggrPrefix != "PEAK") {
+                val events = eventsGenerator.get(aggrPrefix)
+                val noEvents = isEmpty(events)
+                eventsGenerator.commit
+                if (!noEvents) {
+                  processEvents(sc, events, aggrPrefix)
+                } else {
+                  Thread.sleep(1000)
+                }
               } else {
-                Thread.sleep(1000)
+                processPeak(sc)
               }
-            } else {
-              processPeak(sc)
+              if (aggrPrefix == "ALL" || aggrPrefix == "PEAK") {
+                logger.info("calling dataCleaner.tryRun()")
+                dataCleaner.tryRun()
+              }
             }
-            if (aggrPrefix == "ALL" || aggrPrefix == "PEAK") {
-              logger.info("calling dataCleaner.tryRun()")
-              dataCleaner.tryRun()
-            }
+
+            eventsGenerator.close
+          } catch {
+            case nhae: NoHostAvailableException => logger.error("Failed to connect", nhae)
+          } finally {
+            gracefullyDone = true
+            if (!SerializedSession.session.isClosed) SerializedSession.session.close()
+            if (!SerializedSession.cluster.isClosed) SerializedSession.cluster.close()
           }
 
-          eventsGenerator.close
-          gracefullyDone = true
+
      }
 }
 // TODO: for the peak audience read data from Cassandra for the current hour (what if we are running after crash)
