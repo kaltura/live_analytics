@@ -1,11 +1,11 @@
 package com.kaltura.Live
 
-import com.datastax.driver.core.exceptions.NoHostAvailableException
+import com.datastax.driver.core.exceptions.DriverException
 import com.datastax.spark.connector._
 import com.datastax.spark.connector.writer.{TTLOption, WriteConf}
 import com.google.common.base.Charsets
 import com.google.common.io.Resources
-import com.kaltura.Live.infra.{SerializedSession, ConfigurationManager, EventsGenerator}
+import com.kaltura.Live.infra.{ConfigurationManager, EventsGenerator, SerializedSession}
 import com.kaltura.Live.model.LiveEvent
 import com.kaltura.Live.model.aggregation.processors.PeakAudienceNewProcessor
 import com.kaltura.Live.model.purge.DataCleaner
@@ -182,7 +182,8 @@ object MainDriver extends MetaLog[BaseLog]
             .setMaster(ConfigurationManager.get("spark.master"))
             .set("spark.executor.memory", ConfigurationManager.get("spark.executor_memory", "8g"))
             .set("spark.cassandra.connection.host", ConfigurationManager.get("cassandra.node_name"))
-
+          val numRetries = ConfigurationManager.get("cassandra.numRetries", "3").toInt
+          val sleepBetRetries = ConfigurationManager.get("cassandra.sleep.between.retries", "1").toInt
           val aggrPrefix = if (args.isEmpty) "ALL" else args(0)
           var appName = "NewLiveAnalytics-" + aggrPrefix
 
@@ -191,39 +192,53 @@ object MainDriver extends MetaLog[BaseLog]
 
           setShutdownHook
 
+       try {
           for ( jarDependency <- jarDependencies )
                sc.addJar(ConfigurationManager.get("repository_home") + "/" + jarDependency)
-
+  
           println( "******************************************************")
           println(s"*************** Live Analytics v${appVersion} ****************")
           println( "******************************************************")
 
-          try {
+
             // events are returned with 10sec resolution!!!
             val eventsGenerator = new EventsGenerator(sc, ConfigurationManager.get("aggr.max_files_per_cycle", "50").toInt)
             val dataCleaner = new DataCleaner(sc)
+            var retry = 1;
             while (!shouldBreak) {
-              if (aggrPrefix != "PEAK") {
-                val events = eventsGenerator.get(aggrPrefix)
-                val noEvents = isEmpty(events)
-                eventsGenerator.commit
-                if (!noEvents) {
-                  processEvents(sc, events, aggrPrefix)
+              try {
+                if (aggrPrefix != "PEAK") {
+                  val events = eventsGenerator.get(aggrPrefix)
+                  val noEvents = isEmpty(events)
+                  eventsGenerator.commit
+                  if (!noEvents) {
+                    processEvents(sc, events, aggrPrefix)
+                  } else {
+                    Thread.sleep(1000)
+                  }
                 } else {
-                  Thread.sleep(1000)
+                  processPeak(sc)
                 }
-              } else {
-                processPeak(sc)
-              }
-              if (aggrPrefix == "ALL" || aggrPrefix == "PEAK") {
-                logger.info("calling dataCleaner.tryRun()")
-                dataCleaner.tryRun()
+                if (aggrPrefix == "ALL" || aggrPrefix == "PEAK") {
+                  logger.info("calling dataCleaner.tryRun()")
+                  dataCleaner.tryRun()
+                }
+                retry = 1
+              } catch {
+                case e: Exception =>
+                  if (e.getCause.isInstanceOf[DriverException] && retry < numRetries) {
+                    retry = retry + 1
+                    logger.error("Query to Cassandra has failed, trying to reconnect")
+                    Thread.sleep(sleepBetRetries * 1000L)
+                  } else {
+                    throw e
+                  }
+
               }
             }
 
             eventsGenerator.close
-          } catch {
-            case nhae: NoHostAvailableException => logger.error("Failed to connect", nhae)
+
           } finally {
             gracefullyDone = true
             if (!SerializedSession.session.isClosed) SerializedSession.session.close()
