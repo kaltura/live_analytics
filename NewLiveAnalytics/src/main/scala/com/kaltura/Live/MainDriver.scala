@@ -183,7 +183,7 @@ object MainDriver extends MetaLog[BaseLog]
             .set("spark.executor.memory", ConfigurationManager.get("spark.executor_memory", "8g"))
             .set("spark.cassandra.connection.host", ConfigurationManager.get("cassandra.node_name"))
           val numRetries = ConfigurationManager.get("cassandra.numRetries", "3").toInt
-          val sleepBetRetries = ConfigurationManager.get("cassandra.sleep.between.retries", "1").toInt
+          val sleepBetRetries = ConfigurationManager.get("cassandra.sleep.between.retries", "30").toInt
           val aggrPrefix = if (args.isEmpty) "ALL" else args(0)
           var appName = "NewLiveAnalytics-" + aggrPrefix
 
