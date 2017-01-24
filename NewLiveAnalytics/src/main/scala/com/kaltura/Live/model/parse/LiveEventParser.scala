@@ -130,8 +130,8 @@ object LiveEventParser extends Serializable with MetaLog[BaseLog]
                                    event.bitrate = paramsMap("event:bitrate").toLong
                               } catch {
                                    case e: Exception => {
-                                        logger.warn("event bitrate is not a numeric value, changed to 0 " + line)
-                                        event.bitrate = 0
+                                        logger.warn("event bitrate is not a numeric value, ignore bitrate data" + line)
+                                        event.bitrate = -1
                                    }
                               }
                          }
